@@ -1,0 +1,224 @@
+****************************************************************************
+MPI: mvapich2-1.7
+****************************************************************************
+
+* attempt binding '-n 4' ranks to cores 0:8:16:24 *
+
+* numa info *
+node 0 cpus: 0 1 2 3 4 5 6 7
+node 1 cpus: 8 9 10 11 12 13 14 15
+node 2 cpus: 16 17 18 19 20 21 22 23
+node 3 cpus: 24 25 26 27 28 29 30 31
+
+****************************************************************************
+srun (expect: non-mpi & explicit binding)
+****************************************************************************
+
+* srun/non-mpi/hint=compute_bound (expect: bad binding) *
+Cpus_allowed_list:	0
+Cpus_allowed_list:	1
+Cpus_allowed_list:	16
+Cpus_allowed_list:	17
+
+* srun/non-mpi/hint=memory_bound: (expect: bad binding) *
+Cpus_allowed_list:	0
+Cpus_allowed_list:	1
+Cpus_allowed_list:	16
+Cpus_allowed_list:	17
+
+* srun/non-mpi/bind=cores (expect: bad binding) *
+Cpus_allowed_list:	0
+Cpus_allowed_list:	1
+Cpus_allowed_list:	16
+Cpus_allowed_list:	17
+
+* srun/non-mpi/bind=map:0,8,16,24 (expect: good binding) *
+Cpus_allowed_list:	0
+Cpus_allowed_list:	16
+Cpus_allowed_list:	24
+Cpus_allowed_list:	8
+
+* srun/mpi/bind=map:0,8,16,24 (expect: bad binding) *
+cpuset[rank   0]: 0
+cpuset[rank   1]: 1
+cpuset[rank   2]: 2
+cpuset[rank   3]: 3
+
+****************************************************************************
+srun+numactl (expect: non-mpi & explicit binding)
+****************************************************************************
+
+* srun+numactl/non-mpi/bind=0,8,16,24 (expect: ok binding) *
+Cpus_allowed_list:	0,8,16,24
+Cpus_allowed_list:	0,8,16,24
+Cpus_allowed_list:	0,8,16,24
+Cpus_allowed_list:	0,8,16,24
+
+* srun+numactl/mpi/bind=0,8,16,24 (expect: bad binding) *
+cpuset[rank   0]: 0
+cpuset[rank   1]: 1
+cpuset[rank   2]: 2
+cpuset[rank   3]: 3
+
+****************************************************************************
+mvapich (expect: explicit binding)
+****************************************************************************
+
+* mvapich/mpi/(default) (expect: bad binding) *
+cpuset[rank   0]: 0
+cpuset[rank   1]: 1
+cpuset[rank   2]: 2
+cpuset[rank   3]: 3
+
+* mvapich/mpi/affinity (expect: bad binding) *
+cpuset[rank   0]: 0
+cpuset[rank   1]: 1
+cpuset[rank   2]: 2
+cpuset[rank   3]: 3
+
+* mvapich/mpi/map-0:8:16:24 (expect: good binding) *
+cpuset[rank   0]: 0
+cpuset[rank   1]: 8
+cpuset[rank   2]: 16
+cpuset[rank   3]: 24
+
+****************************************************************************
+Info
+****************************************************************************
+
+*** nodes: node0176 ***
+
+*** modules ***
+- Package -----------------------------+- Versions -+- Last mod. ------
+Currently Loaded Modulefiles:
+precision/i8                                         2011/10/12 21:01:18
+libnuma/2.0.7                                        2012/01/31 19:02:27
+gcc/4.1.2                                default     2011/10/12 21:01:18
+mvapich2/1.7                                         2013/01/11 22:33:34
+
+*** limits ***
+core file size          (blocks, -c) 0
+data seg size           (kbytes, -d) unlimited
+scheduling priority             (-e) 0
+file size               (blocks, -f) unlimited
+pending signals                 (-i) 516417
+max locked memory       (kbytes, -l) unlimited
+max memory size         (kbytes, -m) unlimited
+open files                      (-n) 64000
+pipe size            (512 bytes, -p) 8
+POSIX message queues     (bytes, -q) 819200
+real-time priority              (-r) 0
+stack size              (kbytes, -s) 10240
+cpu time               (seconds, -t) unlimited
+max user processes              (-u) 16000
+virtual memory          (kbytes, -v) unlimited
+file locks                      (-x) unlimited
+
+*** environment ***
+SLURM_CHECKPOINT_IMAGE_DIR=/people/tallent/svn.tallent-hpcgroup/mybench/mpi-rank-binding
+SLURM_NODELIST=node0176
+MODULE_VERSION_STACK=3.2.8
+SLURM_JOB_NAME=run.sbatch
+PDSHROOT=/opt/pdsh
+MANPATH=/share/apps/mvapich2/1.7/gcc/4.1.2/share/man:/share/apps/libnuma/2.0.7//share/man:/share/apps/openmpi/1.5.4/pathscale/4.0.10/man:/usr/share/man
+VNCDESKTOP=pal.local:1 (tallent)
+SLURMD_NODENAME=node0176
+SLURM_TOPOLOGY_ADDR=root.ql01.node0176
+SLURM_NTASKS_PER_NODE=32
+HOSTNAME=node0176
+SLURM_PRIO_PROCESS=0
+SLURM_NODE_ALIASES=(null)
+MYCFG_HOSTTYPE=x86_64-unknown-linux-gnu
+SHELL=/bin/bash
+TERM=xterm
+HISTSIZE=1000
+TMPDIR=/tmp
+SLURM_TOPOLOGY_ADDR_PATTERN=switch.switch.node
+SSH_CLIENT=130.20.224.251 37604 22
+MYCMD_SED_RE=sed -r
+MYCMD_TAR=tar
+GTK_RC_FILES=/etc/gtk/gtkrc:/people/tallent/.gtkrc-1.2-gnome2
+SBATCH_CPU_BIND_LIST=0xFFFFFFFF
+WINDOWID=58720275
+SSH_TTY=/dev/pts/1
+LC_ALL=POSIX
+ANT_HOME=/opt/rocks
+SLURM_NO_REQUEUE=1
+SLURM_NNODES=1
+USER=tallent
+SVN_EDITOR=emacs -nw
+XTERM_SHELL=/bin/bash
+LS_COLORS=no=00:fi=00:di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.flac=01;35:*.mp3=01;35:*.mpc=01;35:*.ogg=01;35:*.wav=01;35:
+LD_LIBRARY_PATH=/share/apps/mvapich2/1.7/gcc/4.1.2/lib:/share/apps/libnuma/2.0.7//lib64:/share/apps/acml/5.0.0/gfortran64_fma4/lib:/share/apps/openmpi/1.5.4/pathscale/4.0.10/lib:/opt/AMDAPP/lib/x86_64:/opt/AMDAPP/lib/x86
+ROCKS_ROOT=/opt/rocks
+SLURM_JOBID=6093817
+GNOME_KEYRING_SOCKET=/tmp/keyring-H7aGc2/socket
+SLURM_NTASKS=32
+SESSION_MANAGER=local/pal.local:/tmp/.ICE-unix/23877
+SALLOC_KILL_CMD=9
+PAGER=less
+IBV_FORK_SAFE=1
+SLURM_TASKS_PER_NODE=32
+PATH=/share/apps/mvapich2/1.7/gcc/4.1.2/bin:/share/apps/libnuma/2.0.7//bin:/people/tallent/bin:/people/tallent/pkg/autotools/bin:/people/tallent/pkg/eclipse:/people/tallent/pkg/make/bin:/people/tallent/hpctoolkit/hpctoolkit.trunk/MYINSTALL/bin:/people/tallent/hpctoolkit/hpctoolkit.trunk/MYINSTALL/libexec/hpctoolkit:/usr/sbin:/sbin:/people/scicons/bin:/share/apps/openmpi/1.5.4/pathscale/4.0.10/bin:/usr/java/latest/bin:/pic/people/scicons/bin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/opt/ganglia/bin:/opt/ganglia/sbin:/opt/hpss/bin:/opt/pdsh/bin:/opt/rocks/bin:/opt/rocks/sbin
+MAIL=/var/spool/mail/tallent
+MODULE_VERSION=3.2.8
+SRUN_NO_REQUEUE=1
+SBATCH_CPU_BIND_VERBOSE=quiet
+SLURM_JOB_ID=6093817
+MYCFG_MODULE_PRG=precision/i8 gcc/4.8.2 mvapich2/1.9
+HPSS_PRIMARY_AUTHN_MECH=krb5
+MYCMD_DUSORT=du --block-size=K --max-depth=
+PWD=/people/tallent/svn.tallent-hpcgroup/mybench/mpi-rank-binding
+INPUTRC=/etc/inputrc
+AMDAPPSDKROOT=/opt/AMDAPP
+MYCFG_MODULE_BASE=sbank emacs java svn/1.7.13 git cmake gdb libnuma
+_LMFILES_=/share/apps/modules/Modules/3.2.8/modulefiles/environment/precision/i8:/share/apps/modules/Modules/3.2.8/modulefiles/development/tools/libnuma/2.0.7:/share/apps/modules/Modules/3.2.8/modulefiles/development/compilers/gcc/4.1.2:/share/apps/modules/Modules/3.2.8/modulefiles/development/mpi/mvapich2/1.7
+EDITOR=emacs -nw
+LANG=en_US.iso88591
+MODULEPATH=$MODULESHOME/modulefiles/environment:$MODULESHOME/modulefiles/development/compilers:$MODULESHOME/modulefiles/development/mpi:$MODULESHOME/modulefiles/development/mlib:$MODULESHOME/modulefiles/development/tools:$MODULESHOME/modulefiles/apps:$MODULESHOME/modulefiles/libs:/share/apps/modules/Modules/versions
+PNNL_PRECISION=i8
+LOADEDMODULES=precision/i8:libnuma/2.0.7:gcc/4.1.2:mvapich2/1.7
+SLURM_NODEID=0
+SLURM_SUBMIT_DIR=/people/tallent/svn.tallent-hpcgroup/mybench/mpi-rank-binding
+SLURM_TASK_PID=30482
+SLURM_NPROCS=32
+MYCMD_SQUEUE_O_OPT=%.7i %.7P %.30j %.8u %.2t %.10M %.6D %R
+PNNL_MPI=mvapich2
+SLURM_CPUS_ON_NODE=32
+MYCFG_HOSTNAMESHORT=pal
+SLURM_PROCID=0
+ENVIRONMENT=BATCH
+KRB5CCNAME=FILE:/tmp/krb5cc_3010_Px9Sxw
+SSH_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass
+XTERM_VERSION=XTerm(215)
+SLURM_JOB_NODELIST=node0176
+MYCFG_HOSTNAME=pal.pic.pnnl.gov
+HOME=/people/tallent
+SHLVL=6
+SLURM_LOCALID=0
+MYCMD_ID=id
+MYCFG_USER=tallent
+SBATCH_CPU_BIND_TYPE=mask_cpu:
+SLURM_JOB_CPUS_PER_NODE=32
+MYCFG=/people/tallent/.my-env-config
+GNOME_DESKTOP_SESSION_ID=Default
+PNNL_MPI_VERSION=1.7
+SLURM_GTIDS=0
+PNNL_COMPILER_VERSION=4.1.2
+LOGNAME=tallent
+MPI_ROOT=/share/apps/mvapich2/1.7/gcc/4.1.2
+CVS_RSH=ssh
+PNNL_COMPILER=gcc
+SSH_CONNECTION=130.20.224.251 37604 130.20.68.31 22
+SLURM_JOB_NUM_NODES=1
+MODULESHOME=/share/apps/modules/Modules/3.2.8
+MYCFG_DOMAINNAME=pic.pnnl.gov
+LESSOPEN=|/usr/bin/lesspipe.sh %s
+SBATCH_CPU_BIND=quiet,mask_cpu:0xFFFFFFFF
+DISPLAY=:1.0
+SBATCH_NO_REQUEUE=1
+G_BROKEN_FILENAMES=1
+module=() {  eval `/share/apps/modules/Modules/$MODULE_VERSION/bin/modulecmd bash $*`
+}
+_=/bin/env
+

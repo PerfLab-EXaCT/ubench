@@ -1,0 +1,422 @@
+*** nodes: node[0397-0400] ***
+
+*** modules ***
+- Package -----------------------------+- Versions -+- Last mod. ------
+Currently Loaded Modulefiles:
+sbank/1.2                                            2011/10/12 21:01:18
+java/6_u13                                           2012/09/07 22:13:37
+emacs/24.2                                           2012/10/17 22:13:51
+git/1.7.7.4                                          2011/11/29 20:45:52
+precision/i8                                         2011/10/12 21:01:18
+intel/12.1.3.293                                     2012/02/18 23:43:04
+mvapich2/1.7                                         2011/10/18 15:05:57
+
+*** limits ***
+core file size          (blocks, -c) 0
+data seg size           (kbytes, -d) unlimited
+scheduling priority             (-e) 0
+file size               (blocks, -f) unlimited
+pending signals                 (-i) 516417
+max locked memory       (kbytes, -l) unlimited
+max memory size         (kbytes, -m) unlimited
+open files                      (-n) 64000
+pipe size            (512 bytes, -p) 8
+POSIX message queues     (bytes, -q) 819200
+real-time priority              (-r) 0
+stack size              (kbytes, -s) 10240
+cpu time               (seconds, -t) unlimited
+max user processes              (-u) 16000
+virtual memory          (kbytes, -v) unlimited
+file locks                      (-x) unlimited
+
+*** environment ***
+SLURM_CHECKPOINT_IMAGE_DIR=/pic/people/tallent/pal/microbench/mkscript-input.mpi-ubench.64-cpn16
+SLURM_NODELIST=node[0397-0400]
+MODULE_VERSION_STACK=3.2.8
+SLURM_JOB_NAME=run.sbatch
+VNCDESKTOP=pal.local:1 (tallent)
+MANPATH=/share/apps/intel/xe/composer_xe_2011_sp1.9.293/man/en_US:/share/apps/intel/xe/composer_xe_2011_sp1.9.293/man/en_US:/share/apps/git/1.7.7.4//share/man:/share/apps/emacs/24.2//share/man:/share/apps/jdk6_u13/man:/share/apps/sbank/1.2//share/man:/share/apps/mvapich2/1.7/intel/12.1.3.293/share/man:/usr/share/man
+PDSHROOT=/opt/pdsh
+SLURMD_NODENAME=node0397
+SLURM_TOPOLOGY_ADDR=root.ql01.node0397
+SLURM_NTASKS_PER_NODE=16
+HOSTNAME=node0397
+SLURM_PRIO_PROCESS=0
+SLURM_NODE_ALIASES=(null)
+TERM=xterm
+SHELL=/bin/bash
+HISTSIZE=1000
+TMPDIR=/tmp
+SLURM_TOPOLOGY_ADDR_PATTERN=switch.switch.node
+SSH_CLIENT=130.20.185.118 64575 22
+SBATCH_CPU_BIND_LIST=0xFFFFFFFF
+WINDOWID=50331667
+SSH_TTY=/dev/pts/2
+ANT_HOME=/opt/rocks
+LC_ALL=POSIX
+SLURM_NO_REQUEUE=1
+SLURM_NNODES=4
+XTERM_SHELL=/bin/bash
+SVN_EDITOR=emacs -nw
+USER=tallent
+LD_LIBRARY_PATH=/share/apps/intel/xe/composer_xe_2011_sp1.9.293/compiler/lib/intel64:/share/apps/intel/xe/composer_xe_2011_sp1.9.293/ipp/../compiler/lib/intel64:/share/apps/intel/xe/composer_xe_2011_sp1.9.293/ipp/lib/intel64:/share/apps/intel/xe/composer_xe_2011_sp1.9.293/compiler/lib/intel64:/share/apps/intel/xe/composer_xe_2011_sp1.9.293/mkl/lib/intel64:/share/apps/intel/xe/composer_xe_2011_sp1.9.293/tbb/lib/intel64//cc4.1.0_libc2.4_kernel2.6.16.21:/share/apps/intel/xe/composer_xe_2011_sp1.9.293/debugger/lib/intel64:/share/apps/intel/xe/composer_xe_2011_sp1.9.293/mpirt/lib/intel64:/share/apps/mvapich2/1.7/intel/12.1.3.293/lib:/opt/AMDAPP/lib/x86_64:/opt/AMDAPP/lib/x86
+LS_COLORS=no=00:fi=00:di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.flac=01;35:*.mp3=01;35:*.mpc=01;35:*.ogg=01;35:*.wav=01;35:
+ROCKS_ROOT=/opt/rocks
+SLURM_JOBID=1978826
+MYMODULESBASE=sbank java emacs git
+MY_ID_CMD=id
+SLURM_NTASKS=64
+PAGER=less
+IBV_FORK_SAFE=1
+SLURM_TASKS_PER_NODE=16(x4)
+MYHOSTNAMESHORT=pal
+SRUN_NO_REQUEUE=1
+MODULE_VERSION=3.2.8
+MAIL=/var/spool/mail/tallent
+PATH=/share/apps/intel/xe/composer_xe_2011_sp1.9.293/bin/intel64:/share/apps/git/1.7.7.4//bin:/share/apps/emacs/24.2//bin:/share/apps/jdk6_u13/bin:/share/apps/sbank/1.2//bin:/pic/people/tallent/bin:/pic/people/tallent/pkg/autoconf/bin:/pic/people/tallent/pkg/automake/bin:/pic/people/tallent/pkg/eclipse:/pic/people/tallent/pkg/make/bin:/pic/people/tallent/hpctoolkit/hpctoolkit.trunk/INSTALL/bin:/pic/people/tallent/hpctoolkit/hpctoolkit.trunk/INSTALL/libexec/hpctoolkit:/usr/sbin:/sbin:/pic/people/scicons/bin:/usr/java/latest/bin:/share/apps/mvapich2/1.7/intel/12.1.3.293/bin:/usr/kerberos/bin:/usr/local/bin:/bin:/usr/bin:/opt/ganglia/bin:/opt/ganglia/sbin:/opt/hpss/bin:/opt/pdsh/bin:/opt/rocks/bin:/opt/rocks/sbin
+SBATCH_CPU_BIND_VERBOSE=quiet
+SLURM_JOB_ID=1978826
+MYUSER=tallent
+MYDOMAINNAME=local
+HPSS_PRIMARY_AUTHN_MECH=krb5
+AMDAPPSDKROOT=/opt/AMDAPP
+INPUTRC=/etc/inputrc
+PWD=/pic/people/tallent/pal/microbench/mkscript-input.mpi-ubench.64-cpn16
+JAVA_HOME=/share/apps/jdk6_u13
+_LMFILES_=/share/apps/modules/Modules/3.2.8/modulefiles/development/tools/sbank/1.2:/share/apps/modules/Modules/3.2.8/modulefiles/development/tools/java/6_u13:/share/apps/modules/Modules/3.2.8/modulefiles/development/tools/emacs/24.2:/share/apps/modules/Modules/3.2.8/modulefiles/development/tools/git/1.7.7.4:/share/apps/modules/Modules/3.2.8/modulefiles/environment/precision/i8:/share/apps/modules/Modules/3.2.8/modulefiles/development/compilers/intel/12.1.3.293:/share/apps/modules/Modules/3.2.8/modulefiles/development/mpi/mvapich2/1.7
+MYAPP=nekproxy
+EDITOR=emacs -nw
+LANG=en_US.iso88591
+MODULEPATH=$MODULESHOME/modulefiles/environment:$MODULESHOME/modulefiles/development/compilers:$MODULESHOME/modulefiles/development/mpi:$MODULESHOME/modulefiles/development/mlib:$MODULESHOME/modulefiles/development/tools:$MODULESHOME/modulefiles/apps:$MODULESHOME/modulefiles/libs:/share/apps/modules/Modules/versions
+PNNL_PRECISION=i8
+LOADEDMODULES=sbank/1.2:java/6_u13:emacs/24.2:git/1.7.7.4:precision/i8:intel/12.1.3.293:mvapich2/1.7
+SLURM_NODEID=0
+SLURM_SUBMIT_DIR=/pic/people/tallent/pal/microbench/mkscript-input.mpi-ubench.64-cpn16
+SLURM_TASK_PID=4118
+SLURM_NPROCS=64
+PNNL_MPI=mvapich2
+SLURM_CPUS_ON_NODE=32
+SLURM_PROCID=0
+ENVIRONMENT=BATCH
+XTERM_VERSION=XTerm(215)
+SSH_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass
+SLURM_JOB_NODELIST=node[0397-0400]
+SHLVL=7
+HOME=/pic/people/tallent
+SLURM_LOCALID=0
+SBATCH_CPU_BIND_TYPE=mask_cpu:
+SLURM_JOB_CPUS_PER_NODE=32(x4)
+MYCFG=/pic/people/tallent/.my-env-config
+PNNL_MPI_VERSION=1.7
+SLURM_GTIDS=0
+PNNL_COMPILER_VERSION=12.1.3.293
+LOGNAME=tallent
+MPI_ROOT=/share/apps/mvapich2/1.7/intel/12.1.3.293
+MYHOSTTYPE=x86_64-unknown-linux-gnu
+CVS_RSH=ssh
+PNNL_COMPILER=intel
+MYHOSTNAME=pal.local
+SSH_CONNECTION=130.20.185.118 64575 130.20.68.31 22
+SLURM_JOB_NUM_NODES=4
+MODULESHOME=/share/apps/modules/Modules/3.2.8
+LESSOPEN=|/usr/bin/lesspipe.sh %s
+SBATCH_CPU_BIND=quiet,mask_cpu:0xFFFFFFFF
+DISPLAY=:1.0
+SBATCH_NO_REQUEUE=1
+G_BROKEN_FILENAMES=1
+module=() {  eval `/share/apps/modules/Modules/$MODULE_VERSION/bin/modulecmd bash $*`
+}
+_=/bin/env
+
+*cpuset[000]: 0
+*cpuset[001]: 2
+*cpuset[002]: 4
+*cpuset[003]: 6
+*cpuset[004]: 8
+*cpuset[005]: 10
+*cpuset[006]: 12
+*cpuset[007]: 14
+*cpuset[008]: 16
+*cpuset[009]: 18
+*cpuset[010]: 20
+*cpuset[011]: 22
+*cpuset[012]: 24
+*cpuset[013]: 26
+*cpuset[014]: 28
+*cpuset[015]: 30
+*cpuset[016]: 0
+*cpuset[017]: 2
+*cpuset[018]: 4
+*cpuset[019]: 6
+*cpuset[020]: 8
+*cpuset[021]: 10
+*cpuset[022]: 12
+*cpuset[023]: 14
+*cpuset[024]: 16
+*cpuset[025]: 18
+*cpuset[026]: 20
+*cpuset[027]: 22
+*cpuset[028]: 24
+*cpuset[029]: 26
+*cpuset[030]: 28
+*cpuset[031]: 30
+*cpuset[032]: 0
+*cpuset[033]: 2
+*cpuset[034]: 4
+*cpuset[035]: 6
+*cpuset[036]: 8
+*cpuset[037]: 10
+*cpuset[038]: 12
+*cpuset[039]: 14
+*cpuset[040]: 16
+*cpuset[041]: 18
+*cpuset[042]: 20
+*cpuset[043]: 22
+*cpuset[044]: 24
+*cpuset[045]: 26
+*cpuset[046]: 28
+*cpuset[047]: 30
+*cpuset[048]: 0
+*cpuset[049]: 2
+*cpuset[050]: 4
+*cpuset[051]: 6
+*cpuset[052]: 8
+*cpuset[053]: 10
+*cpuset[054]: 12
+*cpuset[055]: 14
+*cpuset[056]: 16
+*cpuset[057]: 18
+*cpuset[058]: 20
+*cpuset[059]: 22
+*cpuset[060]: 24
+*cpuset[061]: 26
+*cpuset[062]: 28
+*cpuset[063]: 30
+
+comp(usr,real(diff));allreduce(32 bytes)[*/0] us: 7855.86, 7858.32 (2.46167); 155.489 (avg. over 100 invocations)]
+comp(usr,real(diff));allreduce(32 bytes)[*/7] us: 7776.64, 7778.21 (1.57064); 237.191 (avg. over 100 invocations)]
+comp(usr,real(diff));allreduce(32 bytes)[000/0] us: 8635, 8633.85 (-1.14799); 213.146 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[000/7] us: 8824, 8821.01 (-2.98941); 24.0803 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[001/1] us: 7786, 7787.94 (1.94289); 109.911 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[001/8] us: 7657, 7658.96 (1.95844); 240.088 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[002/2] us: 7701, 7704.02 (3.01955); 221.014 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[002/9] us: 7647, 7648.94 (1.94485); 272.989 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[003/10] us: 7710, 7734.06 (24.0603); 202.894 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[003/3] us: 7782, 7783.89 (1.88977); 152.111 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[004/11] us: 7632, 7634.16 (2.1629); 267.029 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[004/4] us: 7714, 7717.13 (3.13257); 183.821 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[005/12] us: 7762, 7764.1 (2.10103); 136.852 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[005/5] us: 7681, 7683.99 (2.99239); 215.054 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[006/13] us: 7770, 7771.97 (1.96884); 185.013 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[006/6] us: 7689, 7713.08 (24.0795); 242.949 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[007/14] us: 7782, 7783.89 (1.88977); 175.953 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[007/7] us: 7802, 7803.92 (1.91693); 155.926 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[008/15] us: 7828, 7831.1 (3.09665); 1598.83 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[008/8] us: 7649, 7650.14 (1.13695); 1776.93 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[009/16] us: 7851, 7851.84 (0.839066); 102.043 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[009/9] us: 7695, 7697.11 (2.10541); 254.869 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[010/10] us: 7675, 7678.03 (3.03192); 296.831 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[010/17] us: 7817, 7817.98 (0.983627); 154.018 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[011/11] us: 7750, 7751.94 (1.94168); 174.046 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[011/18] us: 7844, 7844.92 (0.924927); 82.016 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[012/12] us: 7753, 7755.04 (2.04112); 169.992 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[012/19] us: 7898, 7899.05 (1.04594); 25.9876 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[013/13] us: 7656, 7658.96 (2.95844); 276.089 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[013/20] us: 7703, 7704.97 (1.97322); 234.842 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[014/14] us: 7742, 7743.84 (1.83545); 210.047 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[014/21] us: 7673, 7673.98 (0.978806); 277.042 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[015/15] us: 7742, 7744.07 (2.07387); 176.907 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[015/22] us: 7658, 7658.96 (0.958435); 258.923 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[016/16] us: 7825, 7827.04 (2.04353); 95.8443 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[016/23] us: 7753, 7754.09 (1.08745); 170.946 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[017/17] us: 7831, 7831.81 (0.811905); 88.2149 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[017/24] us: 7781, 7782.94 (1.9361); 135.899 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[018/18] us: 7844, 7846.12 (2.11702); 121.832 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[018/25] us: 7757, 7759.09 (2.09424); 211 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[019/19] us: 7895, 7896.18 (1.18492); 46.0148 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[019/26] us: 7757, 7759.09 (2.09424); 183.105 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[020/20] us: 7714, 7714.99 (0.986801); 232.22 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[020/27] us: 7786, 7786.99 (0.989212); 163.078 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[021/21] us: 7731, 7732.87 (1.86819); 253.201 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[021/28] us: 7724, 7725 (1.00038); 261.068 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[022/22] us: 7723, 7725 (2.00038); 221.968 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[022/29] us: 7719, 7720.95 (1.94727); 226.021 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[023/23] us: 7679, 7680.89 (1.89294); 238.895 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[023/30] us: 7691, 7693.05 (2.05229); 227.928 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[024/24] us: 7751, 7751.94 (0.941681); 205.04 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[024/31] us: 7752, 7754.09 (2.08745); 205.994 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[025/25] us: 7722, 7725 (3.00038); 208.139 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[025/32] us: 7736, 7738.11 (2.1134); 181.913 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[026/26] us: 7752, 7754.09 (2.08745); 163.078 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[026/33] us: 7745, 7746.93 (1.93489); 176.907 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[027/27] us: 7763, 7764.1 (1.10103); 194.073 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[027/34] us: 7786, 7787.94 (1.94289); 174.046 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[028/28] us: 7682, 7683.99 (1.99239); 248.194 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[028/35] us: 7776, 7778.17 (2.16772); 152.826 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[029/29] us: 7769, 7770.06 (1.06149); 169.992 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[029/36] us: 7744, 7746.93 (2.93489); 195.026 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[030/30] us: 7722, 7724.05 (2.04671); 221.968 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[030/37] us: 7751, 7754.09 (3.08745); 200.033 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[031/31] us: 7770, 7771.97 (1.96884); 135.899 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[031/38] us: 7749, 7751.94 (2.94168); 159.979 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[032/32] us: 7755, 7755.99 (0.994797); 209.093 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[032/39] us: 7726, 7726.91 (0.90773); 238.895 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[033/33] us: 7761, 7761 (0.00158691); 213.861 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[033/40] us: 7734, 7736.92 (2.92131); 241.041 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[034/34] us: 7797, 7797 (0.00279236); 174.999 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[034/41] us: 7705, 7708.07 (3.07266); 266.075 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[035/35] us: 7773, 7773.88 (0.87619); 175.953 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[035/42] us: 7728, 7731.2 (3.19926); 221.014 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[036/36] us: 7705, 7706.17 (1.16531); 237.942 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[036/43] us: 7763, 7766.01 (3.00838); 178.099 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[037/37] us: 7745, 7745.98 (0.981216); 230.074 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[037/44] us: 7839, 7839.92 (0.918137); 138.044 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[038/38] us: 7734, 7735.97 (1.96764); 218.868 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[038/45] us: 7685, 7688.05 (3.0455); 264.883 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[039/39] us: 7786, 7786.99 (0.989212); 154.018 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[039/46] us: 7743, 7745.98 (2.98122); 195.026 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[040/40] us: 7719, 7720.95 (1.94727); 200.033 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[040/47] us: 7702, 7704.97 (2.97322); 214.815 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[041/41] us: 7715, 7716.18 (1.17889); 211 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[041/48] us: 7850, 7853.03 (3.03116); 76.0555 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[042/42] us: 7733, 7735.01 (2.01396); 237.942 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[042/49] us: 7901, 7901.91 (0.906967); 80.1086 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[043/43] us: 7785, 7784.84 (-0.156555); 130.177 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[043/50] us: 7894, 7894.99 (0.992828); 21.9345 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[044/44] us: 7770, 7771.97 (1.96884); 167.131 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[044/51] us: 7882, 7882.12 (0.118225); 52.9289 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[045/45] us: 7735, 7735.97 (0.967636); 188.828 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[045/52] us: 7661, 7664.2 (3.20364); 293.97 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[046/46] us: 7735, 7735.97 (0.967636); 4464.86 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[046/53] us: 7700, 7703.07 (3.06587); 4498 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[047/47] us: 7809, 7809.88 (0.877396); 221.014 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[047/54] us: 7744, 7745.98 (1.98122); 287.056 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[048/48] us: 7884, 7884.98 (0.979248); 51.0216 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[048/55] us: 7733, 7733.82 (0.821869); 205.04 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[049/49] us: 7887, 7887.84 (0.840271); 116.11 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[049/56] us: 7745, 7746.93 (1.93489); 259.161 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[050/50] us: 7879, 7879.97 (0.972458); 32.1865 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[050/57] us: 7762, 7763.15 (1.14735); 150.919 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[051/51] us: 7892, 7892.85 (0.847061); 74.1482 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[051/58] us: 7736, 7738.11 (2.1134); 231.028 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[052/52] us: 7756, 7756.95 (0.948471); 202.894 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[052/59] us: 7810, 7811.07 (1.06949); 149.012 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[053/53] us: 7765, 7766.01 (1.00838); 184.059 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[053/60] us: 7738, 7739.07 (1.06708); 213.861 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[054/54] us: 7787, 7787.94 (0.942886); 148.058 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[054/61] us: 7663, 7665.16 (2.15732); 269.89 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[055/55] us: 7796, 7797.96 (1.95647); 154.972 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[055/62] us: 7754, 7754.8 (0.802704); 198.126 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[056/56] us: 7732, 7733.11 (1.10661); 221.014 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[056/63] us: 7752, 7754.09 (2.08745); 199.08 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[057/0] us: 7889, 7889.99 (0.986038); 42.9153 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[057/57] us: 7803, 7804.87 (1.87061); 132.084 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[058/1] us: 7824, 7823.94 (-0.0559082); 143.051 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[058/58] us: 7802, 7803.92 (1.91693); 164.986 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[059/2] us: 7878, 7879.02 (1.01878); 112.057 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[059/59] us: 7773, 7775.07 (2.06828); 211.954 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[060/3] us: 7770, 7770.06 (0.0614929); 181.913 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[060/60] us: 7708, 7709.03 (1.02634); 247.955 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[061/4] us: 7809, 7810.12 (1.11581); 154.018 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[061/61] us: 7772, 7771.97 (-0.0311584); 203.133 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[062/5] us: 7803, 7804.16 (1.15535); 114.918 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[062/62] us: 7779, 7780.08 (1.07507); 135.899 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[063/63] us: 7705, 7705.93 (0.926895); 205.04 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[063/6] us: 7718, 7719.04 (1.03992); 216.961 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[064/0] us: 7853, 7852.79 (-0.20726); 89.1685 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[064/7] us: 7863, 7864.95 (1.95209); 77.9629 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[065/1] us: 7861, 7862.09 (1.09106); 93.9369 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[065/8] us: 7685, 7689 (3.99918); 267.982 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[066/2] us: 7770, 7771.97 (1.96884); 241.041 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[066/9] us: 7661, 7663.01 (2.01155); 349.998 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[067/10] us: 7739, 7740.97 (1.97443); 205.04 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[067/3] us: 7823, 7823.94 (0.944092); 121.117 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[068/11] us: 7695, 7698.06 (3.05908); 270.844 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[068/4] us: 7839, 7840.87 (1.87181); 128.031 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[069/12] us: 7797, 7800.1 (3.10223); 146.866 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[069/5] us: 7797, 7797.96 (0.956467); 150.919 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[070/13] us: 7836, 7838.01 (2.01079); 111.103 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[070/6] us: 7711, 7713.08 (2.07945); 234.842 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[071/14] us: 7861, 7864 (2.99841); 112.057 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[071/7] us: 7732, 7731.91 (-0.0854797); 245.094 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[072/15] us: 7720, 7721.9 (1.90094); 255.108 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[072/8] us: 7698, 7700.92 (2.9201); 277.042 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[073/16] us: 7839, 7841.11 (2.11023); 72.0024 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[073/9] us: 7639, 7640.84 (1.83862); 277.996 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[074/10] us: 7701, 7703.07 (2.06587); 253.916 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[074/17] us: 7884, 7884.98 (0.979248); 73.9098 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[075/11] us: 7788, 7792 (3.996); 241.995 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[075/18] us: 7908, 7910.01 (2.0132); 123.978 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[076/12] us: 7744, 7746.93 (2.93489); 190.02 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[076/19] us: 7896, 7897.14 (1.1386); 36.0012 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[077/13] us: 7754, 7756.95 (2.94847); 198.841 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[077/20] us: 7778, 7780.08 (2.07507); 185.013 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[078/14] us: 7709, 7711.89 (2.88736); 247.002 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[078/21] us: 7746, 7747.89 (1.88857); 208.139 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[079/15] us: 7857, 7858.99 (1.99162); 159.025 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[079/22] us: 7761, 7761.96 (0.955261); 257.015 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[080/16] us: 7852, 7853.03 (1.03116); 97.0364 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[080/23] us: 7776, 7777.93 (1.92931); 175.953 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[081/17] us: 7933, 7935.05 (2.04715); 34.8091 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[081/24] us: 7749, 7750.99 (1.98801); 218.153 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[082/18] us: 7893, 7894.04 (1.03915); 51.9753 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[082/25] us: 7842, 7843.97 (1.97125); 102.043 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[083/19] us: 7895, 7895.95 (0.946503); 29.0871 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[083/26] us: 7831, 7833 (2.004); 93.9369 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[084/20] us: 7746, 7747.89 (1.88857); 231.028 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[084/27] us: 7833, 7833.96 (0.957672); 145.912 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[085/21] us: 7784, 7786.04 (2.03554); 194.073 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[085/28] us: 7742, 7743.84 (1.83545); 239.134 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[086/22] us: 7761, 7763.15 (2.14735); 167.847 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[086/29] us: 7753, 7755.04 (2.04112); 175.953 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[087/23] us: 7729, 7730.01 (1.00717); 200.033 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[087/30] us: 7788, 7789.13 (1.13498); 141.859 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[088/24] us: 7758, 7760.05 (2.04791); 283.957 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[088/31] us: 7799, 7801.06 (2.05591); 242.949 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[089/25] us: 7760, 7761 (1.00159); 195.98 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[089/32] us: 7712, 7713.08 (1.07945); 244.856 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[090/26] us: 7822, 7824.18 (2.18251); 102.997 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[090/33] us: 7800, 7801.06 (1.05591); 134.945 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[091/27] us: 7713, 7714.99 (1.9868); 225.067 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[091/34] us: 7770, 7771.97 (1.96884); 166.893 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[092/28] us: 7714, 7715.94 (1.94048); 218.868 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[092/35] us: 7762, 7761.96 (-0.0447388); 178.099 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[093/29] us: 7744, 7745.98 (1.98122); 176.907 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[093/36] us: 7654, 7654.91 (0.905319); 270.128 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[094/30] us: 7756, 7757.9 (1.90215); 197.172 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[094/37] us: 7739, 7740.02 (1.02075); 209.093 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[095/31] us: 7782, 7784.84 (2.84344); 154.018 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[095/38] us: 7706, 7707.12 (1.11899); 228.882 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[096/32] us: 7725, 7726.91 (1.90773); 169.992 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[096/39] us: 7855, 7856.85 (1.84586); 38.147 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[097/33] us: 7796, 7797 (1.00279); 164.032 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[097/40] us: 7701, 7702.83 (1.82745); 260.115 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[098/34] us: 7734, 7733.82 (-0.178131); 265.121 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[098/41] us: 7855, 7854.94 (-0.0614929); 144.005 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[099/35] us: 7806, 7807.02 (1.01637); 159.025 [val: -1.34218e+08]
+comp(usr,real(diff));allreduce(32 bytes)[099/42] us: 7693, 7696.15 (3.15173); 271.797 [val: -1.34218e+08]
+
+getTSC(cycle res): 0.0185013 us (avg. over 30000 invocations)
+getTime(1 us res): 0.235307 us (avg. over 20000 invocations)
+
+mpi_allreduce(1024 bytes): 25.8066 us (avg. over 10000 invocations) [val: 0]
+mpi_allreduce(128 bytes): 16.2847 us (avg. over 10000 invocations) [val: 0]
+mpi_allreduce(16 bytes): 14.9355 us (avg. over 10000 invocations) [val: 0]
+mpi_allreduce(16384 bytes): 206.749 us (avg. over 10000 invocations) [val: 0]
+mpi_allreduce(2048 bytes): 37.6988 us (avg. over 10000 invocations) [val: 0]
+mpi_allreduce(256 bytes): 18.0979 us (avg. over 10000 invocations) [val: 0]
+mpi_allreduce(32 bytes): 15.2545 us (avg. over 10000 invocations) [val: 0]
+mpi_allreduce(32768 bytes): 388.314 us (avg. over 10000 invocations) [val: 0]
+mpi_allreduce(4096 bytes): 68.0833 us (avg. over 10000 invocations) [val: 0]
+mpi_allreduce(512 bytes): 20.3129 us (avg. over 10000 invocations) [val: 0]
+mpi_allreduce(64 bytes): 15.1988 us (avg. over 10000 invocations) [val: 0]
+mpi_allreduce(8 bytes): 14.7709 us (avg. over 10000 invocations) [val: 0]
+mpi_allreduce(8192 bytes): 114.255 us (avg. over 10000 invocations) [val: 0]
+
+mpi_wtime(1e-06 s res): 0.146401 us (avg. over 20000 invocations)
+
+papi start/stop: 11.6155 us (avg. over 20000 invocations)
+
+real	0m14.569s
+user	0m0.090s
+sys	0m0.161s
