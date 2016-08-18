@@ -12,6 +12,12 @@
 //#define __USE_XOPEN_EXTENDED // for gethostid()
 #include <unistd.h>
 
+//***************************************************************************
+
+#define MY_NM "mpi-test"
+
+//***************************************************************************
+
 int
 main(int argc, char **argv)
 {
@@ -44,7 +50,7 @@ main(int argc, char **argv)
 
   int hostid = (int)gethostid(); // returns a 32-bit id in a long
   
-  printf("mpi-test[rank=%d, size=%d] host=%d wtime(%d)=%ld tag_ub(%d)=%d\n",
+  printf(MY_NM "[rank=%d, size=%d] host=%d wtime(%d)=%ld tag_ub(%d)=%d\n",
 	 rank, size, hostid,
 	 isWtimeGbl_flag, isWtimeGbl,
 	 tag_ub_flag, tag_ub);
