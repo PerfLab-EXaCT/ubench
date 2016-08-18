@@ -36,7 +36,7 @@ mpiompmm = mpi-omp-mm
 
 $(mpiompmm)_SRCS = mpi-omp-mm.c
 
-$(mpiompmm)_CFLAGS = #-DDO_SMALL
+$(mpiompmm)_CFLAGS = -DDO_MEDIUM # -DDO_SMALL
 
 $(mpiompmm)_LDFLAGS =
 

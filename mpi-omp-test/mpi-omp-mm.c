@@ -23,13 +23,24 @@
 
 #include <sys/resource.h>
 
+
+//***************************************************************************
+
+#define MY_NM "mpi-omp-mm"
+
 //#define DO_PRINT
 
-#ifdef DO_SMALL
+#if defined (DO_SMALL)
 
 #define NRA 62                 /* number of rows in matrix A */
 #define NCA 15                 /* number of columns in matrix A */
 #define NCB 7                  /* number of columns in matrix B */
+
+#elif defined (DO_MEDIUM)
+
+#define NRA 2000              /* number of rows in matrix A */
+#define NCA 2300              /* number of columns in matrix A */
+#define NCB 2500              /* number of columns in matrix B */
 
 #else
 
@@ -40,6 +51,8 @@
 #endif
 
 int thread_main(int rank);
+
+//***************************************************************************
 
 
 int
@@ -83,8 +96,10 @@ thread_main(int rank)
   double b[NCA][NCB];           /* matrix B to be multiplied */
   double c[NRA][NCB];           /* result matrix C */
 
-#ifdef DO_SMALL
+#if defined (DO_SMALL)
   chunk = 10;                   /* set loop iteration chunk size */
+#elif defined (DO_MEDIUM)
+  chunk = 60;                   /* set loop iteration chunk size */
 #else
   chunk = 200;                  /* set loop iteration chunk size */
 #endif
@@ -94,7 +109,7 @@ thread_main(int rank)
     tid = omp_get_thread_num();
     if (tid == 0) {
       nthreads = omp_get_num_threads();
-      printf("[rank=%d] starting with %d threads...\n", rank, nthreads);
+      printf(MY_NM "[rank=%d] starting with %d threads...\n", rank, nthreads);
     }
 
     // ----------------------------------------
@@ -118,11 +133,11 @@ thread_main(int rank)
     // ----------------------------------------    
     // matrix multiply
     // ----------------------------------------    
-    printf("[rank=%d, tid=%d] starting matrix multiply...\n", rank, tid);
+    printf(MY_NM "[rank=%d, tid=%d] starting matrix multiply...\n", rank, tid);
 #pragma omp for schedule (static, chunk)
     for (i=0; i<NRA; i++) {
 #ifdef DO_PRINT
-      printf("[rank=%d, tid=%d] did row=%d\n", rank, tid, i);
+      printf(MY_NM "[rank=%d, tid=%d] did row=%d\n", rank, tid, i);
 #endif
       for(j=0; j<NCB; j++)       
 	for (k=0; k<NCA; k++)
@@ -133,16 +148,17 @@ thread_main(int rank)
   // ----------------------------------------    
   // print results
   // ----------------------------------------    
-#ifdef DO_SMALL
-  printf("******************************************************\n");
-  printf("Result Matrix:\n");
+#if defined (DO_SMALL)
+  printf(MY_NM "******************************************************\n");
+  printf(MY_NM "Result Matrix:\n");
   for (i=0; i<NRA; i++) {
-    for (j=0; j<NCB; j++) 
+    for (j=0; j<NCB; j++) {
       printf("%6.2f   ", c[i][j]);
+    }
     printf("\n"); 
   }
-  printf("******************************************************\n");
-  printf ("Done.\n");
+  printf(MY_NM "******************************************************\n");
+  printf(MY_NM "Done.\n");
 #endif
   
   return 0;
