@@ -34,8 +34,8 @@ main(int argc, char **argv)
   int isWtimeGbl_flag = 0;
   int isWtimeGbl = 0;
 
-  int rc = PMPI_Comm_get_attr(comm, MPI_WTIME_IS_GLOBAL,
-			      &isWtimeGbl_ptr, &isWtimeGbl_flag);
+  int rc = MPI_Comm_get_attr(comm, MPI_WTIME_IS_GLOBAL,
+			     &isWtimeGbl_ptr, &isWtimeGbl_flag);
   assert(rc == MPI_SUCCESS);
   isWtimeGbl = *isWtimeGbl_ptr;
 
@@ -44,13 +44,13 @@ main(int argc, char **argv)
   int tag_ub_flag = 0;
   int tag_ub = 0;
 
-  rc = PMPI_Comm_get_attr(comm, MPI_TAG_UB, &tag_ub_ptr, &tag_ub_flag);
+  rc = MPI_Comm_get_attr(comm, MPI_TAG_UB, &tag_ub_ptr, &tag_ub_flag);
   assert(rc == MPI_SUCCESS);
   tag_ub = *tag_ub_ptr;
 
   int hostid = (int)gethostid(); // returns a 32-bit id in a long
   
-  printf(MY_NM "[rank=%d, size=%d] host=%d wtime(%d)=%ld tag_ub(%d)=%d\n",
+  printf(MY_NM "[rank=%d, size=%d] host=%d; wtime-gbl exist?=%d val=%ld; tag_ub exist?=%d val=%d\n",
 	 rank, size, hostid,
 	 isWtimeGbl_flag, isWtimeGbl,
 	 tag_ub_flag, tag_ub);
