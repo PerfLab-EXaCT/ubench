@@ -19,11 +19,14 @@ CC  = mpicc
 CXXFLAGS = -O1 -g # avoid unsafe Intel optimizations
 CFLAGS   = -O3 -g
 
-ifeq ($(MYCFG_DOMAINNAME),pic.pnnl.gov)
-  CPUINFO = -DMY_CPU_MHZ=2100 # PIC/pal
+ifeq ($(MYCFG_HOSTNAME),seapearl.pnnl.gov)
+  CPUINFO = -DMY_CPU_MHZ=2800
 endif
-ifeq ($(MYCFG_DOMAINNAME),cluster.pnnl.gov)
-  CPUINFO = -DMY_CPU_MHZ=2800 # SeaPearl
+ifeq ($(MYCFG_HOSTNAME),constance.pnnl.gov)
+  CPUINFO = -DMY_CPU_MHZ=2300
+endif
+ifeq ($(MYCFG_HOSTNAME),pic.pnnl.gov)
+  CPUINFO = -DMY_CPU_MHZ=2100
 endif
 
 #DO_PAPI = 1
