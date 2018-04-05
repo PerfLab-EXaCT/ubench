@@ -5,7 +5,7 @@
 IO Zone
 =============================================================================
 
-iozone –a –g 2G –R -b iozone-02G.wks
+iozone -a -g 2G -R -b iozone-02G.wks
 
 -g 10G, 20G, 50G
 
