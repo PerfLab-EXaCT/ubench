@@ -15,12 +15,8 @@ test : $(TEST)
 
 perfmem-% :
 	@echo "*** Testing with period $(*F) ***"
-	perf mem -t load record -c $(*F) ./x
+	perf mem record -e list
+	perf mem --type=load record --count $(*F) -- ./x
 	mv perf.data perf.data-$(*F)
 #	perf report -n -i perf.data-$(*F)
-
-
-#  4986: 657
-#  9973: 361, f1:60, f2:64
-# 19946: 214,
-# 49865: 125,
+# 	perf mem report
