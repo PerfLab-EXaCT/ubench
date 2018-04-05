@@ -47,14 +47,26 @@ rep : $(TEST_PERF_REP)
 
 .PHONY: mem rep
 
+perf-stat stat :
+	@if perf --version | egrep "version 2.6" >& /dev/null ; then \
+	  perf stat -e cpu/mem-loads/pp ./$(TGT) ; \
+	fi
+
+# perf stat -e r003c ./x
+# perf stat -e cpu/event=0x0e,umask=0x01,inv,cmask=0x01/ ./x
+
+# perf stat -e cpu/event=0x0e,umask=0x01,inv,cmask=0x01/ ./x
+
+
+
 perf-mem-% : $(TGT)
 	@echo "*** Perf-Mem trace, period $(*F) ***"
-	@if perf --version | egrep "version 3." >& /dev/null ; then \
-	  perf mem record -e list ; \
-	  perf mem -t load record -e ldlat-loads -- ./x ; \
-	  mv perf.data $@ ; \
+	@if perf --version | egrep "version 2.6" >& /dev/null ; then \
+	  perf mem -t load record -c $(*F) -o $@ -- ./$(TGT) ; \
 	else \
-	  perf mem -t load record -c $(*F) -o $@ -- ./x ; \
+	  perf mem record -e list ; \
+	  perf mem -t load record -e ldlat-loads -- ./$(TGT) ; \
+	  mv perf.data $@ ; \
 	fi
 
 perf-rep-% : perf-mem-%
