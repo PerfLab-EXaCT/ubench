@@ -48,12 +48,20 @@ rep : $(TEST_PERF_REP)
 .PHONY: mem rep
 
 perf-mem-% : $(TGT)
-	@echo "*** Testing with period $(*F) ***"
-	@if perf --version | egrep "version 3." >& /dev/null; then \
+	@echo "*** Perf-Mem trace, period $(*F) ***"
+	@if perf --version | egrep "version 3." >& /dev/null ; then \
 	  perf mem record -e list ; \
+	  perf mem -t load record -e ldlat-loads -- ./x ; \
+	  mv perf.data $@ ; \
+	else \
+	  perf mem -t load record -c $(*F) -o $@ -- ./x ; \
 	fi
-	perf mem -t load record -c $(*F) -o $@ -- ./x
+
+# Bug: for version 3, perf record will not accept -c or -o!
+
+# perf stat -e cpu/mem-loads,ldlat=30/P
 
 perf-rep-% : perf-mem-%
 	perf     report --stdio -n -i $<
 #	perf mem report --stdio -v -U -i $<
+

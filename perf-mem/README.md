@@ -3,7 +3,12 @@
 
 Samples should be proportional to loads (and independent of cache state).
 
-Intel(R) Xeon(R) CPU E5-2650 v2 @ 2.60GHz
+Problem: only monitor loads over certain latency!
+
+SeaPearl:
+--------------------------------------------------
+- Intel(R) Xeon(R) CPU E5-2650 v2 @ 2.60GHz
+- perf version 2.6.32-504.8.1.el6.x86_64.debug
 
         samples            events
 period  total   f1   f2    f1    f2
@@ -11,3 +16,22 @@ period  total   f1   f2    f1    f2
   9973:  126    60   65     "     "
  19946:   63    30   32     "     "
  39891:   31    15   16     "     "
+
+
+BlueSky:
+--------------------------------------------------
+- Intel(R) Xeon(R) Gold 6126 CPU @ 2.60GHz
+- perf version 3.10.0-514.21.1.el7.x86_64.debug
+
+        samples            events
+period  total   f1   f2    f1    f2
+  4986:  152    96   51   600k  650k
+  9973:
+ 19946:
+ 39891:
+
+
+Perf bug!
+  - perf record will not accept -o
+  - perf record will not accept -c
+  - event is hard wired to: cpu/mem-loads,ldlat=30/P
