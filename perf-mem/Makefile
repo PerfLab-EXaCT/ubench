@@ -18,7 +18,6 @@ test : $(TGT) $(TEST)
 perfmem-% :
 	@echo "*** Testing with period $(*F) ***"
 	perf mem record -e list
-	perf mem --type=load record --count $(*F) -- ./x
-	mv perf.data perf.data-$(*F)
+	perf mem --type=load record --count $(*F) --output=perf-data-$(*F) -- ./x
 #	perf report -n -i perf.data-$(*F)
 # 	perf mem report
