@@ -1,23 +1,59 @@
+# -*-Mode: makefile;-*-
+#****************************************************************************
+
 CC = gcc -std=c99 -g -O0 -Wall
 
 TGT = x
 
-TEST = perfmem-4986 perfmem-9973 perfmem-19946 perfmem-49865
+TEST = 4986 9973 19946 39891
+
+#****************************************************************************
+
+TEST_PERF_MEM = $(addprefix perf-mem-, $(TEST))
+
+TEST_PERF_REP = $(addprefix perf-rep-, $(TEST))
+
+
+#****************************************************************************
+
+all : help
+
+help :
+	@echo "Targets"
+	@echo "  test: run test"
+	@echo "  mem:  collect perf mem data "
+	@echo "  rep:  show perf reports"
+	@echo "  clean, distclean"
 
 $(TGT) : x.c
 	$(CC) -o $@ $<
 
+test : $(TGT) rep
+
 clean :
-	$(RM) x
+	$(RM) $(TEST_PERF_MEM)
 
 distclean : clean
-	$(RM) perf.data*
+	$(RM) x
 
-test : $(TGT) $(TEST)
 
-perfmem-% :
+.PHONY: all help clean distclean test
+
+#****************************************************************************
+
+mem : $(TEST_PERF_MEM)
+
+rep : $(TEST_PERF_REP)
+
+.PHONY: mem rep
+
+perf-mem-% : $(TGT)
 	@echo "*** Testing with period $(*F) ***"
-	perf mem record -e list
-	perf mem --type=load record --count $(*F) --output=perf-data-$(*F) -- ./x
-#	perf report -n -i perf.data-$(*F)
-# 	perf mem report
+	@if perf --version | egrep "version 3." >& /dev/null; then \
+	  perf mem record -e list ; \
+	fi
+	perf mem -t load record -c $(*F) -o $@ -- ./x
+
+perf-rep-% : perf-mem-%
+	perf     report --stdio -n -i $<
+#	perf mem report --stdio -v -U -i $<
