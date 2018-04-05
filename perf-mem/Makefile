@@ -57,10 +57,6 @@ perf-mem-% : $(TGT)
 	  perf mem -t load record -c $(*F) -o $@ -- ./x ; \
 	fi
 
-# Bug: for version 3, perf record will not accept -c or -o!
-
-# perf stat -e cpu/mem-loads,ldlat=30/P
-
 perf-rep-% : perf-mem-%
 	perf     report --stdio -n -i $<
 #	perf mem report --stdio -v -U -i $<
