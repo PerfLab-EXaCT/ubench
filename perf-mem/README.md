@@ -31,7 +31,7 @@ period  total   f1   f2    f1    f2
  39891:
 
 
-Perf bug!
+[[Perf bug!]]
   - perf record will not accept -o
   - perf record will not accept -c
   - event is hard wired to: cpu/mem-loads,ldlat=30/P
