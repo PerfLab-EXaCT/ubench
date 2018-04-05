@@ -38,7 +38,22 @@ period  total   f1   f2    f1    f2
   - perf record will not accept -c
   - event is hard wired to: cpu/mem-loads,ldlat=30/P
 
+
+
 [[New option to specify latency:]]
   - https://patchwork.kernel.org/patch/9176415/
   > perf mem record -e ldlat-loads --ldlat 50 -v true
   > record -W -d -e cpu/mem-loads,ldlat=50/P true
+
+> kernel.perf_event_paranoid
+https://www.tecmint.com/perf-performance-monitoring-and-analysis-tool-for-linux/
+
+likwid
+https://github.com/RRZE-HPC/likwid
+
+
+# perf stat -e cycles -e cpu/event=0x0e,umask=0x01,inv,cmask=0x01/ -a sleep 5
+
+
+
+cpu/mem-loads/P

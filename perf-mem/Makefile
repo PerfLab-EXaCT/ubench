@@ -50,13 +50,12 @@ rep : $(TEST_PERF_REP)
 perf-stat stat :
 	@if perf --version | egrep "version 2.6" >& /dev/null ; then \
 	  perf stat -e cpu/mem-loads/pp ./$(TGT) ; \
+	else \
+	  perf stat -e cpu/mem-loads,ldlat=1/P ./$(TGT) ; \
 	fi
 
 # perf stat -e r003c ./x
 # perf stat -e cpu/event=0x0e,umask=0x01,inv,cmask=0x01/ ./x
-
-# perf stat -e cpu/event=0x0e,umask=0x01,inv,cmask=0x01/ ./x
-
 
 
 perf-mem-% : $(TGT)
