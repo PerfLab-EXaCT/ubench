@@ -74,6 +74,9 @@ Intel manual, Section B.4.3.2, page B-23
 
 > perf stat -e cpu/event=0x0e,umask=0x01,inv,cmask=0x01/ -a sleep 5
 
+> perf stat -e r003c ./x
+> perf stat -e cpu/event=0x0e,umask=0x01,inv,cmask=0x01/ ./x
+
 
 type = 4,
 config=0x1cd,config1=0x3

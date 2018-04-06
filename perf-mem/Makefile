@@ -11,7 +11,11 @@ TEST = 4986 9973 19946 39891
 
 TEST_PERF_MEM = $(addprefix perf-mem-, $(TEST))
 
-TEST_PERF_REP = $(addprefix perf-rep-, $(TEST))
+TEST_PERF_REC = $(addprefix perf-rec-, $(TEST))
+
+TEST_PERF_MEMREP = $(addprefix perf-memrep-, $(TEST))
+
+TEST_PERF_RECREP = $(addprefix perf-recrep-, $(TEST))
 
 
 #****************************************************************************
@@ -25,9 +29,9 @@ all : help
 help :
 	@echo "Targets"
 	@echo "  test: run test: collect data and show reports."
-	@echo "  mem:  collect perf mem data"
-	@echo "  rep:  show perf reports"
-	@echo "  stat, rec: other tests"
+	@echo "  mem|rec:     show reports"
+	@echo "  domem|dorec: collect data"
+	@echo "  stat: other tests"
 	@echo "  clean"
 	@echo "  distclean"
 
@@ -37,7 +41,7 @@ $(TGT) : x.c
 test : $(TGT) rep
 
 clean :
-	$(RM) $(TEST_PERF_MEM)
+	$(RM) $(TEST_PERF_MEM) $(TEST_PERF_REC)
 
 distclean : clean
 	$(RM) x
@@ -47,28 +51,27 @@ distclean : clean
 
 #****************************************************************************
 
-mem : $(TEST_PERF_MEM)
+domem : $(TEST_PERF_MEM)
 
-rep : $(TEST_PERF_REP)
+mem : $(TEST_PERF_MEMREP)
 
-rec : perf-record
+dorec : $(TEST_PERF_REC)
+
+rec : $(TEST_PERF_RECREP)
 
 stat : perf-stat
 
-.PHONY: mem rep stat rec
+.PHONY: domem mem dorec rec stat
 
 
-perf-record :
-	@if [[ "$(PERF_VER)" =~ "version 2.6" ]] ; then \
-	  : ; \
+PERF_REP_OPT := $(shell \
+	if [[ "$(PERF_VER)" =~ "version 2.6" ]] ; \
+	  then echo "" ; \
 	else \
-	  perf record -e cpu/mem-loads,ldlat=1/P -c 1 -o $@ ./$(TGT) ; \
-	fi
+	  echo "--header" ; \
+	fi )
 
-.PHONY: perf-record
-
-
-perf-stat :
+perf-stat : $(TGT)
 	@if [[ "$(PERF_VER)" =~ "version 2.6" ]] >& /dev/null ; then \
 	  perf stat -e cpu/mem-loads,ldlat=1/pp ./$(TGT) ; \
 	  perf stat -e cpu/config=0x1cd,config1=0x3,config2=0x0/pp ./$(TGT) ; \
@@ -78,11 +81,6 @@ perf-stat :
 	  perf stat -e cpu/config=0x1cd,config1=0x1f,config2=0x0/P ./$(TGT) ; \
 	  perf stat -e cpu/event=0x0b,umask=0x10/P ./$(TGT) ; \
 	fi
-
-
-# perf stat -e r003c ./x
-# perf stat -e cpu/event=0x0e,umask=0x01,inv,cmask=0x01/ ./x
-
 
 perf-mem-% : $(TGT)
 	@echo "*** Perf-Mem trace, period $(*F) ***"
@@ -94,7 +92,16 @@ perf-mem-% : $(TGT)
 	  mv perf.data $@ ; \
 	fi
 
-perf-rep-% : perf-mem-%
-	perf     report --stdio -n -i $<
+perf-rec-% : $(TGT)
+	@if [[ "$(PERF_VER)" =~ "version 2.6" ]] ; then \
+	  perf record -e cpu/mem-loads,ldlat=1/pp -c $(*F) -o $@ ./$(TGT) ; \
+	else \
+	  perf record -e cpu/mem-loads,ldlat=1/P -c $(*F) -o $@ ./$(TGT) ; \
+	fi
+
+perf-memrep-% : perf-mem-%
+	perf report --stdio $(PERF_REP_OPT) -n -i $<
 #	perf mem report --stdio -v -U -i $<
 
+perf-recrep-% : perf-rec-%
+	perf report --stdio $(PERF_REP_OPT) -n -i $<
