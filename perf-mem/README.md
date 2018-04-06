@@ -5,8 +5,9 @@ Samples should be proportional to loads (and independent of cache state).
 
 Problem: only monitor loads over certain latency!
 
+-----------------------------------------------------------------------------
 SeaPearl:
---------------------------------------------------
+-----------------------------------------------------------------------------
 - Intel(R) Xeon(R) CPU E5-2650 v2 @ 2.60GHz
 - perf version 2.6.32-504.8.1.el6.x86_64.debug
 - event: cpu/mem-loads/pp
@@ -19,8 +20,16 @@ period  total   f1   f2    f1    f2
  39891:   31    15   16     "     "
 
 
+Two back-to-back runs of "perf stat"
+  5143312 cpu/mem-loads,ldlat=1/pp
+  1600768 cpu/config=0x1cd,config1=0x3,config2=0x0/pp
+  1266199 cpu/mem-loads,ldlat=1/pp
+  1264178 cpu/config=0x1cd,config1=0x3,config2=0x0/pp
+
+
+-----------------------------------------------------------------------------
 BlueSky:
---------------------------------------------------
+-----------------------------------------------------------------------------
 - Intel(R) Xeon(R) Gold 6126 CPU @ 2.60GHz
 - perf version 3.10.0-514.21.1.el7.x86_64.debug
 - event: cpu/mem-loads,ldlat=30/P
@@ -39,8 +48,11 @@ period  total   f1   f2    f1    f2
   - event is hard wired to: cpu/mem-loads,ldlat=30/P
 
 
+-----------------------------------------------------------------------------
+Extra:
+-----------------------------------------------------------------------------
 
-[[New option to specify latency:]]
+* New option to specify latency:
   - https://patchwork.kernel.org/patch/9176415/
   > perf mem record -e ldlat-loads --ldlat 50 -v true
   > record -W -d -e cpu/mem-loads,ldlat=50/P true
@@ -51,9 +63,7 @@ https://www.tecmint.com/perf-performance-monitoring-and-analysis-tool-for-linux/
 likwid
 https://github.com/RRZE-HPC/likwid
 
+-----------------------------------------------------------------------------
 
 # perf stat -e cycles -e cpu/event=0x0e,umask=0x01,inv,cmask=0x01/ -a sleep 5
 
-
-
-cpu/mem-loads/P
