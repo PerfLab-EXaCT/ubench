@@ -36,10 +36,10 @@ BlueSky:
 
         samples            events
 period  total   f1   f2    f1    f2
-  4986:  152    96   51    .     .
-  9973:
- 19946:
- 39891:
+  4986:  257   116  140    .     .
+  9973:  128    58   70
+ 19946:   64    29   35
+ 39891:   32    14   18
 
 
 [[Perf bug!]]
@@ -73,3 +73,4 @@ Intel manual, Section B.4.3.2, page B-23
 > perf stat -e cpu/event=0x0e,umask=0x01,inv,cmask=0x01/ ./x
 
 
+-W option?

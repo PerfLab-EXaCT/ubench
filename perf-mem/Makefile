@@ -95,8 +95,19 @@ perf-rec-% : $(TGT)
 	@if [[ "$(PERF_VER)" =~ "version 2.6" ]] ; then \
 	  perf record -e cpu/mem-loads,ldlat=1/pp -c $(*F) -o $@ ./$(TGT) ; \
 	else \
-	  perf record -e cpu/mem-loads,ldlat=1/P -c $(*F) -o $@ ./$(TGT) ; \
+	  perf record -W -d -e cpu/event=0xcd,umask=0x1,ldlat=4/upp -c $(*F) -o $@ ./$(TGT) ; \
 	fi
+
+
+#	  perf record -W -d -e cpu/mem-loads,ldlat=4/upp -c $(*F) -o $@ ./$(TGT) ; \
+
+
+
+
+#  perf record -W -d -e cpu/event=0xcd,umask=0x1,ldlat=4,period=1/upp \
+
+#  perf record -e cpu/mem-loads,ldlat=1/P -c $(*F) -o $@ ./$(TGT) ; \
+
 
 perf-memrep-% : perf-mem-%
 	perf report --stdio $(PERF_REP_OPT) -n -i $<
@@ -104,3 +115,4 @@ perf-memrep-% : perf-mem-%
 
 perf-recrep-% : perf-rec-%
 	perf report --stdio $(PERF_REP_OPT) -n -i $<
+
