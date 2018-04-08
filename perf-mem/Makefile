@@ -92,21 +92,16 @@ perf-mem-% : $(TGT)
 	fi
 
 perf-rec-% : $(TGT)
-	@if [[ "$(PERF_VER)" =~ "version 2.6" ]] ; then \
-	  perf record -e cpu/mem-loads,ldlat=1/pp -c $(*F) -o $@ ./$(TGT) ; \
-	else \
-	  perf record -W -d -e cpu/event=0xcd,umask=0x1,ldlat=4/upp -c $(*F) -o $@ ./$(TGT) ; \
-	fi
+	perf record -e cpu/mem-loads,ldlat=1/upp -W -c $(*F) -o $@ ./$(TGT)
 
+# -d: record addresses
+# -W: sample by weight
 
-#	  perf record -W -d -e cpu/mem-loads,ldlat=4/upp -c $(*F) -o $@ ./$(TGT) ; \
+# perf record -W -d -e cpu/mem-loads,ldlat=4/upp -c $(*F)
+# perf record -W -d -e cpu/event=0xcd,umask=0x1,ldlat=4/upp -c $(*F)
+# perf record -W -d -e cpu/event=0xcd,umask=0x1,ldlat=4,period=1/upp
 
-
-
-
-#  perf record -W -d -e cpu/event=0xcd,umask=0x1,ldlat=4,period=1/upp \
-
-#  perf record -e cpu/mem-loads,ldlat=1/P -c $(*F) -o $@ ./$(TGT) ; \
+# old: perf record -e cpu/mem-loads,ldlat=1/P -c $(*F)
 
 
 perf-memrep-% : perf-mem-%

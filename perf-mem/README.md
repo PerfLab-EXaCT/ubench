@@ -36,7 +36,7 @@ BlueSky:
 
         samples            events
 period  total   f1   f2    f1    f2
-  4986:  257   116  140    .     .
+  4986:  257   116  140   600k  650k
   9973:  128    58   70
  19946:   64    29   35
  39891:   32    14   18
@@ -71,6 +71,3 @@ Intel manual, Section B.4.3.2, page B-23
 > perf stat -e r003c ./x
 > perf stat -e cpu/event=0x0b,umask=0x10/p ./x
 > perf stat -e cpu/event=0x0e,umask=0x01,inv,cmask=0x01/ ./x
-
-
--W option?
