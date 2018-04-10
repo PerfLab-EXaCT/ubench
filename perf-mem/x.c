@@ -2,7 +2,8 @@
 #include <unistd.h>
 //#include <stdio.h>
 
-#define TYPE int /*long*/
+#define TYPE int
+//#define TYPE long
 
 size_t SIZE =  10000000; /* 10 M */
 //size_t SIZE = 100000000; /* 100 M */
