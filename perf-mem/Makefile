@@ -41,7 +41,11 @@ $(TGT) : x.c
 test : $(TGT) rep
 
 clean :
-	$(RM) $(TEST_PERF_MEM) $(TEST_PERF_REC)
+	$(RM) \
+	  $(TEST_PERF_MEM) \
+	  $(addsuffix .old, $(TEST_PERF_MEM)) \
+	  $(TEST_PERF_REC) \
+	  $(addsuffix .old, $(TEST_PERF_REC))
 
 distclean : clean
 	$(RM) x

@@ -12,12 +12,13 @@ SeaPearl:
 - perf version 2.6.32-504.8.1.el6.x86_64.debug
 - event: cpu/mem-loads/pp
 
-        samples            events
-period  total   f1   f2    f1    f2
-  4986:  253   120  130   600k  650k
-  9973:  126    60   65     "     "
- 19946:   63    30   32     "     "
- 39891:   31    15   16     "     "
+
+              samples            events
+period/sz     total    f1    f2    f1    f2
+  4986/10M     253    120   130   600k  650k
+  9973/10M     126     60    65     "     "
+ 19946/10M      63     30    32     "     "
+ 39891/10M      31     15    16     "     "
 
 
 Two back-to-back runs of "perf stat"
@@ -34,13 +35,17 @@ BlueSky:
 - perf version 3.10.0-514.21.1.el7.x86_64.debug
 - event: cpu/mem-loads,ldlat=30/P
 
-        samples            events
-period  total   f1   f2    f1    f2
-  4986:  257   116  140   600k  650k
-  9973:  128    58   70
- 19946:   64    29   35
- 39891:   32    14   18
+             samples               events
+period/sz     total    f1    f2     f1    f2
+  4986/10M     257    116   140    600k  650k
+  9973/10M     128     58    70
+ 19946/10M      64     29    35
+ 39891/10M      32     14    18
 
+  4986/100M   2574   1178  1396      6m  6.5m
+
+  12,833,964
+  
 
 [[Perf bug!]]
   - perf mem record will not accept -o
