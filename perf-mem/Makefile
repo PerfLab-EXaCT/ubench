@@ -96,10 +96,10 @@ perf-mem-% : $(TGT)
 	fi
 
 perf-rec-% : $(TGT)
-	perf record -e cpu/mem-loads,ldlat=1/upp -W -c $(*F) -o $@ ./$(TGT)
+	perf record -W -e cpu/mem-loads,ldlat=1/upp -c $(*F) -o $@ ./$(TGT)
 
-# -d: record addresses
 # -W: sample by weight
+# -d: record addresses
 
 # perf record -W -d -e cpu/mem-loads,ldlat=4/upp -c $(*F)
 # perf record -W -d -e cpu/event=0xcd,umask=0x1,ldlat=4/upp -c $(*F)
