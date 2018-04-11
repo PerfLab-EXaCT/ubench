@@ -91,8 +91,7 @@ perf-mem-% : $(TGT)
 	@if [[ "$(PERF_VER)" =~ "version 2.6" ]] ; then \
 	  perf mem -t load record -c $(*F) -o $@ -- ./$(TGT) ; \
 	else \
-	  perf mem -t load record -e ldlat-loads -- ./$(TGT) ; \
-	  mv perf.data $@ ; \
+	  perf mem -t load record -e ldlat-loads -- -o $@ ./$(TGT) ; \
 	fi
 
 perf-rec-% : $(TGT)

@@ -80,3 +80,7 @@ Intel manual, Section B.4.3.2, page B-23
 > perf stat -e r003c ./x
 > perf stat -e cpu/event=0x0b,umask=0x10/p ./x
 > perf stat -e cpu/event=0x0e,umask=0x01,inv,cmask=0x01/ ./x
+
+
+96,762,026,996,052
+52,777,557,947,401
