@@ -2,14 +2,14 @@ CC = gcc
 CFLAGS = -O2 -Wall
 LFLAGS = -lm
 
-all:	intel-prefetch-disable
+all:	intel-prefetch-ctl
 
-intel-prefetch-disable:	intel-prefetch-disable.o
-	$(CC) $(LFLAGS) -o intel-prefetch-disable intel-prefetch-disable.o
+intel-prefetch-ctl:	intel-prefetch-ctl.o
+	$(CC) $(LFLAGS) -o intel-prefetch-ctl intel-prefetch-ctl.o
 
-intel-prefetch-disable.o:	intel-prefetch-disable.c
-	$(CC) $(CFLAGS) -c intel-prefetch-disable.c
+intel-prefetch-ctl.o:	intel-prefetch-ctl.c
+	$(CC) $(CFLAGS) -c intel-prefetch-ctl.c
 
 clean:	
-	rm -f *.o *~ intel-prefetch-disable
+	rm -f *.o *~ intel-prefetch-ctl
 
