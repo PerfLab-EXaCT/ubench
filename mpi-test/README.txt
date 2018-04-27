@@ -9,8 +9,8 @@ make-batch-job --app="mpi-test" \
   --mpi-per-node 20 \
   100
 
-srun -p ivy -N 2 --exclusive mpiexec -n 10 ./mpi-test
+srun [-p ivy] -N 2 --exclusive mpiexec -n 10 ./mpi-test
 
-srun -p ivy -N 2 --exclusive -n 10 ./mpi-test
+srun [-p ivy] -N 2 --exclusive -n 10 ./mpi-test
 
 =============================================================================
