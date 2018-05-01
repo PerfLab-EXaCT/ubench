@@ -45,7 +45,7 @@ distclean : clean
 #****************************************************************************
 #****************************************************************************
 
-PERF_REP_OPT := $(shell \
+PERF_RPT_OPT := $(shell \
 	if [[ "$(PERF_VER)" =~ "version 2.6" ]] ; \
 	  then echo "" ; \
 	else \
@@ -56,22 +56,8 @@ PERF_REP_OPT := $(shell \
 # dla:
 #----------------------------------------------------------------------------
 
-TEST_PERF_DLA_DAT = perf-dla_dat #$(addprefix perf-dla_dat-, $(PERIOD))
-TEST_PERF_DLA_RPT = perf-dla_rpt #$(addprefix perf-dla_rpt-, $(PERIOD))
-
-
-dla : dla_rpt
-
-dla_dat : $(TEST_PERF_DLA_DAT)
-
-dla_rpt : $(TEST_PERF_DLA_RPT)
-
-.PHONY: dla dla_dat dla_rpt
-
-
-perf-dla_dat-% : $(TGT)
-	perf record -e MEM_UOPS_RETIRED.ALL_LOADS -c 4986 -o $@ ./$(TGT)
-
+DLA_EVENTS = \
+	mem_inst_retired.all_loads
 
 # MEM_UOPS_RETIRED.STLB_MISS_LOADS
 # MEM_UOPS_RETIRED.STLB_MISS_STORES
@@ -94,6 +80,26 @@ perf-dla_dat-% : $(TGT)
 # MEM_LOAD_UOPS_L3_HIT_RETIRED.XSNP_HITM
 # UOPS_RETIRED.ALL (if load or store is tagged)
 # MEM_LOAD_UOPS_LLC_HIT_RETIRED.XSNP_NONE
+
+
+TEST_PERF_DLA_DAT = $(addprefix perf-dla_dat-, $(DLA_EVENTS))
+TEST_PERF_DLA_RPT = $(addprefix perf-dla_rpt-, $(DLA_EVENTS))
+
+
+dla : dla_rpt
+
+dla_dat : $(TEST_PERF_DLA_DAT)
+
+dla_rpt : $(TEST_PERF_DLA_RPT)
+
+.PHONY: dla dla_dat dla_rpt
+
+
+perf-dla_dat-% : $(TGT)
+	perf record -e mem_inst_retired.all_loads -c 9973 -o $@ ./$(TGT)
+
+perf-dla_rpt-% : perf-dla_dat-%
+	perf report --stdio $(PERF_RPT_OPT) -n -i $<
 
 
 #----------------------------------------------------------------------------
@@ -145,10 +151,10 @@ perf-ldlat2_dat-% : $(TGT)
 
 
 perf-ldlat1_rpt-% : perf-ldlat1_dat-%
-	perf report --stdio $(PERF_REP_OPT) -n -i $<
+	perf report --stdio $(PERF_RPT_OPT) -n -i $<
 
 perf-ldlat2_rpt-% : perf-ldlat2_dat-%
-	perf report --stdio $(PERF_REP_OPT) -n -i $<
+	perf report --stdio $(PERF_RPT_OPT) -n -i $<
 #	perf mem report --stdio -v -U -i $<
 
 
