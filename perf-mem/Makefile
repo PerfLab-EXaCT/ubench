@@ -30,6 +30,8 @@ test : ldlat
 
 clean :
 	$(RM) \
+	  $(TEST_PERF_DLA_DAT) \
+	  $(addsuffix .old, $(TEST_PERF_DLA_DAT)) \
 	  $(TEST_PERF_LDLAT1_DAT) \
 	  $(addsuffix .old, $(TEST_PERF_LDLAT1_DAT)) \
 	  $(TEST_PERF_LDLAT2_DAT) \
@@ -57,29 +59,40 @@ PERF_RPT_OPT := $(shell \
 #----------------------------------------------------------------------------
 
 DLA_EVENTS = \
-	mem_inst_retired.all_loads
+	mem_inst_retired.all_loads \
+	mem_load_retired.l1_hit \
+	mem_load_retired.l2_hit \
+	mem_load_retired.l3_hit \
+	mem_load_retired.fb_hit
 
-# MEM_UOPS_RETIRED.STLB_MISS_LOADS
-# MEM_UOPS_RETIRED.STLB_MISS_STORES
-# MEM_UOPS_RETIRED.LOCK_LOADS
-# MEM_UOPS_RETIRED.SPLIT_STORES
-# MEM_UOPS_RETIRED.SPLIT_LOADS
-# MEM_UOPS_RETIRED.ALL_STORES
-# MEM_UOPS_RETIRED.ALL_LOADS
-# MEM_LOAD_UOPS_LLC_MISS_RETIRED.LOCAL_DRAM
-# MEM_LOAD_UOPS_LLC_MISS_RETIRED.REMOTE_DRAM
-# MEM_LOAD_UOPS_RETIRED.L1_HIT
-# MEM_LOAD_UOPS_RETIRED.L2_HIT
-# MEM_LOAD_UOPS_RETIRED.L3_HIT
-# MEM_LOAD_UOPS_RETIRED.L1_MISS
-# MEM_LOAD_UOPS_RETIRED.L2_MISS
-# MEM_LOAD_UOPS_RETIRED.L3_MISS
-# MEM_LOAD_UOPS_RETIRED.HIT_LFB
-# MEM_LOAD_UOPS_L3_HIT_RETIRED.XSNP_MISS
-# MEM_LOAD_UOPS_L3_HIT_RETIRED.XSNP_HIT
-# MEM_LOAD_UOPS_L3_HIT_RETIRED.XSNP_HITM
-# UOPS_RETIRED.ALL (if load or store is tagged)
-# MEM_LOAD_UOPS_LLC_HIT_RETIRED.XSNP_NONE
+# mem_inst_retired.all_loads       MEM_UOPS_RETIRED.ALL_LOADS
+# mem_inst_retired.lock_loads      MEM_UOPS_RETIRED.LOCK_LOADS
+# mem_inst_retired.split_loads     MEM_UOPS_RETIRED.SPLIT_LOADS
+# mem_inst_retired.stlb_miss_loads MEM_UOPS_RETIRED.STLB_MISS_LOADS
+
+# mem_inst_retired.all_stores       MEM_UOPS_RETIRED.ALL_STORES
+# mem_inst_retired.split_stores     MEM_UOPS_RETIRED.SPLIT_STORES
+# mem_inst_retired.stlb_miss_stores MEM_UOPS_RETIRED.STLB_MISS_STORES
+
+# mem_load_retired.l1_hit   MEM_LOAD_UOPS_RETIRED.L1_HIT
+# mem_load_retired.l2_hit   MEM_LOAD_UOPS_RETIRED.L2_HIT
+# mem_load_retired.l3_hit   MEM_LOAD_UOPS_RETIRED.L3_HIT
+# mem_load_retired.fb_hit   MEM_LOAD_UOPS_RETIRED.HIT_LFB
+
+# mem_load_retired.l1_miss  MEM_LOAD_UOPS_RETIRED.L1_MISS
+# mem_load_retired.l2_miss  MEM_LOAD_UOPS_RETIRED.L2_MISS
+# mem_load_retired.l3_miss  MEM_LOAD_UOPS_RETIRED.L3_MISS
+
+# mem_load_l3_hit_retired.xsnp_hit  MEM_LOAD_UOPS_L3_HIT_RETIRED.XSNP_HIT
+# mem_load_l3_hit_retired.xsnp_hitm MEM_LOAD_UOPS_L3_HIT_RETIRED.XSNP_HITM
+# mem_load_l3_hit_retired.xsnp_miss MEM_LOAD_UOPS_L3_HIT_RETIRED.XSNP_MISS
+# mem_load_l3_hit_retired.xsnp_none MEM_LOAD_UOPS_LLC_HIT_RETIRED.XSNP_NONE
+
+# mem_load_l3_miss_retired.local_dram  MEM_LOAD_UOPS_LLC_MISS_RETIRED.LOCAL_DRAM
+# mem_load_l3_miss_retired.remote_dram MEM_LOAD_UOPS_LLC_MISS_RETIRED.REMOTE_DRAM
+
+# ? l2_rqsts.pf_hit, l2_rqsts.pf_miss, load_hit_pre.sw_pf
+# ? UOPS_RETIRED.ALL (if load or store is tagged)
 
 
 TEST_PERF_DLA_DAT = $(addprefix perf-dla_dat-, $(DLA_EVENTS))
