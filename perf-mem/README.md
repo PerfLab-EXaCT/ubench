@@ -58,9 +58,8 @@ event: mem_inst_retired.all_loads
 ----------------------------------------
               samples             events
 period/sz     total    f1    f2    f1    f2
-  9973/10M    1850    1306   544  13M   5.4M
-              1919    1355   564  13.5M 5.6M
-
+  code/10M    13018   6009  7009   60M   70M   (130M)
+ loads/10M    1919    1355   564  13.5M   5.6M
 
 [[Perf bug!]]
   - perf mem record will not accept -o

@@ -7,6 +7,8 @@ TGT = x
 
 PERIOD = 4986 9973 19946 39891
 
+PERIOD_DLA = 9973
+
 #****************************************************************************
 
 SHELL = /bin/bash
@@ -59,6 +61,7 @@ PERF_RPT_OPT := $(shell \
 #----------------------------------------------------------------------------
 
 DLA_EVENTS = \
+	mem_uops_retired_all_loads_code \
 	mem_inst_retired.all_loads \
 	mem_load_retired.l1_hit \
 	mem_load_retired.l2_hit \
@@ -95,6 +98,10 @@ DLA_EVENTS = \
 # ? UOPS_RETIRED.ALL (if load or store is tagged)
 
 
+# mem_uops_retired:all_loads [= mem_inst_retired.all_loads]
+#   perf record -d -e cpu/event=0xd0,umask=0x81/upp -c 9973
+#   perf record -d -e mem_inst_retired.all_loads -c 9973
+
 TEST_PERF_DLA_DAT = $(addprefix perf-dla_dat-, $(DLA_EVENTS))
 TEST_PERF_DLA_RPT = $(addprefix perf-dla_rpt-, $(DLA_EVENTS))
 
@@ -108,8 +115,11 @@ dla_rpt : $(TEST_PERF_DLA_RPT)
 .PHONY: dla dla_dat dla_rpt
 
 
+perf-dla_dat-mem_uops_retired_all_loads_code : $(TGT)
+	perf record -e cpu/event=0xd0,umask=0x81/upp -c $(PERIOD_DLA) -o $@ ./$(TGT)
+
 perf-dla_dat-% : $(TGT)
-	perf record -e mem_inst_retired.all_loads -c 9973 -o $@ ./$(TGT)
+	perf record -e $(*F) -c $(PERIOD_DLA) -o $@ ./$(TGT)
 
 perf-dla_rpt-% : perf-dla_dat-%
 	perf report --stdio $(PERF_RPT_OPT) -n -i $<
