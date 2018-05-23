@@ -23,8 +23,8 @@ period/sz     total    f1    f2    f1    f2
  39891/10M      31     15    16     "     "
 
 PIN tool (MIAMI memreuse):
-  Loads: 130M (13 * 10M)
-  Stores: 60M (6 * 10M)
+  f1:    loads: 60M   stores: 30M
+  f1+f2: loads: 130M  stores: 60M
 
 Two back-to-back runs of "perf stat"
   5143312 cpu/mem-loads,ldlat=1/pp
@@ -59,7 +59,8 @@ event: mem_inst_retired.all_loads
               samples             events
 period/sz     total    f1    f2    f1    f2
   9973/10M    1850    1306   544  13M   5.4M
-  
+              1919    1355   564  13.5M 5.6M
+
 
 [[Perf bug!]]
   - perf mem record will not accept -o
