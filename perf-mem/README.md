@@ -22,10 +22,9 @@ period/sz     total    f1    f2    f1    f2
  19946/10M      63     30    32     "     "
  39891/10M      31     15    16     "     "
 
-PIN tool:
-  Loads: 130,044,495 (13 * 10M)
-  Stores: 60,013,523 (6 * 10M)
-
+PIN tool (MIAMI memreuse):
+  Loads: 130M (13 * 10M)
+  Stores: 60M (6 * 10M)
 
 Two back-to-back runs of "perf stat"
   5143312 cpu/mem-loads,ldlat=1/pp
