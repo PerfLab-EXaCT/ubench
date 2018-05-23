@@ -10,8 +10,10 @@ SeaPearl:
 -----------------------------------------------------------------------------
 - Intel(R) Xeon(R) CPU E5-2650 v2 @ 2.60GHz
 - perf version 2.6.32-504.8.1.el6.x86_64.debug
-- event: cpu/mem-loads/pp
 
+
+event: cpu/mem-loads/pp
+----------------------------------------
 
               samples            events
 period/sz     total    f1    f2    f1    f2
@@ -37,7 +39,9 @@ BlueSky:
 -----------------------------------------------------------------------------
 - Intel(R) Xeon(R) Gold 6126 CPU @ 2.60GHz
 - perf version 3.10.0-514.21.1.el7.x86_64.debug
-- event: cpu/mem-loads,ldlat=30/P
+
+event: cpu/mem-loads,.../P
+----------------------------------------
 
              samples               events
 period/sz     total    f1    f2     f1    f2
@@ -49,6 +53,13 @@ period/sz     total    f1    f2     f1    f2
   4986/100M   2574   1178  1396      6m  6.5m
 
   12,833,964
+
+
+event: mem_inst_retired.all_loads
+----------------------------------------
+              samples             events
+period/sz     total    f1    f2    f1    f2
+  9973/10M    1850    1306   544  13M   5.4M
   
 
 [[Perf bug!]]
