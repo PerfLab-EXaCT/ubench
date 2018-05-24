@@ -58,8 +58,8 @@ event: mem_inst_retired.all_loads
 ----------------------------------------
               samples             events
 period/sz     total    f1    f2    f1    f2
-  code/10M    13018   6009  7009   60M   70M   (130M)
- loads/10M    1919    1355   564  13.5M   5.6M
+  code/10M    13018   6009  7009   60M   70M   (130M)  [[good!]]
+ loads/10M    1919    1355   564  13.5M   5.6M (19M)   [[throttling]]
 
 [[Perf bug!]]
   - perf mem record will not accept -o
@@ -91,6 +91,3 @@ Intel manual, Section B.4.3.2, page B-23
 > perf stat -e cpu/event=0x0b,umask=0x10/p ./x
 > perf stat -e cpu/event=0x0e,umask=0x01,inv,cmask=0x01/ ./x
 
-
-96,762,026,996,052
-52,777,557,947,401

@@ -7,7 +7,7 @@ TGT = x
 
 PERIOD = 4986 9973 19946 39891
 
-PERIOD_DLA = 9973
+PERIOD_DLA = 9973 # 119730
 
 #****************************************************************************
 
@@ -62,6 +62,8 @@ PERF_RPT_OPT := $(shell \
 
 DLA_EVENTS = \
 	mem_uops_retired_all_loads_code \
+	mem_inst_retired.all_loads\:upp \
+	\
 	mem_inst_retired.all_loads \
 	mem_load_retired.l1_hit \
 	mem_load_retired.l2_hit \
