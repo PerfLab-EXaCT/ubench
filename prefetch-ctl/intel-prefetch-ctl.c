@@ -175,8 +175,18 @@ static int detect_cpu(void) {
 			is_core2=0;
 			break;
 
-		case 86: case 79: /* bdw-? */
-			printf("Found Broadwell-?? CPU\n");
+		case 86: case 79: /* bdw-server */
+			printf("Found Broadwell-server CPU\n");
+			is_core2=0;
+			break;
+
+		case 94: case 78: /* sky-client */
+			printf("Found SkyLake-client CPU\n");
+			is_core2=0;
+			break;
+
+		case 85: /* sky-server */
+			printf("Found SkyLake-server CPU\n");
 			is_core2=0;
 			break;
 

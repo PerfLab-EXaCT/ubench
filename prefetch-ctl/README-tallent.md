@@ -4,6 +4,19 @@
 Vince Weaver's code:
   https://github.com/deater/uarch-configure/tree/master/intel-prefetch
 
+./intel-prefetch-ctl -d
+./intel-prefetch-ctl -e
+
+=============================================================================
+Model numbers:
+=============================================================================
+
+https://en.wikichip.org/wiki/intel/cpuid
+
+https://software.intel.com/en-us/articles/intel-architecture-and-processor-identification-with-cpuid-model-and-family-numbers
+
+=============================================================================
+Controlling Prefetchers:
 =============================================================================
 
 https://01.org/msr-tools/downloads/msr-tools-source-code
