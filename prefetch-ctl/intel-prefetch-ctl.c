@@ -1,3 +1,5 @@
+/* -*-Mode: c; indent-tabs-mode: 't */
+
 /* Disable the hardware prefetcher on:					   */
 /*	Core2					  			   */
 /*	Nehalem, Westmere, SandyBridge, IvyBridge, Haswell and Broadwell   */
@@ -29,6 +31,9 @@
 #include <string.h>
 
 #include <sys/syscall.h>
+
+#include <sys/sysinfo.h> /* get_nprocs */
+
 
 static int open_msr(int core) {
 
@@ -216,8 +221,9 @@ static int disable_prefetch_nhm(int core) {
 	printf("Disable all prefetch\n");
 
 	if (core==-1) {
+	        int nprocs = get_nprocs();
 		begin=0;
-		end=1024;
+		end=(nprocs) > 1 ? (nprocs - 1) : 0;
 	}
 	else {
 		begin=core;
@@ -271,8 +277,9 @@ static int enable_prefetch_nhm(int core) {
 	printf("Enable all prefetch\n");
 
 	if (core==-1) {
+	        int nprocs = get_nprocs();
 		begin=0;
-		end=1024;
+		end=(nprocs) > 1 ? (nprocs - 1) : 0;
 	}
 	else {
 		begin=core;
@@ -328,8 +335,9 @@ static int disable_prefetch_core2(int core) {
 	printf("Disable all prefetch\n");
 
 	if (core==-1) {
+	        int nprocs = get_nprocs();
 		begin=0;
-		end=1024;
+		end=(nprocs) > 1 ? (nprocs - 1) : 0;
 	}
 	else {
 		begin=core;
@@ -384,8 +392,9 @@ static int enable_prefetch_core2(int core) {
 	printf("Enable all prefetch\n");
 
 	if (core==-1) {
+	        int nprocs = get_nprocs();
 		begin=0;
-		end=1024;
+		end=(nprocs) > 1 ? (nprocs - 1) : 0;
 	}
 	else {
 		begin=core;

@@ -1,14 +1,19 @@
 -*-Mode: markdown;-*- [outline]
 =============================================================================
 
-Vince Weaver's code:
+Vince Weaver's code provides third-party control of prefetchers:
   https://github.com/deater/uarch-configure/tree/master/intel-prefetch
 
-./intel-prefetch-ctl -d
-./intel-prefetch-ctl -e
+  ./intel-prefetch-ctl -d
+  ./intel-prefetch-ctl -e
+
+
+For first-party control of prefetchers, need to use sched_getaffinity()
+  cf. https://stackoverflow.com/questions/4586405/how-to-get-the-number-of-cpus-in-linux-using-c?answertab=active#tab-top
+
 
 =============================================================================
-Model numbers:
+Intel model numbers:
 =============================================================================
 
 https://en.wikichip.org/wiki/intel/cpuid
@@ -16,7 +21,7 @@ https://en.wikichip.org/wiki/intel/cpuid
 https://software.intel.com/en-us/articles/intel-architecture-and-processor-identification-with-cpuid-model-and-family-numbers
 
 =============================================================================
-Controlling Prefetchers:
+Controlling Intel prefetchers:
 =============================================================================
 
 https://01.org/msr-tools/downloads/msr-tools-source-code
@@ -24,7 +29,7 @@ https://01.org/msr-tools/downloads/msr-tools-source-code
 /dev/cpu/<core#>/msr
 
 
-Details for post-Nehalem:
+Details for Nehalem and post-Nehalem:
 ----------------------------------------
 
 https://software.intel.com/en-us/articles/disclosure-of-hw-prefetcher-control-on-some-intel-processors
