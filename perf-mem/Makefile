@@ -63,12 +63,29 @@ PERF_RPT_OPT := $(shell \
 DLA_EVENTS = \
 	mem_uops_retired_all_loads_code \
 	mem_inst_retired.all_loads\:upp \
-	\
 	mem_inst_retired.all_loads \
-	mem_load_retired.l1_hit \
-	mem_load_retired.l2_hit \
-	mem_load_retired.l3_hit \
-	mem_load_retired.fb_hit
+	\
+	mem_load_retired.l1_hit\:upp \
+	mem_load_retired.l2_hit\:upp \
+	mem_load_retired.fb_hit\:upp \
+	mem_load_retired.l3_hit\:upp \
+        mem_load_retired.l3_miss\:upp \
+	\
+	l1d.replacement \
+	l2_rqsts.all_pf \
+	offcore_response.pf_l1d_and_sw.any_response \
+	offcore_response.all_pf_data_rd.any_response
+
+
+# These "non-precise" events can be easily throttled
+#	mem_load_retired.l1_hit \
+#	mem_load_retired.l2_hit \
+#	mem_load_retired.fb_hit \
+#	mem_load_retired.l3_hit \
+#       mem_load_retired.l3_miss
+
+
+# cycle_activity.stalls_l1d_miss
 
 # mem_inst_retired.all_loads       MEM_UOPS_RETIRED.ALL_LOADS
 # mem_inst_retired.lock_loads      MEM_UOPS_RETIRED.LOCK_LOADS
@@ -126,6 +143,10 @@ perf-dla_dat-% : $(TGT)
 perf-dla_rpt-% : perf-dla_dat-%
 	perf report --stdio $(PERF_RPT_OPT) -n -i $<
 
+#	perf annotate -n --no-source --full-paths --stdio -i <input>
+#	perf script -F dso,ip -i <input>
+
+#	perf script [<options>] report <script> [script-args]
 
 #----------------------------------------------------------------------------
 # ldlat:

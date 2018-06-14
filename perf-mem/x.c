@@ -21,7 +21,7 @@ void f1(TYPE* a, size_t a_len) {
 void f2(TYPE* a, size_t a_len) {
   TYPE* a_i = a; // 'a' is an array of size 'a_len'
   for (size_t i = 1; i < a_len; i++, a++) {
-    *a_i  = *(a_i - 1);
+    *a_i = *(a_i - 1);
   }
 
   //fprintf(stdout, "f2 expect: %g loads\n", (double)(a_len - 1));

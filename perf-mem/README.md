@@ -1,6 +1,38 @@
 -*-Mode: markdown;-*- [outline]
 =============================================================================
 
+=============================================================================
+Skylake prefetchers:
+=============================================================================
+
+same when prefetchers on/off:
+  `l1d.replacement`
+
+less when prefetchers off:
+  `offcore_response.pf_l1d_and_sw.any_response`
+
+zero when prefetchers off:
+  `l2_rqsts.all_pf`
+  `offcore_response.all_pf_data_rd.any_response`
+
+
+>                         on     off
+> l1d.replacement        60/57   59/56
+> l2_rqsts.all_pf        59/2    0
+> offcore_response.pf_l1d_and_sw.any_response  0  0
+> offcore_response.all_pf_data_rd.any_response 0  0
+
+
+
+? `offcore_response.all_pf_rfo.any_response`
+? `l2_lines_in.all`
+
+
+=============================================================================
+DLA events:
+=============================================================================
+
+
 Samples should be proportional to loads (and independent of cache state).
 
 Problem: only monitor loads over certain latency!
