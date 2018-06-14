@@ -59,21 +59,21 @@ static int open_msr(int core) {
 	return fd;
 }
 
-static long long read_msr(int fd, int which) {
+static uint64_t read_msr(int fd, int which) {
 
-	uint64_t data;
+	uint64_t value;
 
-	if ( pread(fd, &data, sizeof data, which) != sizeof data ) {
+	if ( pread(fd, &value, sizeof(value), which) != sizeof(value) ) {
 		perror("rdmsr:pread");
 		exit(127);
 	}
 
-	return (long long)data;
+	return (uint64_t)value;
 }
 
 static int write_msr(int fd, uint64_t which, uint64_t value) {
 
-	if ( pwrite(fd, &value, sizeof(value), which) != sizeof value ) {
+	if ( pwrite(fd, &value, sizeof(value), which) != sizeof(value) ) {
 		perror("rdmsr:pwrite");
 		exit(127);
 	}
@@ -214,11 +214,7 @@ static int detect_cpu(void) {
 /* Disable prefetch on nehalem and newer */
 static int disable_prefetch_nhm(int core) {
 
-	int fd;
-	int result;
 	int begin,end,c;
-
-	printf("Disable all prefetch\n");
 
 	if (core==-1) {
 	        int nprocs = get_nprocs();
@@ -232,33 +228,24 @@ static int disable_prefetch_nhm(int core) {
 
 	for(c=begin;c<=end;c++) {
 
-		fd=open_msr(c);
+		int fd=open_msr(c);
 		if (fd<0) break;
 
 		/* Read original results */
-		result=read_msr(fd,NHM_PREFETCH_MSR);
-
-		printf("\tCore %d old : L2HW=%c L2ADJ=%c DCU=%c DCUIP=%c\n",
-			c,
-			result&0x1?'N':'Y',
-			result&0x2?'N':'Y',
-			result&0x4?'N':'Y',
-			result&0x8?'N':'Y'
-			);
+		uint64_t val_old=read_msr(fd,NHM_PREFETCH_MSR);
 
 		/* Disable all */
-		result=write_msr(fd,NHM_PREFETCH_MSR,0xf);
+		write_msr(fd,NHM_PREFETCH_MSR,0xf);
 
 		/* Verify change */
-		result=read_msr(fd,NHM_PREFETCH_MSR);
+		uint64_t val_new=read_msr(fd,NHM_PREFETCH_MSR);
 
-		printf("\tCore %d new : L2HW=%c L2ADJ=%c DCU=%c DCUIP=%c\n",
+		printf("\tDisable(core %d): L2HW=%c->%c L2ADJ=%c->%c DCU=%c->%c DCUIP=%c->%c\n",
 			c,
-			result&0x1?'N':'Y',
-			result&0x2?'N':'Y',
-			result&0x4?'N':'Y',
-			result&0x8?'N':'Y'
-			);
+			val_old&0x1?'N':'Y', val_new&0x1?'N':'Y',
+			val_old&0x2?'N':'Y', val_new&0x2?'N':'Y',
+			val_old&0x4?'N':'Y', val_new&0x4?'N':'Y',
+		        val_old&0x8?'N':'Y', val_new&0x8?'N':'Y');
 
 		close(fd);
 
@@ -270,11 +257,7 @@ static int disable_prefetch_nhm(int core) {
 /* Enable prefetch on nehalem and newer */
 static int enable_prefetch_nhm(int core) {
 
-	int fd;
-	int result;
 	int begin,end,c;
-
-	printf("Enable all prefetch\n");
 
 	if (core==-1) {
 	        int nprocs = get_nprocs();
@@ -288,33 +271,24 @@ static int enable_prefetch_nhm(int core) {
 
 	for(c=begin;c<=end;c++) {
 
-		fd=open_msr(c);
+		int fd=open_msr(c);
 		if (fd<0) break;
 
 		/* Read original results */
-		result=read_msr(fd,NHM_PREFETCH_MSR);
-
-		printf("\tCore %d old : L2HW=%c L2ADJ=%c DCU=%c DCUIP=%c\n",
-			c,
-			result&0x1?'N':'Y',
-			result&0x2?'N':'Y',
-			result&0x4?'N':'Y',
-			result&0x8?'N':'Y'
-			);
+		uint64_t val_old=read_msr(fd,NHM_PREFETCH_MSR);
 
 		/* Enable all */
-		result=write_msr(fd,NHM_PREFETCH_MSR,0x0);
+		write_msr(fd,NHM_PREFETCH_MSR,0x0);
 
 		/* Verify change */
-		result=read_msr(fd,NHM_PREFETCH_MSR);
+		uint64_t val_new=read_msr(fd,NHM_PREFETCH_MSR);
 
-		printf("\tCore %d new : L2HW=%c L2ADJ=%c DCU=%c DCUIP=%c\n",
+		printf("\tEnable(core %d): L2HW=%c->%c L2ADJ=%c->%c DCU=%c->%c DCUIP=%c->%c\n",
 			c,
-			result&0x1?'N':'Y',
-			result&0x2?'N':'Y',
-			result&0x4?'N':'Y',
-			result&0x8?'N':'Y'
-			);
+			val_old&0x1?'N':'Y', val_new&0x1?'N':'Y',
+			val_old&0x2?'N':'Y', val_new&0x2?'N':'Y',
+			val_old&0x4?'N':'Y', val_new&0x4?'N':'Y',
+		        val_old&0x8?'N':'Y', val_new&0x8?'N':'Y');
 
 		close(fd);
 
@@ -332,7 +306,7 @@ static int disable_prefetch_core2(int core) {
 	uint64_t result;
 	int begin,end,c;
 
-	printf("Disable all prefetch\n");
+	printf("Disable all prefetchers\n");
 
 	if (core==-1) {
 	        int nprocs = get_nprocs();
@@ -389,7 +363,7 @@ static int enable_prefetch_core2(int core) {
 	uint64_t result;
 	int begin,end,c;
 
-	printf("Enable all prefetch\n");
+	printf("Enable all prefetchers\n");
 
 	if (core==-1) {
 	        int nprocs = get_nprocs();
