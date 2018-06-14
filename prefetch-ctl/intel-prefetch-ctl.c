@@ -15,8 +15,8 @@
 /*									   */
 /* by Vince Weaver, vincent.weaver _at_ maine.edu -- 26 February 2016	   */
 
-#define CORE2_PREFETCH_MSR	0x1a0
 #define NHM_PREFETCH_MSR	0x1a4
+#define CORE2_PREFETCH_MSR	0x1a0
 
 
 #include <stdio.h>
@@ -210,6 +210,15 @@ static int detect_cpu(void) {
 	return is_core2;
 }
 
+#define PREFETCHER_PRINTF_STR \
+  "L2-hw=%c->%c L2-adj=%c->%c L1/DCU-adj=%c->%c L1/DCU-ip=%c->%c"
+
+#define PREFETCHER_PRINTF_VALS \
+  (val_old&0x1)?'N':'Y', (val_new&0x1)?'N':'Y', \
+  (val_old&0x2)?'N':'Y', (val_new&0x2)?'N':'Y', \
+  (val_old&0x4)?'N':'Y', (val_new&0x4)?'N':'Y', \
+  (val_old&0x8)?'N':'Y', (val_new&0x8)?'N':'Y'
+
 
 /* Disable prefetch on nehalem and newer */
 static int disable_prefetch_nhm(int core) {
@@ -240,12 +249,8 @@ static int disable_prefetch_nhm(int core) {
 		/* Verify change */
 		uint64_t val_new=read_msr(fd,NHM_PREFETCH_MSR);
 
-		printf("\tDisable(core %d): L2HW=%c->%c L2ADJ=%c->%c DCU=%c->%c DCUIP=%c->%c\n",
-			c,
-			val_old&0x1?'N':'Y', val_new&0x1?'N':'Y',
-			val_old&0x2?'N':'Y', val_new&0x2?'N':'Y',
-			val_old&0x4?'N':'Y', val_new&0x4?'N':'Y',
-		        val_old&0x8?'N':'Y', val_new&0x8?'N':'Y');
+		printf("Disable(core %d): " PREFETCHER_PRINTF_STR "\n",
+		       c, PREFETCHER_PRINTF_VALS);
 
 		close(fd);
 
@@ -283,12 +288,8 @@ static int enable_prefetch_nhm(int core) {
 		/* Verify change */
 		uint64_t val_new=read_msr(fd,NHM_PREFETCH_MSR);
 
-		printf("\tEnable(core %d): L2HW=%c->%c L2ADJ=%c->%c DCU=%c->%c DCUIP=%c->%c\n",
-			c,
-			val_old&0x1?'N':'Y', val_new&0x1?'N':'Y',
-			val_old&0x2?'N':'Y', val_new&0x2?'N':'Y',
-			val_old&0x4?'N':'Y', val_new&0x4?'N':'Y',
-		        val_old&0x8?'N':'Y', val_new&0x8?'N':'Y');
+		printf("Enable(core %d): " PREFETCHER_PRINTF_STR "\n",
+		       c, PREFETCHER_PRINTF_VALS);
 
 		close(fd);
 
@@ -296,7 +297,6 @@ static int enable_prefetch_nhm(int core) {
 
 	return 0;
 }
-
 
 
 /* Disable prefetch on core2 */
