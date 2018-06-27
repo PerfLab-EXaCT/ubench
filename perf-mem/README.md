@@ -1,6 +1,34 @@
 -*-Mode: markdown;-*- [outline]
 =============================================================================
 
+What have we learned about perf? multi-plexing gives inaccurate results
+
+What have we learned about events?
+  - line replacement events are not precise -> attribution issues
+
+* The L2_RQSTS and L2_DATA_RQSTS events can be used to discern assorted access types. In all of the L2 access events the designation PREFETCH only refers to the L2 hardware prefetch. The designation DEMAND includes loads and requests due to the L1D hardware prefetchers. 
+
+* The event L1D_PREFETCH.REQUESTS is counted whenever the DCU attempts to prefetch cache lines from the L2 (or memory) to the DCU. If you expect the DCU prefetchers to work and to count this event, but instead you detect the event MEM_LOAD_RETIRE.L1D_MISS, it might be that the IP prefetcher suffers from load instruction address collision of several loads. (739)
+
+Substract effects of code: L2_RQSTS.CODE_RD_HIT
+
+
+- How to parse data? Perhaps use hpctoolkit, since we are focused on profiles.
+  -	perf annotate -n --no-source --full-paths --stdio -i <data>
+    - duplicates disassembly for each event
+
+  - perf script -F dso,event,ip -i <data>
+    - doesn't normalize dso offsets
+    - duplicates dso name
+
+- validation:
+  - rule: lines-replaced <= loads <= words-in-lines-replaced
+  - rule: 
+
+
+* static analysis: tag base-pointer based loads as touch stack with a working set size of 1
+
+
 =============================================================================
 Skylake prefetchers:
 =============================================================================
@@ -12,26 +40,29 @@ less when prefetchers off:
   `offcore_response.pf_l1d_and_sw.any_response`
 
 zero when prefetchers off:
-  `l2_rqsts.all_pf`
-  `offcore_response.all_pf_data_rd.any_response`
+  `l2_rqsts.all_pf`: seems to double count some prefetch events (e.g. L1 attempt, which turns into and L2
+  
+  `offcore_response.all_pf_data_rd.any_response`: does not not appear to count all prefethes... only L2?
 
 
->                         on     off
-> l1d.replacement        60/57   59/56
-> l2_rqsts.all_pf        59/2    0
-> offcore_response.pf_l1d_and_sw.any_response  0  0
-> offcore_response.all_pf_data_rd.any_response 0  0
+                         on     off
+`l1d.replacement`        60/57   59/56 = 598K * 64 B/line = 38 MB
+`l2_rqsts.all_pf`        59/2    0
+`offcore_response.pf_l1d_and_sw.any_response`  0  0
+`offcore_response.all_pf_data_rd.any_response` 0  0
 
+
+? `l2_lines_in.all`
+
+/files0/kili337/Experiments/tests/xr.c
 
 
 ? `offcore_response.all_pf_rfo.any_response`
-? `l2_lines_in.all`
 
 
 =============================================================================
 DLA events:
 =============================================================================
-
 
 Samples should be proportional to loads (and independent of cache state).
 

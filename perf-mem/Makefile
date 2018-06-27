@@ -7,7 +7,7 @@ TGT = x
 
 PERIOD = 4986 9973 19946 39891
 
-PERIOD_DLA = 9973 # 119730
+PERIOD_DLA = 13973 # 9973 # 119730
 
 #****************************************************************************
 
@@ -71,10 +71,14 @@ DLA_EVENTS = \
 	mem_load_retired.l3_hit\:upp \
         mem_load_retired.l3_miss\:upp \
 	\
-	l1d.replacement \
 	l2_rqsts.all_pf \
+	l2_lines_in.all \
+	l1d.replacement \
+	offcore_response.all_pf_data_rd.any_response \
 	offcore_response.pf_l1d_and_sw.any_response \
-	offcore_response.all_pf_data_rd.any_response
+	offcore_response.pf_l2_data_rd.any_response \
+	offcore_response.pf_l3_data_rd.any_response \
+
 
 
 # These "non-precise" events can be easily throttled
@@ -143,10 +147,14 @@ perf-dla_dat-% : $(TGT)
 perf-dla_rpt-% : perf-dla_dat-%
 	perf report --stdio $(PERF_RPT_OPT) -n -i $<
 
+#	perf script -F event,dso,ip,sym,symoff -i <input>
 #	perf annotate -n --no-source --full-paths --stdio -i <input>
-#	perf script -F dso,ip -i <input>
+# 	perf report -n -v -U --no-demangle --stdio -i
 
-#	perf script [<options>] report <script> [script-args]
+
+# export-to-sqlite
+# export-to-postgresql
+# event_analyzing_sample
 
 #----------------------------------------------------------------------------
 # ldlat:
@@ -223,3 +231,5 @@ perf-stat : $(TGT)
 	  perf stat -e cpu/config=0x1cd,config1=0x1f,config2=0x0/P ./$(TGT) ; \
 	  perf stat -e cpu/event=0x0b,umask=0x10/P ./$(TGT) ; \
 	fi
+
+# perf stat -d -d -d <app>
