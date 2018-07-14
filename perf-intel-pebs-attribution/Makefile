@@ -70,4 +70,5 @@ perf-dla_dat-% : ./$(TGT)
 
 perf-dla_rpt-% : perf-dla_dat-%
 #	perf report --stdio $(PERF_RPT_OPT) -n -i $<
-	perf annotate -n --stdio -i $<
+	perf annotate -s f1 -n --stdio -i $<
+	perf annotate -s f2 -n --stdio -i $<
