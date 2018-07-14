@@ -7,6 +7,8 @@ TGT = y
 
 PERIOD = 4986 9973 19946 39891
 
+PERIOD_DLA = 13973 # 9973 # 119730
+
 #****************************************************************************
 
 SHELL = /bin/bash
@@ -18,10 +20,12 @@ all : test
 $(TGT) : % : %.c
 	$(CC) -o $@ $<
 
-test : ldlat
+test : dla ldlat
 
 clean :
 	$(RM) \
+	  $(TEST_PERF_DLA_DAT) \
+	  $(addsuffix .old, $(TEST_PERF_DLA_DAT)) \
 	  $(TEST_PERF_LDLAT_DAT) \
 	  $(addsuffix .old, $(TEST_PERF_LDLAT_DAT)) \
 
@@ -42,6 +46,37 @@ PERF_RPT_OPT := $(shell \
 	  echo "--header" ; \
 	fi )
 
+PERF_OUT_REDIRECT := 2> /dev/null
+
+GREP_ARGS := -e "\# Samples" -e "\# Event count"
+# -e "\# event"
+
+#----------------------------------------------------------------------------
+# dla:
+#----------------------------------------------------------------------------
+
+DLA_EVENTS = \
+	mem_inst_retired.all_loads\:upp
+
+TEST_PERF_DLA_DAT = $(addprefix perf-dla_dat-, $(DLA_EVENTS))
+TEST_PERF_DLA_RPT = $(addprefix perf-dla_rpt-, $(DLA_EVENTS))
+
+dla : dla_rpt
+
+dla_dat : $(TEST_PERF_DLA_DAT)
+
+dla_rpt : $(TEST_PERF_DLA_RPT)
+
+.PHONY: dla dla_dat dla_rpt
+
+perf-dla_dat-% : ./$(TGT)
+	@perf record -e $(*F) -c $(PERIOD_DLA) -o $@ $< $(PERF_OUT_REDIRECT)
+
+perf-dla_rpt-% : perf-dla_dat-%
+	@echo "*** Load count: loads (precise) ***"
+	@perf report --stdio $(PERF_RPT_OPT) -n -i $< \
+	  | grep $(GREP_ARGS)
+
 #----------------------------------------------------------------------------
 # ldlat:
 #----------------------------------------------------------------------------
@@ -59,10 +94,11 @@ ldlat_rpt : $(TEST_PERF_LDLAT_RPT)
 
 
 perf-ldlat_dat-% : $(TGT)
-	perf record -W -e cpu/mem-loads,ldlat=1/upp -c $(*F) -o $@ $<
+	@perf record -W -e cpu/mem-loads,ldlat=4/upp -c $(*F) -o $@ $< $(PERF_OUT_REDIRECT)
 # 	-W: sample by weight
 # 	-d: record addresses
 
 perf-ldlat_rpt-% : perf-ldlat_dat-%
-	perf report --stdio $(PERF_RPT_OPT) -n -i $<
-
+	@echo "*** Load count: ldlat / $(*F) ***"
+	@perf report --stdio $(PERF_RPT_OPT) -n -i $< \
+	  | grep $(GREP_ARGS)
