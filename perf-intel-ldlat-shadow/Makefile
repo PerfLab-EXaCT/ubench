@@ -5,7 +5,7 @@ CC = gcc -std=c99 -g -O0 -Wall
 
 TGT = y
 
-PERIOD = 13973 # 9973 # 119730
+PERIOD = 4986 9973 19946 39891
 
 #****************************************************************************
 
@@ -15,15 +15,15 @@ PERF_VER := $(shell perf --version)
 
 all : test
 
-% : %.c
+$(TGT) : % : %.c
 	$(CC) -o $@ $<
 
-test : dla
+test : ldlat
 
 clean :
 	$(RM) \
-	  $(TEST_PERF_DLA_DAT) \
-	  $(addsuffix .old, $(TEST_PERF_DLA_DAT))
+	  $(TEST_PERF_LDLAT_DAT) \
+	  $(addsuffix .old, $(TEST_PERF_LDLAT_DAT)) \
 
 distclean : clean
 	$(RM) $(TGT)
@@ -43,31 +43,26 @@ PERF_RPT_OPT := $(shell \
 	fi )
 
 #----------------------------------------------------------------------------
-# dla:
+# ldlat:
 #----------------------------------------------------------------------------
 
-DLA_EVENTS = \
-	mem_uops_retired_all_loads_code \
-	mem_inst_retired.all_loads\:upp \
+TEST_PERF_LDLAT_DAT = $(addprefix perf-ldlat_dat-, $(PERIOD))
+TEST_PERF_LDLAT_RPT = $(addprefix perf-ldlat_rpt-, $(PERIOD))
 
-TEST_PERF_DLA_DAT = $(addprefix perf-dla_dat-, $(DLA_EVENTS))
-TEST_PERF_DLA_RPT = $(addprefix perf-dla_rpt-, $(DLA_EVENTS))
+ldlat : ldlat_rpt
 
-dla : dla_rpt
+ldlat_dat : $(TEST_PERF_LDLAT_DAT)
 
-dla_dat : $(TEST_PERF_DLA_DAT)
+ldlat_rpt : $(TEST_PERF_LDLAT_RPT)
 
-dla_rpt : $(TEST_PERF_DLA_RPT)
-
-.PHONY: dla dla_dat dla_rpt
+.PHONY: ldlat ldlat_dat ldlat_rpt
 
 
-perf-dla_dat-mem_uops_retired_all_loads_code : ./$(TGT)
-	perf record -e cpu/event=0xd0,umask=0x81/upp -c $(PERIOD) -o $@ $<
+perf-ldlat_dat-% : $(TGT)
+	perf record -W -e cpu/mem-loads,ldlat=1/upp -c $(*F) -o $@ $<
+# 	-W: sample by weight
+# 	-d: record addresses
 
-perf-dla_dat-% : ./$(TGT)
-	perf record -e $(*F) -c $(PERIOD) -o $@ $<
+perf-ldlat_rpt-% : perf-ldlat_dat-%
+	perf report --stdio $(PERF_RPT_OPT) -n -i $<
 
-perf-dla_rpt-% : perf-dla_dat-%
-#	perf report --stdio $(PERF_RPT_OPT) -n -i $<
-	perf annotate -n --stdio -i $<
