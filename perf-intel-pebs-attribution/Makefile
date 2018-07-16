@@ -15,7 +15,7 @@ PERF_VER := $(shell perf --version)
 
 all : test
 
-% : %.c
+$(TGT) : % : %.c
 	$(CC) -o $@ $<
 
 test : dla
@@ -62,10 +62,10 @@ dla_rpt : $(TEST_PERF_DLA_RPT)
 .PHONY: dla dla_dat dla_rpt
 
 
-perf-dla_dat-mem_uops_retired_all_loads_code : ./$(TGT)
+perf-dla_dat-mem_uops_retired_all_loads_code : $(TGT)
 	perf record -e cpu/event=0xd0,umask=0x81/upp -c $(PERIOD) -o $@ $<
 
-perf-dla_dat-% : ./$(TGT)
+perf-dla_dat-% : $(TGT)
 	perf record -e $(*F) -c $(PERIOD) -o $@ $<
 
 perf-dla_rpt-% : perf-dla_dat-%
