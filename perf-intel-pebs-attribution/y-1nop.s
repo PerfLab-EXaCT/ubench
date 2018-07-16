@@ -24,19 +24,30 @@ f1:
 	jmp	.L2
 .L3:
 	negl	-4(%rbp)
+	nop
 	movq	-16(%rbp), %rax
+	nop
 	leaq	0(,%rax,4), %rdx
+	nop
 	movq	-24(%rbp), %rax
+	nop
 	addq	%rax, %rdx
+	nop
 	movl	-4(%rbp), %eax
+	nop
 	movl	%eax, (%rdx)
+	nop
 	addq	$1, -16(%rbp)
+	nop
 .L2:
 	movq	-16(%rbp), %rax
+	nop
 	cmpq	-32(%rbp), %rax
+	nop
 	jb	.L3
 	nop
 	popq	%rbp
+	nop
 	.cfi_def_cfa 7, 8
 	ret
 	.cfi_endproc
@@ -59,23 +70,38 @@ f2:
 	jmp	.L5
 .L6:
 	movq	-8(%rbp), %rax
+	nop
 	leaq	0(,%rax,4), %rdx
+	nop
 	movq	-32(%rbp), %rax
+	nop
 	addq	%rdx, %rax
+	nop
 	movq	-8(%rbp), %rdx
+	nop
 	leaq	0(,%rdx,4), %rcx
+	nop
 	movq	-24(%rbp), %rdx
+	nop
 	addq	%rcx, %rdx
+	nop
 	movl	(%rax), %eax
+	nop
 	movl	%eax, (%rdx)
+	nop
 	addq	$1, -8(%rbp)
+	nop
 .L5:
 	movq	-40(%rbp), %rax
+	nop
 	subq	$1, %rax
+	nop
 	cmpq	%rax, -8(%rbp)
+	nop
 	jb	.L6
 	nop
 	popq	%rbp
+	nop
 	.cfi_def_cfa 7, 8
 	ret
 	.cfi_endproc
