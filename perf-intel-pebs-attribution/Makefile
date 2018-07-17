@@ -60,7 +60,6 @@ PERF_RPT_OPT := $(shell \
 # dla:
 #----------------------------------------------------------------------------
 
-
 TEST_PERF_DLA1_DAT = $(addprefix perf-dla1_dat-, $(TGT1) $(TGT2))
 TEST_PERF_DLA2_DAT = $(addprefix perf-dla2_dat-, $(TGT1) $(TGT2))
 TEST_PERF_DLA1_RPT = $(addsuffix .txt, $(addprefix perf-dla1_rpt-, $(TGT1) $(TGT2)))
