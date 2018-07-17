@@ -65,6 +65,8 @@ TEST_PERF_DLA2_DAT = $(addprefix perf-dla2_dat-, $(TGT1) $(TGT2))
 TEST_PERF_DLA1_RPT = $(addsuffix .txt, $(addprefix perf-dla1_rpt-, $(TGT1) $(TGT2)))
 TEST_PERF_DLA2_RPT = $(addsuffix .txt, $(addprefix perf-dla2_rpt-, $(TGT1) $(TGT2)))
 
+GREP_ARGS := -v -e "0 :.*nop"
+
 dla : dla_dat dla_rpt
 
 dla_dat : $(TEST_PERF_DLA1_DAT) $(TEST_PERF_DLA2_DAT)
@@ -80,9 +82,12 @@ perf-dla2_dat-% : %
 
 define _rpt_template
   perf-dla$(1)_rpt-%.txt : perf-dla$(1)_dat-%
-	perf annotate -s f1 -n --stdio -i $$< > $$@
-	perf annotate -s f2 -n --stdio -i $$< >> $$@
+	perf annotate -s f1 -n --no-source --stdio -i $$< \
+	  | grep $(GREP_ARGS) > $$@
+	perf annotate -s f2 -n --no-source --stdio -i $$< \
+	  | grep $(GREP_ARGS) >> $$@
 endef
 
 $(foreach x, 1 2,$(eval $(call _rpt_template,$(x))))
 
+# FIXME: check for throttle
