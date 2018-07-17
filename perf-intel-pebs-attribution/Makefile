@@ -78,11 +78,11 @@ perf-dla1_dat-% : %
 perf-dla2_dat-% : %
 	perf record -e cpu/event=0xd0,umask=0x81/upp -c $(PERIOD) -o $@ $<
 
-perf-dla1_rpt-%.txt : perf-dla1_dat-%
-	perf annotate -s f1 -n --stdio -i $< > $@
-	perf annotate -s f2 -n --stdio -i $< >> $@
+define _rpt_template
+  perf-dla$(1)_rpt-%.txt : perf-dla$(1)_dat-%
+	perf annotate -s f1 -n --stdio -i $$< > $$@
+	perf annotate -s f2 -n --stdio -i $$< >> $$@
+endef
 
-perf-dla2_rpt-%.txt : perf-dla2_dat-%
-	perf annotate -s f1 -n --stdio -i $< > $@
-	perf annotate -s f2 -n --stdio -i $< >> $@
+$(foreach x, 1 2,$(eval $(call _rpt_template,$(x))))
 
