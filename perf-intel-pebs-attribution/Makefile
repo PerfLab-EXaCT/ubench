@@ -36,9 +36,8 @@ test : dla
 clean :
 	$(RM) \
 	  $(TEST_PERF_DLA1_DAT) $(TEST_PERF_DLA2_DAT) \
-	  $(TEST_PERF_DLA1_RPT) $(TEST_PERF_DLA2_RPT) \
-	  $(addsuffix .old, $(TEST_PERF_DLA_DAT)) \
-	  $(addsuffix .old, $(TEST_PERF_DLA_DAT_ASM))
+	  $(addsuffix .old, $(TEST_PERF_DLA1_DAT) $(TEST_PERF_DLA2_DAT)) \
+	  $(TEST_PERF_DLA1_RPT) $(TEST_PERF_DLA2_RPT)
 
 distclean : clean
 	$(RM) $(TGT1) $(TGT2)
@@ -64,15 +63,13 @@ PERF_RPT_OPT := $(shell \
 
 TEST_PERF_DLA1_DAT = $(addprefix perf-dla1_dat-, $(TGT1) $(TGT2))
 TEST_PERF_DLA2_DAT = $(addprefix perf-dla2_dat-, $(TGT1) $(TGT2))
-TEST_PERF_DLA1_RPT = $(addprefix perf-dla1_rpt-, $(TGT1) $(TGT2))
-TEST_PERF_DLA2_RPT = $(addprefix perf-dla2_rpt-, $(TGT1) $(TGT2))
+TEST_PERF_DLA1_RPT = $(addsuffix .txt, $(addprefix perf-dla1_rpt-, $(TGT1) $(TGT2)))
+TEST_PERF_DLA2_RPT = $(addsuffix .txt, $(addprefix perf-dla2_rpt-, $(TGT1) $(TGT2)))
 
 dla : dla_dat dla_rpt
 
 dla_dat : $(TEST_PERF_DLA1_DAT) $(TEST_PERF_DLA2_DAT)
-
 dla_rpt : $(TEST_PERF_DLA1_RPT) $(TEST_PERF_DLA2_RPT)
-	cat $<
 
 .PHONY: dla dla_dat dla_rpt
 
@@ -82,11 +79,11 @@ perf-dla1_dat-% : %
 perf-dla2_dat-% : %
 	perf record -e cpu/event=0xd0,umask=0x81/upp -c $(PERIOD) -o $@ $<
 
-perf-dla1_rpt-% : perf-dla1_dat-%
+perf-dla1_rpt-%.txt : perf-dla1_dat-%
 	perf annotate -s f1 -n --stdio -i $< > $@
 	perf annotate -s f2 -n --stdio -i $< >> $@
 
-perf-dla2_rpt-% : perf-dla2_dat-%
+perf-dla2_rpt-%.txt : perf-dla2_dat-%
 	perf annotate -s f1 -n --stdio -i $< > $@
 	perf annotate -s f2 -n --stdio -i $< >> $@
 
