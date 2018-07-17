@@ -87,20 +87,3 @@ perf-dla2_rpt-%.txt : perf-dla2_dat-%
 	perf annotate -s f1 -n --stdio -i $< > $@
 	perf annotate -s f2 -n --stdio -i $< >> $@
 
-
-# DLA_EVENTS = \
-# 	mem_uops_retired_all_loads_code \
-# 	mem_inst_retired.all_loads\:upp \
-
-# perf-dla_dat_asm-mem_uops_retired_all_loads_code : $(TGT2) 
-# 	@$(foreach asm,$(ASM),perf record -e cpu/event=0xd0,umask=0x81/upp -c $(PERIOD) -o $@_$(asm) $(asm);)
-
-# perf-dla_dat_asm-% : $(TGT2)
-# 	@$(foreach asm,$(TGT2),perf record -e $(*F) -c $(PERIOD) -o $@_$(asm) $(asm);)
-
-# perf-dla_rpt_asm-% : perf-dla_dat_asm-% $(TGT2)
-# #	perf report --stdio $(PERF_RPT_OPT) -n -i $<
-# 	@$(foreach asm,$(TGT2),perf annotate -s f1 -n --stdio -i $<_$(asm) >$<_$(asm).txt;)
-# 	@$(foreach asm,$(TGT2),perf annotate -s f2 -n --stdio -i $<_$(asm) >>$<_$(asm).txt;)
-
-
