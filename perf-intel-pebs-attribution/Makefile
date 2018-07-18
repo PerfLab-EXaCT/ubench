@@ -66,6 +66,7 @@ TEST_PERF_DLA1_RPT = $(addsuffix .txt, $(addprefix perf-dla1_rpt-, $(TGT1) $(TGT
 TEST_PERF_DLA2_RPT = $(addsuffix .txt, $(addprefix perf-dla2_rpt-, $(TGT1) $(TGT2)))
 
 GREP_ARGS := -v -e "0 :.*nop"
+PERF_VALIDATE = perf report -D -i $@ | grep -v -q --color THROT
 
 dla : dla_dat dla_rpt
 
@@ -76,9 +77,11 @@ dla_rpt : $(TEST_PERF_DLA1_RPT) $(TEST_PERF_DLA2_RPT)
 
 perf-dla1_dat-% : %
 	perf record -e mem_inst_retired.all_loads:upp -c $(PERIOD) -o $@ $<
+	$(PERF_VALIDATE)
 
 perf-dla2_dat-% : %
 	perf record -e cpu/event=0xd0,umask=0x81/upp -c $(PERIOD) -o $@ $<
+	$(PERF_VALIDATE)
 
 define _rpt_template
   perf-dla$(1)_rpt-%.txt : perf-dla$(1)_dat-%
@@ -89,5 +92,3 @@ define _rpt_template
 endef
 
 $(foreach x, 1 2,$(eval $(call _rpt_template,$(x))))
-
-# FIXME: check for throttle
