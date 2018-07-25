@@ -60,14 +60,14 @@ We cannot explain the distribution of loads.
 For example, consider the following summary of the attribution to
 function f2 using approximate histograms:
 
-- 0 nop: 1800, 1500, 2 x 800, 600, 100, 0 (attribution to jump!)
+- 0 nop: 1800, 1500, 800 x 2, 600, 150, 10, 0 (attribution to jump!)
 - 1 nop: 800 x 6, 400 x 2
-- 2 nop: 1400 x 4, 100 x 2, 55, 5
+- 2 nop: 1400 x 4, 100 x 2, 50, 5
 - 3 nop: 1250; 900 x 2, 600 x 3, 540; 420
-- 4 nop: 1400 x 2, 1300 x 2, 120; 20, 10, 1
+- 4 nop: 1450 x 2, 1300 x 2, 120; 20, 10, 1
 - 5 nop: 1000 x 2, 900 x 4, 50, 30
 - 6 nop: 800 x 7, 25
-- 7 nop: 5200, 350, 170, 15 x 2, 3, 1, 0
+- 7 nop: 5200, 350, 180, 15 x 2, 3, 1, 0
 - 8 nop: 3800, 1850, 20 x 3, 5, 3, 0
 
 (Note: the output removes nops lines which as no attribution.)
