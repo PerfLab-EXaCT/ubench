@@ -6,6 +6,7 @@ ACC = gcc -c
 
 TGT1 = y
 TGT2 = \
+   y-0nop \
    y-1nop \
    y-2nop \
    y-3nop \
