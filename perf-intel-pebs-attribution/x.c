@@ -32,7 +32,7 @@ int main() {
   TYPE* a = (TYPE*)malloc(sizeof(TYPE)*SIZE);
 
   f1(a, SIZE);
-  TYPE z = f2(a, SIZE);
+  f2(a, SIZE);
 
   //fprintf(stdout, "output: %ld, %ld\n", (long)a[SIZE - 1], (long)b[SIZE - 1]);
   free(a);

@@ -58,9 +58,6 @@ loads should re
 
 We cannot explain the distribution of loads.
 
-*** [[should have have f1 repeated twice? the first time it would warm the cache. The second time it would use cache, which would give as predictable load latencies as possible. could add a dependency so that all loop iterations must be sequential.]]
-
-
 Results for load attribution, Function f2:
 ------------------------------------------------------------
 
@@ -88,4 +85,14 @@ function f2 using approximate histograms:
 
 Conclusion:
 ------------------------------------------------------------
+
+------------------------------------------------------------
+x
+------------------------------------------------------------
+
+
+*** [[should have have f1 repeated twice? the first time it would warm the cache. The second time it would use cache, which would give as predictable load latencies as possible. could add a dependency so that all loop iterations must be sequential.]]
+
+Each loop has 7 loads, expect 70M for each loop.
+
 
