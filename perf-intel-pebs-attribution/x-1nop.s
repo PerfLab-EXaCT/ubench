@@ -24,16 +24,26 @@ f1:
 	jmp	.L2
 .L3:
 	negl	-4(%rbp)
+	nop
 	movq	-16(%rbp), %rax
+	nop
 	leaq	0(,%rax,4), %rdx
+	nop
 	movq	-24(%rbp), %rax
+	nop
 	addq	%rax, %rdx
+	nop
 	movl	-4(%rbp), %eax
+	nop
 	movl	%eax, (%rdx)
+	nop
 	addq	$1, -16(%rbp)
+	nop
 .L2:
 	movq	-16(%rbp), %rax
+	nop
 	cmpq	-32(%rbp), %rax
+	nop
 	jb	.L3
 	nop
 	popq	%rbp
@@ -59,15 +69,24 @@ f2:
 	jmp	.L5
 .L6:
 	movq	-16(%rbp), %rax
+	nop
 	leaq	0(,%rax,4), %rdx
+	nop
 	movq	-24(%rbp), %rax
+	nop
 	addq	%rdx, %rax
+	nop
 	movl	(%rax), %eax
+	nop
 	addl	%eax, -4(%rbp)
+	nop
 	addq	$1, -16(%rbp)
+	nop
 .L5:
 	movq	-16(%rbp), %rax
+	nop
 	cmpq	-32(%rbp), %rax
+	nop
 	jb	.L6
 	movl	-4(%rbp), %eax
 	popq	%rbp

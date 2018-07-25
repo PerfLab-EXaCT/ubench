@@ -89,6 +89,61 @@ Conclusion:
 ------------------------------------------------------------
 x
 ------------------------------------------------------------
+Results for load totals:
+------------------------------------------------------------
+
+We expect:
+- the loop in f1 to have 70M loads (10M iterations; 7 load instructions).
+- the loop in f2 to have 70M loads (10M iterations; 7 load instructions).
+
+The total samples conforms to these expectations.
+
+
+Results for load attribution, Function f1:
+------------------------------------------------------------
+
+We expect a uniform distribution of samples. Nominally, we expect each load to have 715 samples. (Each loop has 10M iterations; sample period is 13973.)
+
+We cannot explain the distribution of loads.
+
+For example, consider the following summary of the attribution to
+function f1 using approximate histograms:
+
+- 0 nop: 200x3 414   568    757   2597 (attribution to jump!)
+- 1 nop: 234   500x3 700x2  1706
+- 2 nop: 500x2 700x3 858    1026   
+- 3 nop: 225   700x4 928    1084
+- 4 nop: 100x2 842   1000x4   
+- 5 nop: 2     50x2  1100x2 1300x2   
+- 6 nop: 44    700x2 900x4
+- 7 nop: 200x2 727   915    1361  1581
+- 8 nop: 300x2 517   900x3  1167  
+
+
+
+Results for load attribution, Function f2:
+------------------------------------------------------------
+
+We expect a uniform distribution of samples. Again, we expect each
+load to have 715 samples. (Each loop has 10M iterations; sample period
+is 13973.)
+
+We cannot explain the distribution of loads.
+
+For example, consider the following summary of the attribution to
+function f2 using approximate histograms:
+
+- 0 nop: 2     422   639   1021  2919 (attribution to jump!
+- 1 nop: 132   500x4 815   1921
+- 2 nop: 394   500x2 700x2 1100x2
+- 3 nop: 100x2 900x4 1015
+- 4 nop: 3     150x4 2100x2
+- 5 nop: 10x3  71    189   1670  3056     
+- 6 nop: 5     100x5 4437
+- 7 nop: 50x2  120   1200x4
+- 8 nop: 50x3  1200x4
+
+(Note: the output removes nops lines which as no attribution.)
 
 
 *** [[should have have f1 repeated twice? the first time it would warm the cache. The second time it would use cache, which would give as predictable load latencies as possible. could add a dependency so that all loop iterations must be sequential.]]
