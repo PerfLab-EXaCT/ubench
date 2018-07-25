@@ -4,17 +4,17 @@
 CC = gcc -std=c99 -g -O0 -Wall
 ACC = gcc -c 
 
-TGT1 = y
+TGT1 = x
 TGT2 = \
-   y-0nop \
-   y-1nop \
-   y-2nop \
-   y-3nop \
-   y-4nop \
-   y-5nop \
-   y-6nop \
-   y-7nop \
-   y-8nop \
+   x-0nop \
+   x-1nop \
+   x-2nop \
+   x-3nop \
+   x-4nop \
+   x-5nop \
+   x-6nop \
+   x-7nop \
+   x-8nop
 
 PERIOD = 13973 # 9973 # 119730
 

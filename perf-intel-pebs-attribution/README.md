@@ -37,7 +37,6 @@ Our sample results are in the directory `intel-xeon-6126`. The `dla1`
 and `dla2` versions correspond to the perf invocations 1 and 2,
 respectively.
 
-
 Results for load totals:
 ------------------------------------------------------------
 
@@ -48,12 +47,26 @@ We expect:
 The total samples conforms to these expectations.
 
 
-Results for load attribution:
+Results for load attribution, Function f1:
 ------------------------------------------------------------
 
-We expect a uniform distribution of samples. In particular, we expect
-each load to have 715 samples. (Each loop has 10M iterations; sample
-period is 13973.)
+We expect a uniform distribution of samples. Nominally, we expect each load to have 715 samples. (Each loop has 10M iterations; sample period is 13973.)
+
+We observe that the loads should be quite predictable as 
+
+loads should re
+
+We cannot explain the distribution of loads.
+
+*** [[should have have f1 repeated twice? the first time it would warm the cache. The second time it would use cache, which would give as predictable load latencies as possible. could add a dependency so that all loop iterations must be sequential.]]
+
+
+Results for load attribution, Function f2:
+------------------------------------------------------------
+
+We expect a uniform distribution of samples. Again, we expect each
+load to have 715 samples. (Each loop has 10M iterations; sample period
+is 13973.)
 
 We cannot explain the distribution of loads.
 
@@ -71,3 +84,8 @@ function f2 using approximate histograms:
 - 8 nop: 3800, 1850, 20 x 3, 5, 3, 0
 
 (Note: the output removes nops lines which as no attribution.)
+
+
+Conclusion:
+------------------------------------------------------------
+
