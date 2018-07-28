@@ -48,8 +48,11 @@ PERF_RPT_OPT := $(shell \
 
 PERF_OUT_REDIRECT := 2> /dev/null
 
-GREP_ARGS := -e "\# Samples" -e "\# Event count"
+GREP_ARGS := -e "\# Samples" -e "\# Event count" --color
 # -e "\# event"
+
+PERF_VALIDATE = perf report -D -i $@ | grep -v -q --color THROT
+
 
 #----------------------------------------------------------------------------
 # dla:
@@ -69,8 +72,9 @@ dla_rpt : $(TEST_PERF_DLA_RPT)
 
 .PHONY: dla dla_dat dla_rpt
 
-perf-dla_dat-% : ./$(TGT)
+perf-dla_dat-% : $(TGT)
 	@perf record -e $(*F) -c $(PERIOD_DLA) -o $@ $< $(PERF_OUT_REDIRECT)
+	$(PERF_VALIDATE)
 
 perf-dla_rpt-% : perf-dla_dat-%
 	@echo "*** Load count: loads (precise) ***"
@@ -95,6 +99,7 @@ ldlat_rpt : $(TEST_PERF_LDLAT_RPT)
 
 perf-ldlat_dat-% : $(TGT)
 	@perf record -W -e cpu/mem-loads,ldlat=4/upp -c $(*F) -o $@ $< $(PERF_OUT_REDIRECT)
+	$(PERF_VALIDATE)
 # 	-W: sample by weight
 # 	-d: record addresses
 
