@@ -80,6 +80,7 @@ TEST_PERF_DLA1_RPT = $(addsuffix .txt, $(addprefix perf-dla1_rpt-, $(TGT1) $(TGT
 TEST_PERF_DLA2_RPT = $(addsuffix .txt, $(addprefix perf-dla2_rpt-, $(TGT1) $(TGT2)))
 
 GREP_ARGS := -v -e "0 :.*nop"
+
 PERF_VALIDATE = perf report -D -i $@ | grep -v -q --color THROT
 
 dla : dla_dat dla_rpt
