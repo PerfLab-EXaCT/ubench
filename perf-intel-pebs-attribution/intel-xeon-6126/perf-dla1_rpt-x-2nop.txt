@@ -1,0 +1,58 @@
+ Samples |	Source code & Disassembly of x-2nop for mem_inst_retired.all_loads:upp (5006 samples)
+-----------------------------------------------------------------------------------------------------
+         :
+         :
+         :
+         :	Disassembly of section .text:
+         :
+         :	0000000000400547 <f1>:
+         :	f1():
+       0 :	  400547:       push   %rbp
+       0 :	  400548:       mov    %rsp,%rbp
+       0 :	  40054b:       mov    %rdi,-0x18(%rbp)
+       0 :	  40054f:       mov    %rsi,-0x20(%rbp)
+       0 :	  400553:       movl   $0x1,-0x4(%rbp)
+       0 :	  40055a:       movq   $0x0,-0x10(%rbp)
+       0 :	  400562:       jmp    400594 <f1+0x4d>
+     591 :	  400564:       negl   -0x4(%rbp)
+     723 :	  400569:       mov    -0x10(%rbp),%rax
+       0 :	  40056f:       lea    0x0(,%rax,4),%rdx
+    1068 :	  400579:       mov    -0x18(%rbp),%rax
+       0 :	  40057f:       add    %rax,%rdx
+     917 :	  400584:       mov    -0x4(%rbp),%eax
+       0 :	  400589:       mov    %eax,(%rdx)
+     570 :	  40058d:       addq   $0x1,-0x10(%rbp)
+     606 :	  400594:       mov    -0x10(%rbp),%rax
+     531 :	  40059a:       cmp    -0x20(%rbp),%rax
+       0 :	  4005a0:       jb     400564 <f1+0x1d>
+       0 :	  4005a4:       pop    %rbp
+       0 :	  4005a5:       retq
+ Samples |	Source code & Disassembly of x-2nop for mem_inst_retired.all_loads:upp (5006 samples)
+-----------------------------------------------------------------------------------------------------
+         :
+         :
+         :
+         :	Disassembly of section .text:
+         :
+         :	00000000004005a6 <f2>:
+         :	f2():
+       0 :	  4005a6:       push   %rbp
+       0 :	  4005a7:       mov    %rsp,%rbp
+       0 :	  4005aa:       mov    %rdi,-0x18(%rbp)
+       0 :	  4005ae:       mov    %rsi,-0x20(%rbp)
+       0 :	  4005b2:       movl   $0x0,-0x4(%rbp)
+       0 :	  4005b9:       movq   $0x0,-0x10(%rbp)
+       0 :	  4005c1:       jmp    4005ee <f2+0x48>
+    1047 :	  4005c3:       mov    -0x10(%rbp),%rax
+       0 :	  4005c9:       lea    0x0(,%rax,4),%rdx
+    1145 :	  4005d3:       mov    -0x18(%rbp),%rax
+       0 :	  4005d9:       add    %rdx,%rax
+     828 :	  4005de:       mov    (%rax),%eax
+     409 :	  4005e2:       add    %eax,-0x4(%rbp)
+     439 :	  4005e7:       addq   $0x1,-0x10(%rbp)
+     603 :	  4005ee:       mov    -0x10(%rbp),%rax
+     535 :	  4005f4:       cmp    -0x20(%rbp),%rax
+       0 :	  4005fa:       jb     4005c3 <f2+0x1d>
+       0 :	  4005fd:       mov    -0x4(%rbp),%eax
+       0 :	  400600:       pop    %rbp
+       0 :	  400601:       retq
