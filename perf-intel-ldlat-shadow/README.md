@@ -49,6 +49,17 @@ The total loads estimated from load latency samples is wildly off.
 
   [[Should sampling period have an effect?]]
   
+# Samples: 22K of event 'mem_inst_retired.all_loads:upp'
+# Event count (approx.): 320470755
+perf report -D -i perf-ldlat_dat-x-2313 | grep -v -q --color THROT
+*** Load count: ldlat / 2313 ***
+# Samples: 1K of event 'cpu/mem-loads,ldlat=4/upp'
+# Event count (approx.): 2708523
+perf report -D -i perf-ldlat_dat-x-4986 | grep -v -q --color THROT
+*** Load count: ldlat / 4986 ***
+# Samples: 370  of event 'cpu/mem-loads,ldlat=4/upp'
+
+  
   How many different types of shadows?
 
  *** We vary the period of the load latency sampling... to show it has an effect..

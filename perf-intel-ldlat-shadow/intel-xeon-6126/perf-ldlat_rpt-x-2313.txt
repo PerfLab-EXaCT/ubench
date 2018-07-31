@@ -1,0 +1,39 @@
+# ========
+# captured on: Tue Jul 31 07:12:04 2018
+# hostname : bluesky.pnl.gov
+# os release : 3.10.0-693.5.2.el7.x86_64
+# perf version : 4.14.38
+# arch : x86_64
+# nrcpus online : 48
+# nrcpus avail : 48
+# cpudesc : Intel(R) Xeon(R) Gold 6126 CPU @ 2.60GHz
+# cpuid : GenuineIntel,6,85,4
+# total memory : 196477796 kB
+# cmdline : /people/tallent/pkg/perf-4.14.38/bluesky/bin/perf record -W -e cpu/mem-loads,ldlat=4/upp -c 2313 -o perf-ldlat_dat-x-2313 x 
+# event : name = cpu/mem-loads,ldlat=4/upp, , type = 4, size = 112, config = 0x1cd, { sample_period, sample_freq } = 2313, sample_type = IP|TID|TIME|WEIGHT, disabled = 1, inherit = 1, exclude_kernel = 1, exclude_hv = 1, mmap = 1, comm = 1, enable_on_exec = 1, task = 1, precise_ip = 2, sample_id_all = 1, exclude_guest = 1, mmap2 = 1, comm_exec = 1, { bp_addr, config1 } = 0x7
+# CPU_TOPOLOGY info available, use -I to display
+# NUMA_TOPOLOGY info available, use -I to display
+# pmu mappings: cpu = 4, software = 1, power = 9, uncore_pcu = 63, tracepoint = 2, uncore_cha_0 = 25, uncore_cha_1 = 26, uncore_cha_2 = 27, uncore_cha_3 = 28, uncore_cha_4 = 29, uncore_cha_5 = 30, uncore_cha_6 = 31, uncore_cha_7 = 32, uncore_cha_8 = 33, uncore_cha_9 = 34, uncore_m2m_0 = 10, uncore_m2m_1 = 11, uncore_iio_0 = 53, uncore_iio_1 = 54, uncore_iio_2 = 55, uncore_iio_3 = 56, uncore_iio_4 = 57, uncore_imc_0 = 12, uncore_imc_1 = 13, uncore_imc_2 = 14, uncore_imc_3 = 15, uncore_imc_4 = 16, uncore_imc_5 = 17, uncore_irp_0 = 58, uncore_irp_1 = 59, uncore_irp_2 = 60, uncore_irp_3 = 61, uncore_irp_4 = 62, uncore_upi_0 = 18, uncore_upi_1 = 19, uncore_upi_2 = 20, uncore_cha_10 = 35, uncore_cha_11 = 36, uncore_cha_12 = 37, uncore_cha_13 = 38, uncore_cha_14 = 39, uncore_cha_15 = 40, uncore_cha_16 = 41, uncore_cha_17 = 42, uncore_cha_18 = 43, uncore_cha_19 = 44, uncore_cha_20 = 45, uncore_cha_21 = 46, uncore_cha_22 = 47, uncore_cha_23 = 48, uncore_cha_24 = 49, uncore_cha_25 = 50, uncore_cha_26 = 51, uncore_cha_27 = 52, uncore_m3upi_0 = 21, uncore_m3upi_1 = 22, uncore_m3upi_2 = 23, intel_bts = 6, intel_cqm = 8, breakpoint = 5, uncore_ubox = 24, intel_pt = 7
+# CACHE info available, use -I to display
+# missing features: TRACING_DATA BRANCH_STACK GROUP_DESC AUXTRACE STAT 
+# ========
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 1K of event 'cpu/mem-loads,ldlat=4/upp'
+# Event count (approx.): 2708523
+#
+# Overhead       Samples  Command  Shared Object  Symbol        
+# ........  ............  .......  .............  ..............
+#
+    41.33%           484  x        x              [.] main
+    27.75%           325  x        libc-2.17.so   [.] __random_r
+    23.83%           279  x        libc-2.17.so   [.] __random
+     6.75%            79  x        libc-2.17.so   [.] rand
+     0.34%             4  x        x              [.] rand@plt
+
+
+#
+# (Tip: Customize output of perf script with: perf script -F event,ip,sym)
+#
