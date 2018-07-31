@@ -1,11 +1,16 @@
 # -*-Mode: makefile;-*-
 #****************************************************************************
 
-CC = gcc -std=c99 -g -O0 -Wall
+CC = gcc -std=c99 -g -O3 -Wall
+CXX = g++ -std=c++11 -g -O3 -Wall
 
-TGT = y
+C_TGT = x y
 
-PERIOD = 4986 9973 19946 39891
+CXX_TGT = w
+
+TGTS = $(C_TGT) $(CXX_TGT)
+
+PERIOD = 2313 4986 9973 19946 39891
 
 PERIOD_DLA = 13973 # 9973 # 119730
 
@@ -17,8 +22,11 @@ PERF_VER := $(shell perf --version)
 
 all : test
 
-$(TGT) : % : %.c
+$(C_TGT) : % : %.c
 	$(CC) -o $@ $<
+
+$(CXX_TGT) : % : %.cpp
+	$(CXX) -o $@ $<
 
 test : dla ldlat
 
@@ -28,9 +36,10 @@ clean :
 	  $(addsuffix .old, $(TEST_PERF_DLA_DAT)) \
 	  $(TEST_PERF_LDLAT_DAT) \
 	  $(addsuffix .old, $(TEST_PERF_LDLAT_DAT)) \
+	  $(TEST_PERF_DLA_RPT) $(TEST_PERF_LDLAT_RPT)
 
 distclean : clean
-	$(RM) $(TGT)
+	$(RM) $(TGTS)
 
 
 .PHONY: all clean distclean test
@@ -51,18 +60,16 @@ PERF_OUT_REDIRECT := 2> /dev/null
 GREP_ARGS := -e "\# Samples" -e "\# Event count" --color
 # -e "\# event"
 
-PERF_VALIDATE = perf report -D -i $@ | grep -v -q --color THROT
+PERF_VALIDATE  = perf report -D -i $@ | grep -v -q --color THROT
+PERF_VALIDATEx = perf report -D -i $$@ | grep -v -q --color THROT
 
 
 #----------------------------------------------------------------------------
 # dla:
 #----------------------------------------------------------------------------
 
-DLA_EVENTS = \
-	mem_inst_retired.all_loads\:upp
-
-TEST_PERF_DLA_DAT = $(addprefix perf-dla_dat-, $(DLA_EVENTS))
-TEST_PERF_DLA_RPT = $(addprefix perf-dla_rpt-, $(DLA_EVENTS))
+TEST_PERF_DLA_DAT = $(addprefix perf-dla_dat-, $(TGTS))
+TEST_PERF_DLA_RPT = $(addsuffix .txt, $(addprefix perf-dla_rpt-, $(TGTS)))
 
 dla : dla_rpt
 
@@ -72,21 +79,23 @@ dla_rpt : $(TEST_PERF_DLA_RPT)
 
 .PHONY: dla dla_dat dla_rpt
 
-perf-dla_dat-% : $(TGT)
-	@perf record -e $(*F) -c $(PERIOD_DLA) -o $@ $< $(PERF_OUT_REDIRECT)
+perf-dla_dat-% : %
+	@perf record -e mem_inst_retired.all_loads:upp -c $(PERIOD_DLA) -o $@ $< $(PERF_OUT_REDIRECT)
 	$(PERF_VALIDATE)
 
-perf-dla_rpt-% : perf-dla_dat-%
+perf-dla_rpt-%.txt : perf-dla_dat-%
 	@echo "*** Load count: loads (precise) ***"
-	@perf report --stdio $(PERF_RPT_OPT) -n -i $< \
-	  | grep $(GREP_ARGS)
+	@perf report --stdio $(PERF_RPT_OPT) -n -i $< > $@
+	@grep $(GREP_ARGS) $@
 
 #----------------------------------------------------------------------------
 # ldlat:
 #----------------------------------------------------------------------------
 
-TEST_PERF_LDLAT_DAT = $(addprefix perf-ldlat_dat-, $(PERIOD))
-TEST_PERF_LDLAT_RPT = $(addprefix perf-ldlat_rpt-, $(PERIOD))
+TGT_PRD_PAIRS = $(foreach tgt, $(TGTS), $(addprefix $(tgt)-, $(PERIOD)))
+
+TEST_PERF_LDLAT_DAT := $(addprefix perf-ldlat_dat-, $(TGT_PRD_PAIRS))
+TEST_PERF_LDLAT_RPT := $(addsuffix .txt, $(addprefix perf-ldlat_rpt-, $(TGT_PRD_PAIRS)))
 
 ldlat : ldlat_rpt
 
@@ -97,13 +106,21 @@ ldlat_rpt : $(TEST_PERF_LDLAT_RPT)
 .PHONY: ldlat ldlat_dat ldlat_rpt
 
 
-perf-ldlat_dat-% : $(TGT)
-	@perf record -W -e cpu/mem-loads,ldlat=4/upp -c $(*F) -o $@ $< $(PERF_OUT_REDIRECT)
-	$(PERF_VALIDATE)
+define _ldlat_dat_template
+  perf-ldlat_dat-%-$(1) : %
+	@perf record -W -e cpu/mem-loads,ldlat=4/upp -c $(1) -o $$@ $$< $(PERF_OUT_REDIRECT)
+	$(PERF_VALIDATEx)
 # 	-W: sample by weight
 # 	-d: record addresses
+endef
 
-perf-ldlat_rpt-% : perf-ldlat_dat-%
-	@echo "*** Load count: ldlat / $(*F) ***"
-	@perf report --stdio $(PERF_RPT_OPT) -n -i $< \
-	  | grep $(GREP_ARGS)
+define _ldlat_rpt_template
+  perf-ldlat_rpt-%-$(1).txt : perf-ldlat_dat-%-$(1)
+	@echo "*** Load count: ldlat / $(1) ***"
+	@perf report --stdio $(PERF_RPT_OPT) -n -i $$< > $$@
+	@grep $(GREP_ARGS) $$@
+endef
+
+$(foreach x, $(PERIOD), $(eval $(call _ldlat_dat_template,$(x))))
+
+$(foreach x, $(PERIOD), $(eval $(call _ldlat_rpt_template,$(x))))
