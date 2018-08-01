@@ -106,4 +106,5 @@ define _rpt_template
 	  | grep $(GREP_ARGS) >> $$@
 endef
 
-$(foreach x, 1 2,$(eval $(call _rpt_template,$(x))))
+# N.B.: Beware of whitespace in $(call)!
+$(foreach x, 1 2, $(eval $(call _rpt_template,$(x))))
