@@ -22,7 +22,10 @@ PERF_VER := $(shell perf --version)
 
 all : test
 
-$(C_TGT) : % : %.c
+y : % : %.c
+	$(CC) -O0 -o $@ $<
+
+x : % : %.c
 	$(CC) -o $@ $<
 
 $(CXX_TGT) : % : %.cpp
@@ -57,7 +60,7 @@ PERF_RPT_OPT := $(shell \
 
 PERF_OUT_REDIRECT := 2> /dev/null
 
-GREP_ARGS := -e "\# Samples" -e "\# Event count" 
+GREP_ARGS := -e "\# Samples" -e "\# Event count"
 # --color
 # -e "\# event"
 
@@ -93,9 +96,8 @@ perf-dla_rpt-%.txt : perf-dla_dat-%
 # ldlat:
 #----------------------------------------------------------------------------
 
-#TGT_PRD_PAIRS := $(foreach tgt, $(TGTS), $(addprefix $(tgt)-, $(PERIOD)))
-#TGT_PRD_PAIRS := $(foreach prd, $(PERIOD), $(addsuffix -$(prd), $(TGTS)))
-TGT_PRD_PAIRS := $(foreach tgt, $(TGTS), $(foreach prd, $(PERIOD), $(tgt)-$(prd)))
+TGT_PRD_PAIRS := $(foreach tgt, $(TGTS), $(addprefix $(tgt)-, $(PERIOD)))
+#TGT_PRD_PAIRS := $(foreach tgt, $(TGTS), $(foreach prd, $(PERIOD), $(tgt)-$(prd)))
 
 TEST_PERF_LDLAT_DAT := $(addprefix perf-ldlat_dat-, $(TGT_PRD_PAIRS))
 TEST_PERF_LDLAT_RPT := $(addsuffix .txt, $(addprefix perf-ldlat_rpt-, $(TGT_PRD_PAIRS)))
