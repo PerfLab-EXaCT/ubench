@@ -104,12 +104,6 @@ int main(int argc, const char** argv)
   array[size-1]->val = double(rand()%2000000)/1000000.0;
 
   node* cur = array[0];
-  double s1=0;
-  double s2=0;
-  double s3=0;
-  double v1, v2 ,v3, v4;
-  long bigVal=0;
-  int r1 = -1;
 	
   for(int i =0; i< numCall;i++){
     auto t1 = chrono::steady_clock::now();
@@ -134,7 +128,7 @@ int main(int argc, const char** argv)
   }
   //cout <<endl;
 
-  for(int i=0;i<array.size();i++){
+  for(size_t i=0;i<array.size();i++){
     delete array[i];
   }
   std::this_thread::sleep_for(std::chrono::milliseconds(1000));

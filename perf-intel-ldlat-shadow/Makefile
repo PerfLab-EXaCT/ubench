@@ -8,7 +8,7 @@ C_TGT = x y
 
 CXX_TGT = w
 
-TGTS = $(C_TGT) $(CXX_TGT)
+TGTS = $(CXX_TGT) $(C_TGT)
 
 PERIOD = 2313 4986 9973 19946 39891
 
@@ -57,7 +57,8 @@ PERF_RPT_OPT := $(shell \
 
 PERF_OUT_REDIRECT := 2> /dev/null
 
-GREP_ARGS := -e "\# Samples" -e "\# Event count" --color
+GREP_ARGS := -e "\# Samples" -e "\# Event count" 
+# --color
 # -e "\# event"
 
 PERF_VALIDATE  = perf report -D -i $@ | grep -v -q --color THROT
@@ -68,8 +69,8 @@ PERF_VALIDATEx = perf report -D -i $$@ | grep -v -q --color THROT
 # dla:
 #----------------------------------------------------------------------------
 
-TEST_PERF_DLA_DAT = $(addprefix perf-dla_dat-, $(TGTS))
-TEST_PERF_DLA_RPT = $(addsuffix .txt, $(addprefix perf-dla_rpt-, $(TGTS)))
+TEST_PERF_DLA_DAT := $(addprefix perf-dla_dat-, $(TGTS))
+TEST_PERF_DLA_RPT := $(addsuffix .txt, $(addprefix perf-dla_rpt-, $(TGTS)))
 
 dla : dla_rpt
 
@@ -84,7 +85,7 @@ perf-dla_dat-% : %
 	@$(PERF_VALIDATE)
 
 perf-dla_rpt-%.txt : perf-dla_dat-%
-	@echo "*** $(*F): precise load count ***"
+	@echo "*** precise load count: $(*F) / $(PERIOD_DLA) ***"
 	@perf report --stdio $(PERF_RPT_OPT) -n -i $< > $@
 	@grep $(GREP_ARGS) $@
 
@@ -92,7 +93,9 @@ perf-dla_rpt-%.txt : perf-dla_dat-%
 # ldlat:
 #----------------------------------------------------------------------------
 
-TGT_PRD_PAIRS = $(foreach tgt, $(TGTS), $(addprefix $(tgt)-, $(PERIOD)))
+#TGT_PRD_PAIRS := $(foreach tgt, $(TGTS), $(addprefix $(tgt)-, $(PERIOD)))
+#TGT_PRD_PAIRS := $(foreach prd, $(PERIOD), $(addsuffix -$(prd), $(TGTS)))
+TGT_PRD_PAIRS := $(foreach tgt, $(TGTS), $(foreach prd, $(PERIOD), $(tgt)-$(prd)))
 
 TEST_PERF_LDLAT_DAT := $(addprefix perf-ldlat_dat-, $(TGT_PRD_PAIRS))
 TEST_PERF_LDLAT_RPT := $(addsuffix .txt, $(addprefix perf-ldlat_rpt-, $(TGT_PRD_PAIRS)))
@@ -108,7 +111,7 @@ ldlat_rpt : $(TEST_PERF_LDLAT_RPT)
 
 define _ldlat_dat_template
   perf-ldlat_dat-%-$(1) : %
-	@perf record -W -e cpu/mem-loads,ldlat=4/upp -c $(1) -o $$@ $$< $(PERF_OUT_REDIRECT)
+	@perf record -W -e cpu/mem-loads,ldlat=0/upp -c $(1) -o $$@ $$< $(PERF_OUT_REDIRECT)
 	@$(PERF_VALIDATEx)
 # 	-W: sample by weight
 # 	-d: record addresses
@@ -116,12 +119,12 @@ endef
 
 define _ldlat_rpt_template
   perf-ldlat_rpt-%-$(1).txt : perf-ldlat_dat-%-$(1)
-	@echo "*** $(*F): ldlat load count / $(1) ***"
+	@echo "*** ldlat load count: $$(*F) / $(1) ***"
 	@perf report --stdio $(PERF_RPT_OPT) -n -i $$< > $$@
 	@grep $(GREP_ARGS) $$@
 endef
 
-# N.B.: Be ware of whitespace in $(call)!
+# N.B.: Beware of whitespace in $(call)!
 $(foreach x, $(PERIOD), $(eval $(call _ldlat_dat_template,$(x))))
 
 $(foreach x, $(PERIOD), $(eval $(call _ldlat_rpt_template,$(x))))
