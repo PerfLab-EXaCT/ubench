@@ -73,3 +73,22 @@ Best case: benchmark y:
  - totals are off
  - the distributions are good
 Explanation: Frequent L1 hits and a regular instruction stream mean that there is a relatively consistent number of loads in each sample's shadow. The main issue is that the effect cannot be estimated.
+
+
+  load count       w:              x:              y:
+  precise (13973): 1,720,649,193   3,148,033,062   199,855,819
+  ldlat    (2313):    23,217,894      38,994,867     2,107,143
+  ldlat    (4986):    23,219,802      39,010,464     2,153,952
+  ldlat    (9973):    23,197,198      39,004,403     2,134,222
+  ldlat   (19946):    23,217,144      39,014,376     2,114,276
+  ldlat   (39891):    23,216,562      38,973,507     2,154,114
+
+   74x  80x  95x
+
+
+For w: 
+- the distribution of ldlat is uneven
+
+Question: how representative are the latencies?
+
+

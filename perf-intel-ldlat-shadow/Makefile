@@ -1,8 +1,9 @@
 # -*-Mode: makefile;-*-
 #****************************************************************************
 
-CC = gcc -std=c99 -g -O3 -Wall
+CC = gcc -std=c99 -g -O1 -Wall
 CXX = g++ -std=c++11 -g -O3 -Wall
+#CXX = icpc -std=c++11 -g -Ofast -Wall
 
 C_TGT = x y
 
@@ -22,10 +23,7 @@ PERF_VER := $(shell perf --version)
 
 all : test
 
-y : % : %.c
-	$(CC) -O0 -o $@ $<
-
-x : % : %.c
+$(C_TGT) : % : %.c
 	$(CC) -o $@ $<
 
 $(CXX_TGT) : % : %.cpp
