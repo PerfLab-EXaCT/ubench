@@ -49,16 +49,6 @@ The total loads estimated from load latency samples is wildly off.
 
   [[Should sampling period have an effect?]]
   
-# Samples: 22K of event 'mem_inst_retired.all_loads:upp'
-# Event count (approx.): 320470755
-perf report -D -i perf-ldlat_dat-x-2313 | grep -v -q --color THROT
-*** Load count: ldlat / 2313 ***
-# Samples: 1K of event 'cpu/mem-loads,ldlat=4/upp'
-# Event count (approx.): 2708523
-perf report -D -i perf-ldlat_dat-x-4986 | grep -v -q --color THROT
-*** Load count: ldlat / 4986 ***
-# Samples: 370  of event 'cpu/mem-loads,ldlat=4/upp'
-
   
   How many different types of shadows?
 
@@ -70,21 +60,20 @@ perf report -D -i perf-ldlat_dat-x-4986 | grep -v -q --color THROT
 Terrible: x benchmark with random access
 
 Best case: benchmark y:
- - totals are off
+ - totals are off; ratio depends on application
  - the distributions are good
 Explanation: Frequent L1 hits and a regular instruction stream mean that there is a relatively consistent number of loads in each sample's shadow. The main issue is that the effect cannot be estimated.
 
 
-  load count       w:              x:              y:
-  precise (13973): 1,720,649,193   3,148,033,062   199,855,819
-  ldlat    (2313):    23,217,894      38,994,867     2,107,143
-  ldlat    (4986):    23,219,802      39,010,464     2,153,952
-  ldlat    (9973):    23,197,198      39,004,403     2,134,222
-  ldlat   (19946):    23,217,144      39,014,376     2,114,276
-  ldlat   (39891):    23,216,562      38,973,507     2,154,114
+  load count       w: 74x          x: 80x           y: 95x
+  precise (13973): 1,720,453,571   7,593,920,283    1,897,742,995
+  ldlat    (2313):    23,231,772      79,888,707	   17,289,675
+  ldlat    (4986):    23,229,774      79,776,000	   17,291,448
+  ldlat    (9973):    23,237,090      79,724,162	   17,293,182
+  ldlat   (19946):    23,177,252      79,504,756	   17,273,236
+  ldlat   (39891):    23,216,562      79,662,327	   17,272,803
 
-   74x  80x  95x
-
+       
 
 For w: 
 - the distribution of ldlat is uneven
@@ -92,3 +81,26 @@ For w:
 Question: how representative are the latencies?
 
 
+g++ -std=c++11 -g -O3 -Wall -o w w.cpp
+
+
+# Event count (approx.): 1,720,453,571
+# Event count (approx.):    23,231,772
+# Event count (approx.):    23,229,774
+# Event count (approx.):    23,237,090
+# Event count (approx.):    23,177,252
+# Event count (approx.):    23,216,562
+
+# Event count (approx.): 7,593,920,283
+# Event count (approx.):    79,888,707
+# Event count (approx.):    79,776,000
+# Event count (approx.):    79,724,162
+# Event count (approx.):    79,504,756
+# Event count (approx.):    79,662,327
+
+# Event count (approx.): 1,897,742,995
+# Event count (approx.):    17,289,675
+# Event count (approx.):    17,291,448
+# Event count (approx.):    17,293,182
+# Event count (approx.):    17,273,236
+# Event count (approx.):    17,272,803

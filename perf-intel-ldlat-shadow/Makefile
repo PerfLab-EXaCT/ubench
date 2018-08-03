@@ -1,7 +1,7 @@
 # -*-Mode: makefile;-*-
 #****************************************************************************
 
-CC = gcc -std=c99 -g -O1 -Wall
+CC = gcc -std=c99 -g -O0 -Wall
 CXX = g++ -std=c++11 -g -O3 -Wall
 #CXX = icpc -std=c++11 -g -Ofast -Wall
 
