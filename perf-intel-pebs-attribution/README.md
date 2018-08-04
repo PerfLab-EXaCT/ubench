@@ -14,7 +14,7 @@ Source Location" in Intel Arch Opt manual.
 Here is the issue: we have found that using precise events (a) we can
 accurately estimate the total number of events (e.g., loads), but that
 (b) the attribution does _not_ conform to expectations. For instance
-on a loop with a straight line sequence of loads, one would expect a
+on a loop with a straight-line sequence of loads, one would expect a
 uniform distribution of samples. We obtain highly non-uniform
 distributions.
 
@@ -41,6 +41,11 @@ We compiled the C and assembly code using GCC 7.1.0 with -O0.
 We profiled the resulting binaries using "perf record":
   > 1: perf record -e mem_inst_retired.all_loads:upp -c <period>
   > 2: perf record -e cpu/event=0xd0,umask=0x81/upp -c <period>
+
+System:
+- SkyLake (Xeon Gold 6126, 2.60GHz)
+- CentOS Linux release 7.4.1708 (kernel 3.10.0-693.5.2.el7.x86_64)
+- perf 4.14.38
 
 Our sample results are in the directory `intel-xeon-6126`. The `dla1`
 and `dla2` versions correspond to the perf invocations 1 and 2,
@@ -116,8 +121,6 @@ function f2 using approximate histograms:
 - 8 nop: 50x3  1200x4
 
 (Note: the output removes nops lines which as no attribution.)
-
-
 
 
 -----------------------------------------------------------------------------
