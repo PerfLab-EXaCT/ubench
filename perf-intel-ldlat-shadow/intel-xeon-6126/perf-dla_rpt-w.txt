@@ -1,5 +1,5 @@
 # ========
-# captured on: Fri Aug  3 13:30:11 2018
+# captured on: Fri Aug  3 20:48:49 2018
 # hostname : bluesky.pnl.gov
 # os release : 3.10.0-693.5.2.el7.x86_64
 # perf version : 4.14.38
@@ -21,43 +21,45 @@
 #
 # Total Lost Samples: 0
 #
-# Samples: 123K of event 'mem_inst_retired.all_loads:upp'
-# Event count (approx.): 1720453571
+# Samples: 166K of event 'mem_inst_retired.all_loads:upp'
+# Event count (approx.): 2331017779
 #
 # Overhead       Samples  Command  Shared Object        Symbol                    
 # ........  ............  .......  ...................  ..........................
 #
-    94.39%        116219  w        w                    [.] f1
-     1.40%          1722  w        libc-2.17.so         [.] _int_malloc
-     1.35%          1661  w        libc-2.17.so         [.] _int_free
-     1.22%          1498  w        w                    [.] main
-     0.68%           841  w        libc-2.17.so         [.] free
-     0.53%           653  w        libc-2.17.so         [.] malloc
-     0.10%           125  w        libstdc++.so.6.0.23  [.] free@plt
-     0.06%            72  w        libstdc++.so.6.0.23  [.] malloc@plt
-     0.05%            63  w        w                    [.] operator delete@plt
-     0.05%            61  w        [kernel.kallsyms]    [.] irq_return
-     0.04%            50  w        w                    [.] operator new@plt
-     0.04%            47  w        libc-2.17.so         [.] __memmove_ssse3_back
-     0.02%            22  w        ld-2.17.so           [.] do_lookup_x
-     0.02%            20  w        w                    [.] f2
-     0.01%            15  w        libc-2.17.so         [.] sysmalloc
-     0.01%            11  w        ld-2.17.so           [.] check_match.9513
-     0.01%            11  w        libc-2.17.so         [.] __random_r
-     0.01%             8  w        ld-2.17.so           [.] _dl_relocate_object
-     0.01%             7  w        ld-2.17.so           [.] strcmp
-     0.00%             5  w        libc-2.17.so         [.] __random
-     0.00%             4  w        [unknown]            [k] 0x0000000000400b24
-     0.00%             3  w        ld-2.17.so           [.] _dl_lookup_symbol_x
-     0.00%             3  w        libc-2.17.so         [.] rand
+    72.75%        121367  w        w                    [.] f2
+    23.12%         38576  w        w                    [.] f1
+     1.00%          1670  w        libc-2.17.so         [.] _int_malloc
+     0.97%          1619  w        libc-2.17.so         [.] _int_free
+     0.88%          1470  w        w                    [.] main
+     0.53%           892  w        libc-2.17.so         [.] free
+     0.44%           732  w        libc-2.17.so         [.] malloc
+     0.08%           130  w        libstdc++.so.6.0.23  [.] free@plt
+     0.04%            69  w        w                    [.] operator delete@plt
+     0.03%            55  w        libstdc++.so.6.0.23  [.] malloc@plt
+     0.03%            48  w        libc-2.17.so         [.] __memmove_ssse3_back
+     0.02%            40  w        w                    [.] operator new@plt
+     0.02%            30  w        [kernel.kallsyms]    [.] irq_return
+     0.01%            23  w        ld-2.17.so           [.] do_lookup_x
+     0.01%            17  w        libc-2.17.so         [.] sysmalloc
+     0.01%            12  w        libc-2.17.so         [.] __random_r
+     0.01%            11  w        [unknown]            [k] 0x0000000000400b23
+     0.01%            10  w        ld-2.17.so           [.] check_match.9513
+     0.01%             9  w        [unknown]            [k] 0x0000000000400b27
+     0.00%             7  w        ld-2.17.so           [.] _dl_relocate_object
+     0.00%             7  w        ld-2.17.so           [.] strcmp
+     0.00%             7  w        [unknown]            [k] 0x0000000000400b2b
+     0.00%             6  w        libc-2.17.so         [.] __random
+     0.00%             4  w        ld-2.17.so           [.] _dl_lookup_symbol_x
+     0.00%             4  w        libc-2.17.so         [.] rand
+     0.00%             3  w        libstdc++.so.6.0.23  [.] operator new
      0.00%             1  w        ld-2.17.so           [.] _dl_check_map_versions
-     0.00%             1  w        libc-2.17.so         [.] __brk
+     0.00%             1  w        libc-2.17.so         [.] __sbrk
      0.00%             1  w        libc-2.17.so         [.] _dl_addr
-     0.00%             1  w        [unknown]            [.] 0000000000000000
-     0.00%             1  w        [unknown]            [k] 0x0000000000400b40
-     0.00%             1  w        [unknown]            [k] 0x0000000000400b53
+     0.00%             1  w        [unknown]            [k] 0x0000000000400b18
+     0.00%             1  w        [unknown]            [k] 0x0000000000400bd7
 
 
 #
-# (Tip: Save output of perf stat using: perf stat record <target workload>)
+# (Tip: Order by the overhead of source file name and line number: perf report -s srcline)
 #

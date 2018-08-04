@@ -1,5 +1,5 @@
 # ========
-# captured on: Fri Aug  3 13:33:25 2018
+# captured on: Fri Aug  3 20:54:41 2018
 # hostname : bluesky.pnl.gov
 # os release : 3.10.0-693.5.2.el7.x86_64
 # perf version : 4.14.38
@@ -21,38 +21,38 @@
 #
 # Total Lost Samples: 0
 #
-# Samples: 4K of event 'cpu/mem-loads,ldlat=0/upp'
-# Event count (approx.): 23229774
+# Samples: 7K of event 'cpu/mem-loads,ldlat=0/upp'
+# Event count (approx.): 35280936
 #
 # Overhead       Samples  Command  Shared Object        Symbol                  
 # ........  ............  .......  ...................  ........................
 #
-    65.89%          3070  w        w                    [.] f1
-    29.26%          1363  w        w                    [.] f2
-     1.27%            59  w        libc-2.17.so         [.] _int_free
-     0.86%            40  w        libc-2.17.so         [.] _int_malloc
-     0.64%            30  w        libc-2.17.so         [.] malloc
-     0.49%            23  w        w                    [.] main
-     0.34%            16  w        libc-2.17.so         [.] __random
-     0.34%            16  w        libc-2.17.so         [.] __random_r
-     0.11%             5  w        libstdc++.so.6.0.23  [.] operator new
-     0.11%             5  w        [unknown]            [k] 0x0000000000400b1d
-     0.09%             4  w        libc-2.17.so         [.] free
-     0.09%             4  w        libc-2.17.so         [.] rand
-     0.09%             4  w        libstdc++.so.6.0.23  [.] malloc@plt
-     0.09%             4  w        [unknown]            [k] 0x0000000000400b39
-     0.06%             3  w        w                    [.] rand@plt
-     0.04%             2  w        libc-2.17.so         [.] sysmalloc
-     0.04%             2  w        libstdc++.so.6.0.23  [.] free@plt
-     0.04%             2  w        w                    [.] operator delete@plt
-     0.04%             2  w        [unknown]            [k] 0x0000000000400b45
-     0.02%             1  w        ld-2.17.so           [.] do_lookup_x
-     0.02%             1  w        libc-2.17.so         [.] __memmove_ssse3_back
-     0.02%             1  w        w                    [.] operator new@plt
-     0.02%             1  w        [unknown]            [k] 0x0000000000400b24
-     0.02%             1  w        [unknown]            [k] 0x0000000000400b40
+    65.28%          4619  w        w                    [.] f2
+    31.44%          2225  w        w                    [.] f1
+     0.78%            55  w        libc-2.17.so         [.] _int_free
+     0.68%            48  w        libc-2.17.so         [.] _int_malloc
+     0.37%            26  w        libc-2.17.so         [.] malloc
+     0.31%            22  w        libc-2.17.so         [.] __random_r
+     0.27%            19  w        libc-2.17.so         [.] __random
+     0.20%            14  w        w                    [.] main
+     0.20%            14  w        [unknown]            [k] 0x0000000000400bbf
+     0.08%             6  w        libc-2.17.so         [.] free
+     0.07%             5  w        libstdc++.so.6.0.23  [.] operator new
+     0.06%             4  w        libstdc++.so.6.0.23  [.] free@plt
+     0.04%             3  w        [unknown]            [k] 0x00007f9eb30e9c15
+     0.03%             2  w        libc-2.17.so         [.] rand
+     0.03%             2  w        libstdc++.so.6.0.23  [.] malloc@plt
+     0.03%             2  w        w                    [.] rand@plt
+     0.03%             2  w        [unknown]            [k] 0x0000000000400b23
+     0.03%             2  w        [unknown]            [k] 0x0000000000400be0
+     0.01%             1  w        ld-2.17.so           [.] strcmp
+     0.01%             1  w        libc-2.17.so         [.] __memmove_ssse3_back
+     0.01%             1  w        libc-2.17.so         [.] sysmalloc
+     0.01%             1  w        w                    [.] operator delete@plt
+     0.01%             1  w        w                    [.] operator new@plt
+     0.01%             1  w        [unknown]            [k] 0x0000000000400bd0
 
 
 #
-# (Tip: Search options using a keyword: perf report -h <keyword>)
+# (Tip: Customize output of perf script with: perf script -F event,ip,sym)
 #

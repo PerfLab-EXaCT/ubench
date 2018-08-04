@@ -1,5 +1,5 @@
 # ========
-# captured on: Fri Aug  3 13:32:00 2018
+# captured on: Fri Aug  3 20:51:57 2018
 # hostname : bluesky.pnl.gov
 # os release : 3.10.0-693.5.2.el7.x86_64
 # perf version : 4.14.38
@@ -21,43 +21,41 @@
 #
 # Total Lost Samples: 0
 #
-# Samples: 10K of event 'cpu/mem-loads,ldlat=0/upp'
-# Event count (approx.): 23231772
+# Samples: 15K of event 'cpu/mem-loads,ldlat=0/upp'
+# Event count (approx.): 35277876
 #
 # Overhead       Samples  Command  Shared Object        Symbol                  
 # ........  ............  .......  ...................  ........................
 #
-    64.86%          6515  w        w                    [.] f1
-    30.09%          3022  w        w                    [.] f2
-     1.18%           119  w        libc-2.17.so         [.] _int_free
-     0.82%            82  w        libc-2.17.so         [.] _int_malloc
-     0.72%            72  w        libc-2.17.so         [.] malloc
-     0.44%            44  w        libc-2.17.so         [.] __random_r
-     0.44%            44  w        w                    [.] main
-     0.28%            28  w        libc-2.17.so         [.] __random
-     0.20%            20  w        libc-2.17.so         [.] free
-     0.18%            18  w        [unknown]            [k] 0x0000000000400b1d
-     0.11%            11  w        [unknown]            [k] 0x0000000000400b39
-     0.09%             9  w        libstdc++.so.6.0.23  [.] operator new
-     0.08%             8  w        [unknown]            [k] 0x00007fa454d95c15
-     0.07%             7  w        w                    [.] rand@plt
-     0.06%             6  w        libc-2.17.so         [.] __memmove_ssse3_back
-     0.06%             6  w        libc-2.17.so         [.] rand
-     0.05%             5  w        libstdc++.so.6.0.23  [.] malloc@plt
-     0.05%             5  w        [unknown]            [k] 0x0000000000400b45
-     0.05%             5  w        [unknown]            [k] 0x0000000000400b4c
-     0.04%             4  w        libstdc++.so.6.0.23  [.] free@plt
-     0.04%             4  w        w                    [.] operator delete@plt
-     0.03%             3  w        w                    [.] operator new@plt
+    64.59%          9851  w        w                    [.] f2
+    32.10%          4896  w        w                    [.] f1
+     0.84%           128  w        libc-2.17.so         [.] _int_free
+     0.65%            99  w        libc-2.17.so         [.] _int_malloc
+     0.40%            61  w        libc-2.17.so         [.] malloc
+     0.30%            46  w        libc-2.17.so         [.] __random_r
+     0.29%            44  w        w                    [.] main
+     0.22%            33  w        libc-2.17.so         [.] __random
+     0.22%            33  w        [unknown]            [k] 0x0000000000400bbf
+     0.07%            11  w        libc-2.17.so         [.] free
+     0.05%             8  w        libstdc++.so.6.0.23  [.] operator new
+     0.03%             5  w        w                    [.] operator new@plt
+     0.03%             4  w        libc-2.17.so         [.] __memmove_ssse3_back
+     0.03%             4  w        libc-2.17.so         [.] rand
+     0.03%             4  w        libstdc++.so.6.0.23  [.] free@plt
+     0.03%             4  w        [unknown]            [k] 0x0000000000400b2b
+     0.03%             4  w        [unknown]            [k] 0x0000000000400bd0
+     0.03%             4  w        [unknown]            [k] 0x00007f03ef97ec15
+     0.02%             3  w        w                    [.] rand@plt
+     0.01%             2  w        ld-2.17.so           [.] _dl_lookup_symbol_x
+     0.01%             2  w        w                    [.] operator delete@plt
      0.01%             1  w        ld-2.17.so           [.] check_match.9513
-     0.01%             1  w        ld-2.17.so           [.] do_lookup_x
-     0.01%             1  w        ld-2.17.so           [.] strcmp
-     0.01%             1  w        libc-2.17.so         [.] __sbrk
      0.01%             1  w        libc-2.17.so         [.] sysmalloc
-     0.01%             1  w        [unknown]            [k] 0x0000000000400b40
-     0.01%             1  w        [unknown]            [k] 0x0000000000400b53
+     0.01%             1  w        [unknown]            [k] 0x0000000000400b27
+     0.01%             1  w        [unknown]            [k] 0x0000000000400bc6
+     0.01%             1  w        [unknown]            [k] 0x0000000000400be7
+     0.01%             1  w        [unknown]            [k] 0x00007f03ef97db5e
 
 
 #
-# (Tip: Skip collecting build-id when recording: perf record -B)
+# (Tip: Sample related events with: perf record -e '{cycles,instructions}:S')
 #

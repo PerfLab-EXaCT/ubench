@@ -1,6 +1,7 @@
-#include <stdlib.h>
 #include <cstdlib>
-#include <stdio.h>
+#include <cstdlib>
+#include <cmath>
+
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -17,26 +18,16 @@ struct node {
 };
 
 
-__attribute__((noinline)) int f2(int a, int b) // a >= 0 and b >= 0
+__attribute__((noinline)) double f2(int cnt, int a, int b) // a >= 0 and b >= 0
 {
-  static int foo = -1;
-
-  int res = foo * -1;
-  if (res < 0) {
-    res = -res + 10;
+  double a_ = a;
+  double b_ = b;
+  double x = a + b + 1; // x > 0
+  for (int i = 0; i < cnt; i++) {
+    x += 0.013 * a_ * x + 0.27 * b_;
   }
-  // res > 0
 
-  res = res * a;
-
-  if (a > b) {
-    res = a;
-  }
-  else {
-    res = b;
-  }
-  res += 1;
-  return res; // res > 0
+  return x; // res > 0
 }
 
 
@@ -46,13 +37,14 @@ __attribute__((noinline)) node* f1(node* cur, int size, int cnt)
 
   for (int i = 0; i < cnt; i++) {
     for (int j = 0; j < size; j++) {
+      
+      double x = f2(cnt, i, j);
+      double x_frac = x - floor(x);
 
-      int x = f2(i, j) % 8;
-
-      if (x < 2) {
+      if (x_frac <= 0.1) {
 	temp = (j+i+1)/temp;
       }
-      else if (x >= 2 && x < 6) {
+      else if (0.1 < x_frac && x_frac <= 0.2) {
 	cur=cur->next;
       }
       else {

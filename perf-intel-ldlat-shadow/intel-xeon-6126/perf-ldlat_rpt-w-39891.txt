@@ -1,5 +1,5 @@
 # ========
-# captured on: Fri Aug  3 13:37:50 2018
+# captured on: Fri Aug  3 21:03:01 2018
 # hostname : bluesky.pnl.gov
 # os release : 3.10.0-693.5.2.el7.x86_64
 # perf version : 4.14.38
@@ -21,26 +21,27 @@
 #
 # Total Lost Samples: 0
 #
-# Samples: 582  of event 'cpu/mem-loads,ldlat=0/upp'
-# Event count (approx.): 23216562
+# Samples: 885  of event 'cpu/mem-loads,ldlat=0/upp'
+# Event count (approx.): 35303535
 #
-# Overhead       Samples  Command  Shared Object        Symbol                
-# ........  ............  .......  ...................  ......................
+# Overhead       Samples  Command  Shared Object     Symbol                
+# ........  ............  .......  ................  ......................
 #
-    64.09%           373  w        w                    [.] f1
-    31.10%           181  w        w                    [.] f2
-     1.55%             9  w        libc-2.17.so         [.] _int_malloc
-     1.03%             6  w        libc-2.17.so         [.] _int_free
-     0.52%             3  w        libc-2.17.so         [.] free
-     0.34%             2  w        libc-2.17.so         [.] __random
-     0.34%             2  w        libc-2.17.so         [.] __random_r
-     0.34%             2  w        w                    [.] main
-     0.17%             1  w        libstdc++.so.6.0.23  [.] free@plt
-     0.17%             1  w        libstdc++.so.6.0.23  [.] malloc@plt
-     0.17%             1  w        w                    [.] rand@plt
-     0.17%             1  w        [unknown]            [k] 0x0000000000400b53
+    64.75%           573  w        w                 [.] f2
+    31.98%           283  w        w                 [.] f1
+     0.79%             7  w        libc-2.17.so      [.] _int_free
+     0.68%             6  w        libc-2.17.so      [.] _int_malloc
+     0.45%             4  w        libc-2.17.so      [.] malloc
+     0.34%             3  w        w                 [.] main
+     0.23%             2  w        libc-2.17.so      [.] __random_r
+     0.23%             2  w        libc-2.17.so      [.] free
+     0.11%             1  w        libc-2.17.so      [.] __random
+     0.11%             1  w        w                 [.] rand@plt
+     0.11%             1  w        [unknown]         [k] 0x0000000000400bbf
+     0.11%             1  w        [unknown]         [k] 0x0000000000400be7
+     0.11%             1  w        [unknown]         [k] 0x00007f5fe4948b5e
 
 
 #
-# (Tip: Create an archive with symtabs to analyse on other machine: perf archive)
+# (Tip: To count events in every 1000 msec: perf stat -I 1000)
 #

@@ -1,5 +1,5 @@
 # ========
-# captured on: Fri Aug  3 13:36:22 2018
+# captured on: Fri Aug  3 21:00:17 2018
 # hostname : bluesky.pnl.gov
 # os release : 3.10.0-693.5.2.el7.x86_64
 # perf version : 4.14.38
@@ -22,31 +22,31 @@
 # Total Lost Samples: 0
 #
 # Samples: 1K of event 'cpu/mem-loads,ldlat=0/upp'
-# Event count (approx.): 23177252
+# Event count (approx.): 35244582
 #
-# Overhead       Samples  Command  Shared Object        Symbol                 
-# ........  ............  .......  ...................  .......................
+# Overhead       Samples  Command  Shared Object        Symbol                
+# ........  ............  .......  ...................  ......................
 #
-    63.51%           738  w        w                    [.] f1
-    31.41%           365  w        w                    [.] f2
-     1.12%            13  w        libc-2.17.so         [.] _int_free
-     0.86%            10  w        libc-2.17.so         [.] _int_malloc
-     0.52%             6  w        libc-2.17.so         [.] malloc
-     0.43%             5  w        libc-2.17.so         [.] __random
-     0.34%             4  w        libc-2.17.so         [.] __random_r
-     0.34%             4  w        w                    [.] main
-     0.34%             4  w        [unknown]            [k] 0x0000000000400b1d
-     0.26%             3  w        libstdc++.so.6.0.23  [.] operator new
-     0.17%             2  w        libc-2.17.so         [.] free
-     0.17%             2  w        w                    [.] operator new@plt
-     0.09%             1  w        libstdc++.so.6.0.23  [.] malloc@plt
-     0.09%             1  w        w                    [.] operator delete@plt
-     0.09%             1  w        w                    [.] rand@plt
-     0.09%             1  w        [unknown]            [k] 0x0000000000400b39
-     0.09%             1  w        [unknown]            [k] 0x0000000000400b45
-     0.09%             1  w        [unknown]            [k] 0x00007fc95ca12c15
+    65.53%          1158  w        w                    [.] f2
+    30.90%           546  w        w                    [.] f1
+     0.74%            13  w        libc-2.17.so         [.] _int_malloc
+     0.68%            12  w        libc-2.17.so         [.] _int_free
+     0.40%             7  w        libc-2.17.so         [.] malloc
+     0.28%             5  w        libc-2.17.so         [.] __random
+     0.28%             5  w        libc-2.17.so         [.] __random_r
+     0.28%             5  w        libc-2.17.so         [.] free
+     0.23%             4  w        w                    [.] main
+     0.23%             4  w        [unknown]            [k] 0x0000000000400bbf
+     0.06%             1  w        libstdc++.so.6.0.23  [.] malloc@plt
+     0.06%             1  w        libstdc++.so.6.0.23  [.] operator new
+     0.06%             1  w        w                    [.] operator new@plt
+     0.06%             1  w        [unknown]            [k] 0x0000000000400b23
+     0.06%             1  w        [unknown]            [k] 0x0000000000400bd0
+     0.06%             1  w        [unknown]            [k] 0x0000000000400be0
+     0.06%             1  w        [unknown]            [k] 0x0000000000400be7
+     0.06%             1  w        [unknown]            [k] 0x00007f84964f8c15
 
 
 #
-# (Tip: Limit to show entries above 5% only: perf report --percent-limit 5)
+# (Tip: Save output of perf stat using: perf stat record <target workload>)
 #
