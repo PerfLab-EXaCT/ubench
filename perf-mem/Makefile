@@ -27,7 +27,7 @@ help :
 	@echo "  clean"
 	@echo "  distclean"
 
-% : %.c
+$(TGT) : % : %.c
 	$(CC) -o $@ $<
 
 test : ldlat
