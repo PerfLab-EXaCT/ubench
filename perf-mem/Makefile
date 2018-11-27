@@ -5,8 +5,6 @@ CC = gcc -std=c99 -g -O0 -Wall
 
 TGT = x
 
-TGTy = y
-
 PERIOD = 4986 9973 19946 39891
 
 PERIOD_DLA = 13973 # 9973 # 119730
@@ -79,53 +77,8 @@ DLA_EVENTS = \
 	offcore_response.all_pf_data_rd.any_response \
 	offcore_response.pf_l1d_and_sw.any_response \
 	offcore_response.pf_l2_data_rd.any_response \
-	offcore_response.pf_l3_data_rd.any_response \
+	offcore_response.pf_l3_data_rd.any_response
 
-
-
-# These "non-precise" events can be easily throttled
-#	mem_load_retired.l1_hit \
-#	mem_load_retired.l2_hit \
-#	mem_load_retired.fb_hit \
-#	mem_load_retired.l3_hit \
-#       mem_load_retired.l3_miss
-
-
-# cycle_activity.stalls_l1d_miss
-
-# mem_inst_retired.all_loads       MEM_UOPS_RETIRED.ALL_LOADS
-# mem_inst_retired.lock_loads      MEM_UOPS_RETIRED.LOCK_LOADS
-# mem_inst_retired.split_loads     MEM_UOPS_RETIRED.SPLIT_LOADS
-# mem_inst_retired.stlb_miss_loads MEM_UOPS_RETIRED.STLB_MISS_LOADS
-
-# mem_inst_retired.all_stores       MEM_UOPS_RETIRED.ALL_STORES
-# mem_inst_retired.split_stores     MEM_UOPS_RETIRED.SPLIT_STORES
-# mem_inst_retired.stlb_miss_stores MEM_UOPS_RETIRED.STLB_MISS_STORES
-
-# mem_load_retired.l1_hit   MEM_LOAD_UOPS_RETIRED.L1_HIT
-# mem_load_retired.l2_hit   MEM_LOAD_UOPS_RETIRED.L2_HIT
-# mem_load_retired.l3_hit   MEM_LOAD_UOPS_RETIRED.L3_HIT
-# mem_load_retired.fb_hit   MEM_LOAD_UOPS_RETIRED.HIT_LFB
-
-# mem_load_retired.l1_miss  MEM_LOAD_UOPS_RETIRED.L1_MISS
-# mem_load_retired.l2_miss  MEM_LOAD_UOPS_RETIRED.L2_MISS
-# mem_load_retired.l3_miss  MEM_LOAD_UOPS_RETIRED.L3_MISS
-
-# mem_load_l3_hit_retired.xsnp_hit  MEM_LOAD_UOPS_L3_HIT_RETIRED.XSNP_HIT
-# mem_load_l3_hit_retired.xsnp_hitm MEM_LOAD_UOPS_L3_HIT_RETIRED.XSNP_HITM
-# mem_load_l3_hit_retired.xsnp_miss MEM_LOAD_UOPS_L3_HIT_RETIRED.XSNP_MISS
-# mem_load_l3_hit_retired.xsnp_none MEM_LOAD_UOPS_LLC_HIT_RETIRED.XSNP_NONE
-
-# mem_load_l3_miss_retired.local_dram  MEM_LOAD_UOPS_LLC_MISS_RETIRED.LOCAL_DRAM
-# mem_load_l3_miss_retired.remote_dram MEM_LOAD_UOPS_LLC_MISS_RETIRED.REMOTE_DRAM
-
-# ? l2_rqsts.pf_hit, l2_rqsts.pf_miss, load_hit_pre.sw_pf
-# ? UOPS_RETIRED.ALL (if load or store is tagged)
-
-
-# mem_uops_retired:all_loads [= mem_inst_retired.all_loads]
-#   perf record -d -e cpu/event=0xd0,umask=0x81/upp -c 9973
-#   perf record -d -e mem_inst_retired.all_loads -c 9973
 
 TEST_PERF_DLA_DAT = $(addprefix perf-dla_dat-, $(DLA_EVENTS))
 TEST_PERF_DLA_RPT = $(addprefix perf-dla_rpt-, $(DLA_EVENTS))
@@ -149,14 +102,6 @@ perf-dla_dat-% : $(TGT)
 perf-dla_rpt-% : perf-dla_dat-%
 	perf report --stdio $(PERF_RPT_OPT) -n -i $<
 
-#	perf script -F event,dso,ip,sym,symoff -i <input>
-#	perf annotate -n --no-source --full-paths --stdio -i <input>
-# 	perf report -n -v -U --no-demangle --stdio -i
-
-
-# export-to-sqlite
-# export-to-postgresql
-# event_analyzing_sample
 
 #----------------------------------------------------------------------------
 # ldlat:
@@ -228,10 +173,10 @@ perf-stat : $(TGT)
 	  perf stat -e cpu/mem-loads,ldlat=1/pp ./$(TGT) ; \
 	  perf stat -e cpu/config=0x1cd,config1=0x3,config2=0x0/pp ./$(TGT) ; \
 	else \
-	  perf stat -e cpu/mem-loads/P ./$(TGT) ; \
-	  perf stat -e cpu/mem-loads,ldlat=1/P ./$(TGT) ; \
-	  perf stat -e cpu/config=0x1cd,config1=0x1f,config2=0x0/P ./$(TGT) ; \
-	  perf stat -e cpu/event=0x0b,umask=0x10/P ./$(TGT) ; \
+	  perf stat -e cpu/mem-loads/upp ./$(TGT) ; \
+	  perf stat -e cpu/mem-loads,ldlat=1/upp ./$(TGT) ; \
+	  perf stat -e cpu/event=0x0b,umask=0x10/upp ./$(TGT) ; \
+	  perf stat -e cpu/config=0x1cd,config1=0x1f,config2=0x0/upp ./$(TGT) ; \
 	fi
 
 # perf stat -d -d -d <app>
