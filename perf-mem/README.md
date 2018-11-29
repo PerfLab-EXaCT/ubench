@@ -42,14 +42,8 @@ SkyLake Data Linear Address Events (perf, Intel)
 =============================================================================
 
 Data Linear Address events:
-# mem_inst_retired.all_loads       MEM_UOPS_RETIRED.ALL_LOADS
-# mem_inst_retired.lock_loads      MEM_UOPS_RETIRED.LOCK_LOADS
-# mem_inst_retired.split_loads     MEM_UOPS_RETIRED.SPLIT_LOADS
-# mem_inst_retired.stlb_miss_loads MEM_UOPS_RETIRED.STLB_MISS_LOADS
-
-# mem_inst_retired.all_stores       MEM_UOPS_RETIRED.ALL_STORES
-# mem_inst_retired.split_stores     MEM_UOPS_RETIRED.SPLIT_STORES
-# mem_inst_retired.stlb_miss_stores MEM_UOPS_RETIRED.STLB_MISS_STORES
+# mem_inst_retired.all_loads   MEM_UOPS_RETIRED.ALL_LOADS
+# mem_inst_retired.all_stores  MEM_UOPS_RETIRED.ALL_STORES
 
 # mem_load_retired.l1_hit   MEM_LOAD_UOPS_RETIRED.L1_HIT
 # mem_load_retired.l2_hit   MEM_LOAD_UOPS_RETIRED.L2_HIT
@@ -60,13 +54,22 @@ Data Linear Address events:
 # mem_load_retired.l2_miss  MEM_LOAD_UOPS_RETIRED.L2_MISS
 # mem_load_retired.l3_miss  MEM_LOAD_UOPS_RETIRED.L3_MISS
 
+# mem_inst_retired.lock_loads      MEM_UOPS_RETIRED.LOCK_LOADS
 # mem_load_l3_hit_retired.xsnp_hit  MEM_LOAD_UOPS_L3_HIT_RETIRED.XSNP_HIT
 # mem_load_l3_hit_retired.xsnp_hitm MEM_LOAD_UOPS_L3_HIT_RETIRED.XSNP_HITM
 # mem_load_l3_hit_retired.xsnp_miss MEM_LOAD_UOPS_L3_HIT_RETIRED.XSNP_MISS
 # mem_load_l3_hit_retired.xsnp_none MEM_LOAD_UOPS_LLC_HIT_RETIRED.XSNP_NONE
 
-# mem_load_l3_miss_retired.local_dram  MEM_LOAD_UOPS_LLC_MISS_RETIRED.LOCAL_DRAM
-# mem_load_l3_miss_retired.remote_dram MEM_LOAD_UOPS_LLC_MISS_RETIRED.REMOTE_DRAM
+# mem_load_l3_miss_retired.local_dram
+# mem_load_l3_miss_retired.remote_dram
+
+# mem_inst_retired.stlb_miss_loads: Retired load insns that miss the STLB (addr)
+# mem_inst_retired.stlb_miss_stores
+
+# mem_inst_retired.split_loads     MEM_UOPS_RETIRED.SPLIT_LOADS
+# mem_inst_retired.split_stores    MEM_UOPS_RETIRED.SPLIT_STORES
+
+
 
 
 =============================================================================
@@ -138,14 +141,28 @@ Intel manual, Section B.4.3.2, page B-23
 New
 =============================================================================
 
-# dtlb_load_misses.miss_causes_a_walk [Load misses in all DTLB levels that cause page walks]
-# dtlb_load_misses.stlb_hit [Loads that miss the DTLB and hit the STLB]
-# dtlb_load_misses.walk_completed_4k [Demand load Miss in all translation lookaside buffer (TLB) levels causes a page walk that completes (4K)]
+A page table walk occurs when a TLB lookup fails.
+
+For SkyLake/4k pages, dTLB/1 holds 64 entries; dTLB/2 holds 1536
+
+A dTLB/1 lookup fails after 64 pages = 256 KB (less than L2).
+A dTLB/2 lookup fails after 1536 pages = 6.1 MB (assuming inclusive; less than L3).
 
 
-???
-# PAGE_WALKER_LOADS.DTLB_L1
+The page tables in the Intel 64 architecture make very good use of caches, with each cache line holding Page Table Entries (PTEs) for 8 consecutive (virtual address) pages.  So it is quite common for all page table walks to find the data in the caches, rather than going all the way to memory.
+
+# mem_inst_retired.stlb_miss_loads: Retired load insns that miss the STLB (addr)
+
+
+Intel manual, SkyLake (Table 19-4; page 19-25)
+# dtlb_load_misses.miss_causes_a_walk Load misses in all DTLB levels that cause page walks]
+# dtlb_load_misses.walk_completed_4k: Load misses in all TLB levels causing a page walk that completes (4K)
+
+# dtlb_load_misses.stlb_hit: Loads that miss the DTLB and hit the STLB
+
+Intel manual, Broadwell (Table 19-7; page 19-43)
+# PAGE_WALKER_LOADS.DTLB_L1: DTLB page walker loads that hit in the L1+FB
 # PAGE_WALKER_LOADS.DTLB_L2
 # PAGE_WALKER_LOADS.DTLB_L3
-# PAGE_WALKER_LOADS.DTLB_M
+# PAGE_WALKER_LOADS.DTLB_MEMORY: Number of DTLB page walker loads from memory
 
