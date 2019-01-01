@@ -133,8 +133,8 @@ ldlat2_rpt : $(TEST_PERF_LDLAT2_RPT)
 perf-ldlat1_dat-% : $(TGT)
 	perf record -W -e cpu/mem-loads,ldlat=1/upp -c $(*F) -o $@ ./$(TGT)
 
-# -W: sample by weight
-# -d: record addresses
+# -W, --weight: sample by weight
+# -d, --data: record addresses
 
 # perf record -W -d -e cpu/mem-loads,ldlat=4/upp -c $(*F)
 # perf record -W -d -e cpu/event=0xcd,umask=0x1,ldlat=4/upp -c $(*F)

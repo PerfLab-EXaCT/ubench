@@ -30,7 +30,7 @@ perf annotate -n --no-source --full-paths --stdio -i <in>
 perf report -n -v -U --no-demangle --stdio -i <in>
 perf report --stdio --header -n -i <in>
 
-perf script -F event,dso,ip,sym,symoff -i <input>
+perf script -F event,ip,sym,symoff,dso -i <input>
 
 perf annotate -n --no-source --full-paths --stdio -i <data>
 # duplicates disassembly for each event
@@ -77,7 +77,7 @@ Comments:
 =============================================================================
 
 * Perf may throttle if sampling frequency is too high.
-  Test: `perf report -D -i <input> | grep THROT`
+  Test: `perf report -D -i <input> | grep THROTTLE`
 
 
 * Perf's multiplexing often gives inaccurate results.
@@ -143,7 +143,7 @@ New
 
 A page table walk occurs when a TLB lookup fails.
 
-For SkyLake/4k pages, dTLB/1 holds 64 entries; dTLB/2 holds 1536
+SkyLake: dTLB has 64 entries (4 KiB); iTLB has 128; TLB/2 (unified) has 1536.
 
 A dTLB/1 lookup fails after 64 pages = 256 KB (less than L2).
 A dTLB/2 lookup fails after 1536 pages = 6.1 MB (assuming inclusive; less than L3).
@@ -152,6 +152,10 @@ A dTLB/2 lookup fails after 1536 pages = 6.1 MB (assuming inclusive; less than L
 The page tables in the Intel 64 architecture make very good use of caches, with each cache line holding Page Table Entries (PTEs) for 8 consecutive (virtual address) pages.  So it is quite common for all page table walks to find the data in the caches, rather than going all the way to memory.
 
 # mem_inst_retired.stlb_miss_loads: Retired load insns that miss the STLB (addr)
+
+This is similar to using load-lat with a high threshold.
+
+Problem: cannot get every memory load. We *can* get a representative sample of memory loads. That is we expect both stlb and high-latencies to be uniformly distributed across memory loads. But, we cannot infer from that sample when there is reuse.
 
 
 Intel manual, SkyLake (Table 19-4; page 19-25)
