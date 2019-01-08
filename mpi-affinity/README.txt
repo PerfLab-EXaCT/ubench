@@ -1,17 +1,25 @@
-*****************************************************************************
-* $HeadURL$
-* $Id$
-*
-* Nathan Tallent
-*****************************************************************************
+-*-Mode: markdown;-*- [outline]
+=============================================================================
+
+$HeadURL$
+Id: README.txt 14144 2016-05-10 20:39:39Z tallent $
 
 =============================================================================
 
-Test binding of MPI ranks to cores.  Focus on SLURM + [OpenMPI | MVAPICH2].
+Nathan Tallent
 
------------------------------------------------------------------------------
+=============================================================================
+Test binding of MPI ranks to cores.  Focus on SLURM + [OpenMPI | MVAPICH2].
+=============================================================================
+
+> make-batch-job --app="./mpi-affinity" --mpi-per-node 12  12
+> make-batch-job --app="./mpi-affinity" --mpi-per-node 24  12
+
+> srun -N 1 -n 12 --exclusive ./mpi-affinity
+
 
 To use the SLURM script, 'run.sbatch', do the following:
+----------------------------------------
 
 0. Prepare environment:
    source results/<machine>.<mpi>.sourceme.sh
@@ -26,6 +34,7 @@ To use the SLURM script, 'run.sbatch', do the following:
 =============================================================================
 
 SeaPearl conclusions:
+-----------------------------------------------------------------------------
 
 0. numa nodes are numbered in an odd way.
 
@@ -37,9 +46,8 @@ SeaPearl conclusions:
    - MVAPICH2 supports explicit binding via MV2_CPU_MAPPING.
    - OpenMPI ...
 
-=============================================================================
-
 PIC conclusions:
+-----------------------------------------------------------------------------
 
 1. srun's binding options work only for non-MPI applications.  Both
    MVAPICH and OpenMPI reset thread affinity.

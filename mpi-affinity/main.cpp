@@ -31,7 +31,9 @@ using std::cerr;
 
 #include <stdint.h>
 
-#define __USE_GNU
+#ifndef __USE_GNU
+# define __USE_GNU
+#endif
 #include <sched.h>
 
 //***************************************************************************
@@ -39,6 +41,8 @@ using std::cerr;
 #include <mpi.h>
 
 //***************************************************************************
+
+#define MY_NM "mpi-affinity"
 
 static void
 dumpAffinity(int myRank, int numRanks, MPI_Comm comm);
@@ -78,7 +82,7 @@ dumpAffinity(int myRank, int numRanks, MPI_Comm comm)
   sched_getaffinity(0, sizeof(set), &set);
 
   std::ostringstream os;
-  os << "cpuset[rank " << std::setw(3) << myRank << "]:";
+  os << MY_NM "[rank=" << std::setw(3) << myRank << ", size=" << numRanks << "] cores";
   // std::setfill('0')
 
   for (size_t i = 0; i < CPU_SETSIZE; i++) {
