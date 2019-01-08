@@ -50,8 +50,8 @@ main(int argc, char **argv)
 
   int hostid = (int)gethostid(); // returns a 32-bit id in a long
   
-  printf(MY_NM "[rank=%d, size=%d] host=%d; wtime-gbl exist?=%d val=%ld; tag_ub exist?=%d val=%d\n",
-	 rank, size, hostid,
+  printf(MY_NM "[rank=%*d, size=%d] host=%d; wtime-gbl exist?=%d val=%ld; tag_ub exist?=%d val=%d\n",
+	 3, rank, size, hostid,
 	 isWtimeGbl_flag, isWtimeGbl,
 	 tag_ub_flag, tag_ub);
   
