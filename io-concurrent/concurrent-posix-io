@@ -157,6 +157,7 @@ do_ior()
 
 printf "" > "${out_fnm}"
 printf "ior: ${ior_path} (${ior_sz_opts})\n" | tee -a "${out_fnm}"
+printf "hostname: $(hostname)\n" | tee -a "${out_fnm}"
 printf "file system: ${fs_path} (${dat_fnm_path})\n" | tee -a "${out_fnm}"
 
 for (( hour = 1; hour <= max_hours; hour++ )) ; do
