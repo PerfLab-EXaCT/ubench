@@ -16,17 +16,7 @@ scriptCmd=${scriptPath##*/} # cf. $(basename ...)
 scriptDir=${scriptPath%/*}  # cf. $(dirname ...)
 
 
-ior_path="${HOME}/app/ior/ior.git/MYINSTALL/bin/ior"
-
-fs_path=$(realpath .)
-
-out_fnm="io-test.log"
-
-max_ranks=64
-
-max_hours=24
-
-#opt_maxRanks=''
+opt_out_fnm=''
 
 #****************************************************************************
 # Parse arguments
@@ -63,7 +53,7 @@ while [[ $# -gt 0 ]] ; do
 	    ;;
 
 	-o | --output )
-	    opt_outDir="$1"
+	    opt_out_fnm="$1"
 	    shift # past value
 	    ;;
       	
@@ -88,12 +78,24 @@ done
 
 # cf. ~/1modsim-tools-svn/palm/trunk/palm-task/palm-task-genfp
 
+ior_path="${HOME}/app/ior/ior.git/MYINSTALL/bin/ior"
+
+fs_path=$(realpath .)
+
+out_fnm="${scriptCmd}-$(date --iso-8601=minutes).log"
+[[ -n ${opt_out_fnm} ]] && out_fnm="${opt_out_fnm}"mnan
+
+max_ranks=64
+
+max_hours=24
+
+
 #****************************************************************************
 # 
 #****************************************************************************
 
 dat_fnm_stem="io.dat"
-dat_fnm_path="${fs_path%/*}/${dat_fnm_stem}" # cf. $(dirname ...)
+dat_fnm_path="${fs_path%/}/${dat_fnm_stem}" # strip trailing /
 
 re_tasks="tasks[:blank:]*: ([[:digit:]]+)"
 re_bw="^Max (Read|Write): *([0-9.]+) MiB/sec \(([0-9.]+) MB/sec"
@@ -122,7 +124,7 @@ do_ior()
     launcher="srun --ntasks-per-node=24 -n"
     #launcher="mpiexec -n"
     
-    date_str=$(date)
+    date_str=$(date --iso-8601=minutes)
 
     printf "${date_str}\n" >> "${out_fnm}"
 
@@ -155,7 +157,7 @@ do_ior()
 
 printf "" > "${out_fnm}"
 printf "ior: ${ior_path} (${ior_sz_opts})\n" | tee -a "${out_fnm}"
-printf "file system: ${fs_path}\n" | tee -a "${out_fnm}"
+printf "file system: ${fs_path} (${dat_fnm_path})\n" | tee -a "${out_fnm}"
 
 for (( hour = 1; hour <= max_hours; hour++ )) ; do
     do_ior
