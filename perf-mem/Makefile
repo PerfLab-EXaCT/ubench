@@ -158,6 +158,7 @@ perf-ldlat2_rpt-% : perf-ldlat2_dat-%
 	perf report --stdio $(PERF_RPT_OPT) -n -i $<
 #	perf mem report --stdio -v -U -i $<
 
+# perf evlist -v -i <file>
 
 #----------------------------------------------------------------------------
 # stat test

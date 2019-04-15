@@ -1,0 +1,169 @@
+#!/bin/bash
+# -*- mode: sh -*-
+
+#*BeginPNNLCopyright*********************************************************
+#
+# $HeadURL$
+# $Id$
+#
+#***********************************************************EndPNNLCopyright*
+
+# set -x
+
+scriptPath0="${BASH_SOURCE[0]}" # works when script is sourced (unlike $0)
+scriptPath=$(readlink -f "${scriptPath0}")
+scriptCmd=${scriptPath##*/} # cf. $(basename ...)
+scriptDir=${scriptPath%/*}  # cf. $(dirname ...)
+
+
+ior_path="${HOME}/app/ior/ior.git/MYINSTALL/bin/ior"
+
+fs_path=$(realpath .)
+
+out_fnm="io-test.log"
+
+max_ranks=64
+
+max_hours=24
+
+#opt_maxRanks=''
+
+#****************************************************************************
+# Parse arguments
+#****************************************************************************
+
+die()
+{
+    cat <<EOF 1>&2
+${scriptCmd}: $*
+Use '${scriptCmd} -h' for usage.
+EOF
+    exit 1
+}
+
+usage()
+{
+    cat <<EOF
+Usage: ${scriptCmd} ...
+EOF
+    exit 0
+}
+
+#-----------------------------------------------------------
+# optional arguments
+#-----------------------------------------------------------
+while [[ $# -gt 0 ]] ; do
+
+    arg="$1"
+    shift # past argument
+    
+    case "${arg}" in
+	-h | --help )
+	    usage
+	    ;;
+
+	-o | --output )
+	    opt_outDir="$1"
+	    shift # past value
+	    ;;
+      	
+	* ) # unknown option
+	    die "unknown option '$1'"
+	    ;;
+    esac
+done
+
+#-----------------------------------------------------------
+# required args
+#-----------------------------------------------------------
+
+#if [[ -z ${xxx} ]] ; then
+#    die "no CFGProf path"
+#fi
+
+
+#****************************************************************************
+# 
+#****************************************************************************
+
+# cf. ~/1modsim-tools-svn/palm/trunk/palm-task/palm-task-genfp
+
+#****************************************************************************
+# 
+#****************************************************************************
+
+dat_fnm_stem="io.dat"
+dat_fnm_path="${fs_path%/*}/${dat_fnm_stem}" # cf. $(dirname ...)
+
+re_tasks="tasks[:blank:]*: ([[:digit:]]+)"
+re_bw="^Max (Read|Write): *([0-9.]+) MiB/sec \(([0-9.]+) MB/sec"
+
+ior_sz_opts="-s=1 -b=256m -t=16k"
+
+
+parse_ior()
+{
+    while read line; do
+	#echo ${line}
+	if [[ ${line} =~ ${re_tasks} ]] ; then
+	    ranks=${BASH_REMATCH[1]}
+	elif [[ ${line} =~ ${re_bw} ]] ; then
+	    type=${BASH_REMATCH[1]}
+	    bw2=${BASH_REMATCH[2]}
+	    bw10=${BASH_REMATCH[3]}
+	fi
+    done
+    printf "  ${type} ${ranks}: ${bw10} MB/sec; ${bw2} MiB/sec\n"
+}
+
+
+do_ior()
+{
+    launcher="srun --ntasks-per-node=24 -n"
+    #launcher="mpiexec -n"
+    
+    date_str=$(date)
+
+    printf "${date_str}\n" >> "${out_fnm}"
+
+    printf "* ${date_str}: write"
+    for (( n_rank = 1; n_rank <= max_ranks; n_rank *= 2 )) ; do
+    	printf " ${n_rank}"
+    	${launcher} ${n_rank} \
+    	     "${ior_path}" -a=POSIX -w ${ior_sz_opts} -i=1 -vv \
+    	     -k -F -o "${dat_fnm_path}" | parse_ior >> "${out_fnm}"
+	
+    	sleep 5
+    done
+
+    printf "; read"
+    for (( n_rank = 1; n_rank <= max_ranks; n_rank *= 2 )) ; do
+	printf " ${n_rank}"
+	${launcher} ${n_rank} \
+	     "${ior_path}" -a=POSIX -r ${ior_sz_opts} -i=1 -vv \
+	     -k -F -o "${dat_fnm_path}" | parse_ior >> "${out_fnm}"
+	
+	sleep 5
+    done
+    printf "\n"
+}
+
+#****************************************************************************
+
+
+((hour_sec = 60 * 60))
+
+printf "" > "${out_fnm}"
+printf "ior: ${ior_path} (${ior_sz_opts})\n" | tee -a "${out_fnm}"
+printf "file system: ${fs_path}\n" | tee -a "${out_fnm}"
+
+for (( hour = 1; hour <= max_hours; hour++ )) ; do
+    do_ior
+    sleep ${hour_sec}
+done
+
+
+# watch --interval=3600 <me>
+
+# at now + 1 hour -m -f ~/scheduledTask.sh
+# at 06:00 -m -f ~/scheduledTask.sh
