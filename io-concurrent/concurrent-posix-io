@@ -148,8 +148,6 @@ do_ior()
     date_str=$(date --iso-8601=minutes)
 
     printf "${date_str}\n" >> "${out_fnm}"
-
-    
     
     printf "* ${date_str}: write"
     for (( n_rank = 1; n_rank <= max_ranks; n_rank *= 2 )) ; do
