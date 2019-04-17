@@ -153,8 +153,10 @@ do_ior()
     for (( n_rank = 1; n_rank <= max_ranks; n_rank *= 2 )) ; do
     	printf " ${n_rank}"
 	mk_mpi_launcher ${n_rank}
-    	${mpi_launcher} "${ior_path}" -a=POSIX -w ${ior_sz_opts} -i=1 -vv \
-    	     -k -F -o "${dat_fnm_path}" | parse_ior >> "${out_fnm}"
+	cmd="${mpi_launcher} ${ior_path} -a=POSIX -w ${ior_sz_opts} -i=1 -vv -k -F -o ${dat_fnm_path}"
+	if ! ${cmd}  | parse_ior >> "${out_fnm}" ; then
+	    printf " error: ${cmd}"
+	fi
 	
     	sleep 5
     done
@@ -163,9 +165,10 @@ do_ior()
     for (( n_rank = 1; n_rank <= max_ranks; n_rank *= 2 )) ; do
 	printf " ${n_rank}"
 	mk_mpi_launcher ${n_rank}
-	${mpi_launcher} "${ior_path}" -a=POSIX -r ${ior_sz_opts} -i=1 -vv \
-	     -k -F -o "${dat_fnm_path}" | parse_ior >> "${out_fnm}"
-	
+	cmd="${mpi_launcher} ${ior_path} -a=POSIX -r ${ior_sz_opts} -i=1 -vv -k -F -o ${dat_fnm_path}"
+	if ! ${cmd} | parse_ior >> "${out_fnm}" ; then
+	    printf " error: ${cmd}"
+	fi
 	sleep 5
     done
     printf "\n"
