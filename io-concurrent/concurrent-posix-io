@@ -114,11 +114,11 @@ mk_mpi_launcher()
 	bluesky* )
 	    # --ntasks-per-node=24
 	    ((nodes= ${tasks} / 24 + 1))
-	    mpi_launcher="srun -N ${nodes} -n ${tasks}"
+	    mpi_launcher="srun -N ${nodes} -n ${tasks} -t 00:10:00"
 	    ;;
 	seapearl* )
 	    ((nodes= ${tasks} / 20 + 1))
-	    mpi_launcher="srun -p ivyall -N ${nodes} mpiexec -n ${tasks}"
+	    mpi_launcher="srun -p ivyall -N ${nodes} -t 00:10:00 mpiexec -n ${tasks}"
 	    ;;
 	* ) # unknown option
 	    die "unknown launcher for '${my_hostname}'"
@@ -154,11 +154,9 @@ do_ior()
     	printf " ${n_rank}"
 	mk_mpi_launcher ${n_rank}
 	cmd="${mpi_launcher} ${ior_path} -a=POSIX -w ${ior_sz_opts} -i=1 -vv -k -F -o ${dat_fnm_path}"
-	if ! ${cmd}  | parse_ior >> "${out_fnm}" ; then
-	    printf " error: ${cmd}"
-	fi
+	${cmd}  | parse_ior >> "${out_fnm}"
 	
-    	sleep 5
+    	sleep 10
     done
 
     printf "; read"
@@ -166,10 +164,9 @@ do_ior()
 	printf " ${n_rank}"
 	mk_mpi_launcher ${n_rank}
 	cmd="${mpi_launcher} ${ior_path} -a=POSIX -r ${ior_sz_opts} -i=1 -vv -k -F -o ${dat_fnm_path}"
-	if ! ${cmd} | parse_ior >> "${out_fnm}" ; then
-	    printf " error: ${cmd}"
-	fi
-	sleep 5
+	${cmd} | parse_ior >> "${out_fnm}"
+	
+	sleep 10
     done
     printf "\n"
 }
