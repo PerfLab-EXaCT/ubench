@@ -102,7 +102,8 @@ dat_fnm_path="${fs_path%/}/${dat_fnm_stem}" # strip trailing /
 re_tasks="tasks[:blank:]*: ([[:digit:]]+)"
 re_bw="^Max (Read|Write): *([0-9.]+) MiB/sec \(([0-9.]+) MB/sec"
 
-ior_sz_opts="-s=1 -b=256m -t=16k"
+ior_w_opts="-F -a=POSIX -w -s=1 -b=256m -t=16m -e -i=1 -vv"
+ior_r_opts="-F -a=POSIX -r -s=1 -b=256m -t=16k -i=1 -vv"
 
 
 # sets "mpi_launcher"
@@ -118,7 +119,7 @@ mk_mpi_launcher()
 	    ;;
 	seapearl* )
 	    ((nodes= ${tasks} / 20 + 1))
-	    mpi_launcher="srun -p ivyall -N ${nodes} -t 00:10:00 mpiexec -n ${tasks}"
+	    mpi_launcher="srun -p ivy -N ${nodes} -t 00:10:00 mpiexec -n ${tasks}"
 	    ;;
 	* ) # unknown option
 	    die "unknown launcher for '${my_hostname}'"
@@ -139,7 +140,7 @@ parse_ior()
 	    bw10=${BASH_REMATCH[3]}
 	fi
     done
-    printf "  ${type} ${ranks}: ${bw10} MB/sec; ${bw2} MiB/sec\n"
+    printf "  %5s: %05d MB/s; %05d MiB/s\n" ${type} ${ranks} ${bw10} ${bw2}
 }
 
 
@@ -147,15 +148,15 @@ do_ior()
 {
     date_str=$(date --iso-8601=minutes)
 
-    printf "${date_str}\n" >> "${out_fnm}"
+    printf -- "- ${date_str}\n" >> "${out_fnm}"
     
-    printf "* ${date_str}: write"
+    printf -- "- ${date_str}: write"
     for (( n_rank = 1; n_rank <= max_ranks; n_rank *= 2 )) ; do
     	printf " ${n_rank}"
-	mk_mpi_launcher ${n_rank}
-	cmd="${mpi_launcher} ${ior_path} -a=POSIX -w ${ior_sz_opts} -i=1 -vv -k -F -o ${dat_fnm_path}"
-	${cmd}  | parse_ior >> "${out_fnm}"
-	
+    	mk_mpi_launcher ${n_rank}
+    	cmd="${mpi_launcher} ${ior_path} ${ior_w_opts} -k -o ${dat_fnm_path}"
+	#printf "\n${cmd}\n"
+    	${cmd}  | parse_ior >> "${out_fnm}"
     	sleep 10
     done
 
@@ -163,9 +164,9 @@ do_ior()
     for (( n_rank = 1; n_rank <= max_ranks; n_rank *= 2 )) ; do
 	printf " ${n_rank}"
 	mk_mpi_launcher ${n_rank}
-	cmd="${mpi_launcher} ${ior_path} -a=POSIX -r ${ior_sz_opts} -i=1 -vv -k -F -o ${dat_fnm_path}"
+	cmd="${mpi_launcher} ${ior_path} ${ior_r_opts} -k -o ${dat_fnm_path}"
+	#printf "\n${cmd}\n"
 	${cmd} | parse_ior >> "${out_fnm}"
-	
 	sleep 10
     done
     printf "\n"
@@ -177,9 +178,11 @@ do_ior()
 ((hour_sec = 60 * 60))
 
 printf "" > "${out_fnm}"
-printf "ior: ${ior_path} (${ior_sz_opts})\n" | tee -a "${out_fnm}"
-printf "hostname: ${my_hostname}\n" | tee -a "${out_fnm}"
-printf "file system: ${fs_path} (${dat_fnm_path})\n" | tee -a "${out_fnm}"
+printf "* ior: ${ior_path}\n" | tee -a "${out_fnm}"
+printf "* ior write: ${ior_w_opts}\n" | tee -a "${out_fnm}"
+printf "* ior read:  ${ior_r_opts})\n" | tee -a "${out_fnm}"
+printf "* hostname: ${my_hostname}\n" | tee -a "${out_fnm}"
+printf "* file system: ${fs_path} (${dat_fnm_path})\n" | tee -a "${out_fnm}"
 
 for (( hour = 1; hour <= max_hours; hour++ )) ; do
     do_ior
