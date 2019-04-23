@@ -151,7 +151,7 @@ do_ior()
     printf -- "- ${date_str}\n" >> "${out_fnm}"
 
     #----------------------------------------
-    # Write tests (create pristine data)
+    # Write tests
     #----------------------------------------
 
     printf -- "- ${date_str}: write"
@@ -165,7 +165,7 @@ do_ior()
     done
 
     #----------------------------------------
-    # Read tests (create pristine data)
+    # Read tests (first create pristine data)
     #----------------------------------------
 
     # N.B.: without fsyncs, ior may exit without writing all data
