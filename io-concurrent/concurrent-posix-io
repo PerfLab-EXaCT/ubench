@@ -82,29 +82,20 @@ my_hostname=${HOSTNAME}
 
 ior_path="${HOME}/app/ior/ior.git/MYINSTALL/bin/ior"
 
+iozone_path="${HOME}/app/iozone/iozone3_487/src/current/iozone"
+
 fs_path=$(readlink -f .)
 
 out_fnm="${scriptCmd}-$(date --iso-8601=minutes).log"
 [[ -n ${opt_out_fnm} ]] && out_fnm="${opt_out_fnm}"
 
-max_ranks=64
+max_ranks=1 #64
 
 max_hours=24
-
 
 #****************************************************************************
 # 
 #****************************************************************************
-
-dat_fnm_stem="io.dat"
-dat_fnm_path="${fs_path%/}/${dat_fnm_stem}" # strip trailing /
-
-re_tasks="tasks[:blank:]*: ([[:digit:]]+)"
-re_bw="^Max (Read|Write): *([0-9.]+) MiB/sec \(([0-9.]+) MB/sec"
-
-ior_w_opts="-F -a=POSIX -w -s=1 -b=256m -t=16m -i=1 -vv" # -e
-ior_r_opts="-F -a=POSIX -r -s=1 -b=256m -t=16k -i=1 -vv"
-
 
 # sets "mpi_launcher"
 mk_mpi_launcher()
@@ -128,20 +119,73 @@ mk_mpi_launcher()
 }
 
 
+#****************************************************************************
+# 
+#****************************************************************************
+
+re_tasks="tasks[:blank:]*: ([[:digit:]]+)"
+re_bw="^Max (Read|Write): *([0-9.]+) MiB/sec \(([0-9.]+) MB/sec"
+
 parse_ior()
 {
-    while read line; do
+    local num_match=0
+    while IFS= read line; do
 	#echo ${line}
-	if [[ ${line} =~ ${re_tasks} ]] ; then
+	if ((num_match >= 2)) ; then
+	    continue
+	elif [[ ${line} =~ ${re_tasks} ]] ; then
 	    ranks=${BASH_REMATCH[1]}
+	    ((num_match++))
 	elif [[ ${line} =~ ${re_bw} ]] ; then
 	    type=${BASH_REMATCH[1]}
 	    bw2=${BASH_REMATCH[2]}
 	    bw10=${BASH_REMATCH[3]}
+	    ((num_match++))
 	fi
     done
     printf "  %5s %3d: %8.1f MB/s; %8.1f MiB/s\n" ${type} ${ranks} ${bw10} ${bw2}
 }
+
+
+re_x="Children see throughput for"
+re_rewrite="${re_x} +([0-9]+) rewriters[[:blank:]]+= +([0-9.]+) kB/sec"
+re_rndread="${re_x} +([0-9]+) random readers[[:blank:]]+= +([0-9.]+) kB/sec"
+re_rndwrite="${re_x} +([0-9]+) random writers[[:blank:]]+= +([0-9.]+) kB/sec"
+
+parse_iozone()
+{
+    local num_match=0
+    while IFS= read line; do
+	#echo ${line}
+	if ((num_match >= 3)) ; then
+	    continue
+	elif [[ ${line} =~ ${re_rewrite} ]] ; then
+	    ranks=${BASH_REMATCH[1]}
+	    rewrite_bw=${BASH_REMATCH[2]}
+	    ((num_match++))
+	elif [[ ${line} =~ ${re_rndread} ]] ; then
+	    ranks=${BASH_REMATCH[1]}
+	    rndread_bw=${BASH_REMATCH[2]}
+	    ((num_match++))
+	elif [[ ${line} =~ ${re_rndwrite} ]] ; then
+	    ranks=${BASH_REMATCH[1]}
+	    rndwrite_bw=${BASH_REMATCH[2]}
+	    ((num_match++))
+	fi
+    done
+    printf " re-w,rnd-w,rnd-r %3d: %8.1f kB/sec; %8.1f kB/sec; %8.1f kB/sec\n" ${ranks} ${rewrite_bw} ${rndwrite_bw} ${rndread_bw}
+}
+
+
+#****************************************************************************
+
+ior_w_opts="-F -a=POSIX -w -s=1 -b=256m -t=16m -i=1 -vv" # -e
+ior_r_opts="-F -a=POSIX -r -s=1 -b=256m -t=16k -i=1 -vv"
+
+iozone_opts="-i 0 -i 1 -i 2 -i 8 -r 16k -s 16m -t"
+
+dat_fnm_stem="io.dat"
+dat_fnm_path="${fs_path%/}/${dat_fnm_stem}" # strip trailing /
 
 
 do_ior()
@@ -186,25 +230,70 @@ do_ior()
     \rm -f "${dat_fnm_path}".*
 }
 
-#****************************************************************************
 
+do_iozone()
+{
+    date_str=$(date --iso-8601=minutes)
+
+    printf -- "- ${date_str}\n" >> "${out_fnm}"
+
+    #----------------------------------------
+    # 
+    #----------------------------------------
+
+    printf -- "- ${date_str}: "
+    for (( n_rank = 1; n_rank <= max_ranks; n_rank *= 2 )) ; do
+    	printf " ${n_rank}"
+    	cmd="${iozone_path} ${iozone_opts} ${n_rank}"
+    	#printf "\n${cmd}\n"
+    	${cmd} | parse_iozone >> "${out_fnm}"
+    	sleep 10
+    done
+
+    printf "\n"
+}
+
+#****************************************************************************
 
 ((hour_sec = 60 * 60))
 
-printf "" > "${out_fnm}"
-printf "* ior: ${ior_path}\n" | tee -a "${out_fnm}"
-printf "* ior write: ${ior_w_opts}\n" | tee -a "${out_fnm}"
-printf "* ior read:  ${ior_r_opts}\n" | tee -a "${out_fnm}"
-printf "* hostname: ${my_hostname}\n" | tee -a "${out_fnm}"
-printf "* file system: ${fs_path} (${dat_fnm_path})\n" | tee -a "${out_fnm}"
+do_ior_loop()
+{
+    printf "* ior: ${ior_path}\n" | tee -a "${out_fnm}"
+    printf "* ior write: ${ior_w_opts}\n" | tee -a "${out_fnm}"
+    printf "* ior read:  ${ior_r_opts}\n" | tee -a "${out_fnm}"
+    printf "* hostname: ${my_hostname}\n" | tee -a "${out_fnm}"
+    printf "* file system: ${fs_path} (${dat_fnm_path})\n" | tee -a "${out_fnm}"
+    
+    for (( hour = 1; hour <= max_hours; hour++ )) ; do
+	do_ior
+	sleep ${hour_sec}
+    done
+}
 
-for (( hour = 1; hour <= max_hours; hour++ )) ; do
-    do_ior
-    sleep ${hour_sec}
-done
 
+do_iozone_loop()
+{
+    printf "* iozone: ${iozone_path}\n" | tee -a "${out_fnm}"
+    printf "* iozone opts: ${iozone_opts}\n" | tee -a "${out_fnm}"
+    printf "* hostname: ${my_hostname}\n" | tee -a "${out_fnm}"
+    printf "* file system: ${fs_path}\n" | tee -a "${out_fnm}"
+    
+    for (( hour = 1; hour <= max_hours; hour++ )) ; do
+	do_iozone
+	sleep ${hour_sec}
+    done
+}
 
 # watch --interval=3600 <me>
 
 # at now + 1 hour -m -f ~/scheduledTask.sh
 # at 06:00 -m -f ~/scheduledTask.sh
+
+#****************************************************************************
+
+
+printf "" > "${out_fnm}"
+
+#do_ior_loop
+do_iozone_loop
