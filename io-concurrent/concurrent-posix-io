@@ -136,19 +136,19 @@ re_bw="^Max (Read|Write): *([0-9.]+) MiB/sec \(([0-9.]+) MB/sec"
 
 parse_ior()
 {
-    local num_match=0
+    local n_match=0
     while IFS= read line; do
 	#echo ${line}
-	#if ((num_match >= 2)) ; then
+	#if ((n_match >= 2)) ; then
 	#    continue
 	if [[ ${line} =~ ${re_tasks} ]] ; then
 	    ranks=${BASH_REMATCH[1]}
-	    ((num_match++))
+	    ((n_match++))
 	elif [[ ${line} =~ ${re_bw} ]] ; then
 	    type=${BASH_REMATCH[1]}
 	    bw2=${BASH_REMATCH[2]}  # MiB/s
 	    bw10=${BASH_REMATCH[3]} # MB/s
-	    ((num_match++))
+	    ((n_match++))
 	fi
     done
     printf "  %5s %3d: %8.1f MB/s; %8.1f MiB/s\n" ${type} ${ranks} ${bw10} ${bw2}
@@ -165,35 +165,35 @@ re_rnd_wr="${re_ioz_x} +([0-9]+) random writers${re_ioz_y}"
 parse_iozone()
 {
     type=$1
-    local num_match=0
+    local n_match=0
     while IFS= read line; do
 	#echo ${line}
-	#if ((num_match >= 3)) ; then
+	#if ((n_match >= 3)) ; then
 	#    continue
 	if [[ ${line} =~ ${re_re_wr} ]] ; then
 	    ranks=${BASH_REMATCH[1]}
 	    re_wr_bw2=${BASH_REMATCH[2]} # KiB/s all ps
 	    re_wr_bw10=$(kb2_to_mb10_per_ps ${ranks} ${re_wr_bw2}) # MB/s
-	    ((num_match++))
+	    ((n_match++))
 	elif [[ ${line} =~ ${re_re_rd} ]] ; then
 	    ranks=${BASH_REMATCH[1]}
 	    re_rd_bw2=${BASH_REMATCH[2]} # KiB/s all ps
 	    re_rd_bw10=$(kb2_to_mb10_per_ps ${ranks} ${re_rd_bw2}) # MB/s
-	    ((num_match++))
+	    ((n_match++))
 	elif [[ ${line} =~ ${re_rnd_rd} ]] ; then
 	    ranks=${BASH_REMATCH[1]}
 	    rnd_rd_bw2=${BASH_REMATCH[2]} # KiB/s all ps
 	    rnd_rd_bw10=$(kb2_to_mb10_per_ps ${ranks} ${rnd_rd_bw2}) # MB/s
-	    ((num_match++))
+	    ((n_match++))
 	elif [[ ${line} =~ ${re_rnd_wr} ]] ; then
 	    ranks=${BASH_REMATCH[1]}
 	    rnd_wr_bw2=${BASH_REMATCH[2]} # KiB/s all ps
 	    rnd_wr_bw10=$(kb2_to_mb10_per_ps ${ranks} ${rnd_wr_bw2}) # MB/s
-	    ((num_match++))
+	    ((n_match++))
 	fi
     done
     
-    printf "   %5s %3d re-wr,re-rd:   %8.1f MB/s/ps; %8.1f MB/s/ps\n" ${type} ${ranks} ${re_wr_bw10} ${re_rd_bw10}
+    printf "   %5s %3d  re-wr, re-rd: %8.1f MB/s/ps; %8.1f MB/s/ps\n" ${type} ${ranks} ${re_wr_bw10} ${re_rd_bw10}
     printf "   %5s %3d rnd-wr,rnd-rd: %8.1f MB/s/ps; %8.1f MB/s/ps\n" ${type} ${ranks} ${rnd_wr_bw10} ${rnd_rd_bw10}
 }
 
