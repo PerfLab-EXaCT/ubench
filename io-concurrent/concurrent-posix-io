@@ -15,7 +15,7 @@ scriptPath=$(readlink -f "${scriptPath0}")
 scriptCmd=${scriptPath##*/} # cf. $(basename ...)
 scriptDir=${scriptPath%/*}  # cf. $(dirname ...)
 
-
+opt_ubench='iozone'
 opt_out_fnm=''
 
 #****************************************************************************
@@ -324,5 +324,8 @@ do_iozone_loop()
 
 printf "" > "${out_fnm}"
 
-#do_ior_loop
-do_iozone_loop
+if [[ ${opt_ubench} = iozone ]] ; then
+    do_iozone_loop
+elif [[ ${opt_ubench} = ior ]] ; then
+    do_ior_loop
+fi
