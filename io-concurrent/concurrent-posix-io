@@ -100,7 +100,7 @@ max_hours=24
 # sets "mpi_launcher"
 mk_mpi_launcher()
 {
-    tasks=$1
+    local tasks=$1
     mpi_launcher="mpiexec -n ${tasks}"
     case "${my_hostname}" in
 	bluesky* )
@@ -121,8 +121,8 @@ mk_mpi_launcher()
 
 kb2_to_mb10_per_ps()
 {
-    n_ps=$1
-    bw=$2
+    local n_ps=$1
+    local bw=$2
     echo "(${bw} * 1024) / (10^6 * ${n_ps})" | bc -l
 }
 
@@ -142,12 +142,12 @@ parse_ior()
 	#if ((n_match >= 2)) ; then
 	#    continue
 	if [[ ${line} =~ ${re_tasks} ]] ; then
-	    ranks=${BASH_REMATCH[1]}
+	    local ranks=${BASH_REMATCH[1]}
 	    ((n_match++))
 	elif [[ ${line} =~ ${re_bw} ]] ; then
-	    type=${BASH_REMATCH[1]}
-	    bw2=${BASH_REMATCH[2]}  # MiB/s
-	    bw10=${BASH_REMATCH[3]} # MB/s
+	    local type=${BASH_REMATCH[1]}
+	    local bw2=${BASH_REMATCH[2]}  # MiB/s
+	    local bw10=${BASH_REMATCH[3]} # MB/s
 	    ((n_match++))
 	fi
     done
@@ -164,31 +164,31 @@ re_rnd_wr="${re_ioz_x} +([0-9]+) random writers${re_ioz_y}"
 
 parse_iozone()
 {
-    type=$1
+    local type=$1
     local n_match=0
     while IFS= read line; do
 	#echo ${line}
 	#if ((n_match >= 3)) ; then
 	#    continue
 	if [[ ${line} =~ ${re_re_wr} ]] ; then
-	    ranks=${BASH_REMATCH[1]}
-	    re_wr_bw2=${BASH_REMATCH[2]} # KiB/s all ps
-	    re_wr_bw10=$(kb2_to_mb10_per_ps ${ranks} ${re_wr_bw2}) # MB/s
+	    local ranks=${BASH_REMATCH[1]}
+	    local re_wr_bw2=${BASH_REMATCH[2]} # KiB/s all ps
+	    local re_wr_bw10=$(kb2_to_mb10_per_ps ${ranks} ${re_wr_bw2}) # MB/s
 	    ((n_match++))
 	elif [[ ${line} =~ ${re_re_rd} ]] ; then
-	    ranks=${BASH_REMATCH[1]}
-	    re_rd_bw2=${BASH_REMATCH[2]} # KiB/s all ps
-	    re_rd_bw10=$(kb2_to_mb10_per_ps ${ranks} ${re_rd_bw2}) # MB/s
+	    local ranks=${BASH_REMATCH[1]}
+	    local re_rd_bw2=${BASH_REMATCH[2]} # KiB/s all ps
+	    local re_rd_bw10=$(kb2_to_mb10_per_ps ${ranks} ${re_rd_bw2}) # MB/s
 	    ((n_match++))
 	elif [[ ${line} =~ ${re_rnd_rd} ]] ; then
-	    ranks=${BASH_REMATCH[1]}
-	    rnd_rd_bw2=${BASH_REMATCH[2]} # KiB/s all ps
-	    rnd_rd_bw10=$(kb2_to_mb10_per_ps ${ranks} ${rnd_rd_bw2}) # MB/s
+	    local ranks=${BASH_REMATCH[1]}
+	    local rnd_rd_bw2=${BASH_REMATCH[2]} # KiB/s all ps
+	    local rnd_rd_bw10=$(kb2_to_mb10_per_ps ${ranks} ${rnd_rd_bw2}) # MB/s
 	    ((n_match++))
 	elif [[ ${line} =~ ${re_rnd_wr} ]] ; then
-	    ranks=${BASH_REMATCH[1]}
-	    rnd_wr_bw2=${BASH_REMATCH[2]} # KiB/s all ps
-	    rnd_wr_bw10=$(kb2_to_mb10_per_ps ${ranks} ${rnd_wr_bw2}) # MB/s
+	    local ranks=${BASH_REMATCH[1]}
+	    local rnd_wr_bw2=${BASH_REMATCH[2]} # KiB/s all ps
+	    local rnd_wr_bw10=$(kb2_to_mb10_per_ps ${ranks} ${rnd_wr_bw2}) # MB/s
 	    ((n_match++))
 	fi
     done
@@ -212,7 +212,7 @@ dat_fnm_path="${fs_path%/}/${dat_fnm_stem}" # strip trailing /
 
 do_ior()
 {
-    date_str=$(date --iso-8601=minutes)
+    local date_str=$(date --iso-8601=minutes)
 
     printf -- "- ${date_str}\n" >> "${out_fnm}"
 
@@ -224,7 +224,7 @@ do_ior()
     for (( n_rank = 1; n_rank <= max_ranks; n_rank *= 2 )) ; do
     	printf " ${n_rank}"
     	mk_mpi_launcher ${n_rank}
-    	cmd="${mpi_launcher} ${ior_path} ${ior_w_opts} -o ${dat_fnm_path}"
+    	local cmd="${mpi_launcher} ${ior_path} ${ior_w_opts} -o ${dat_fnm_path}"
     	#printf "\n${cmd}\n"
     	${cmd}  | parse_ior >> "${out_fnm}"
     	sleep 10
@@ -242,7 +242,7 @@ do_ior()
     for (( n_rank = 1; n_rank <= max_ranks; n_rank *= 2 )) ; do
 	printf " ${n_rank}"
 	mk_mpi_launcher ${n_rank}
-	cmd="${mpi_launcher} ${ior_path} ${ior_r_opts} -k -o ${dat_fnm_path}"
+	local cmd="${mpi_launcher} ${ior_path} ${ior_r_opts} -k -o ${dat_fnm_path}"
 	#printf "\n${cmd}\n"
 	${cmd} | parse_ior >> "${out_fnm}"
 	sleep 10
@@ -255,7 +255,7 @@ do_ior()
 
 do_iozone()
 {
-    date_str=$(date --iso-8601=minutes)
+    local date_str=$(date --iso-8601=minutes)
 
     printf -- "- ${date_str}\n" >> "${out_fnm}"
 
@@ -266,13 +266,13 @@ do_iozone()
     printf -- "- ${date_str}: "
     for (( n_rank = 1; n_rank <= max_ranks; n_rank *= 2 )) ; do
     	printf " ${n_rank} (wr"
-    	cmd="${iozone_path} ${iozone_w_opts} ${n_rank}"
+    	local cmd="${iozone_path} ${iozone_w_opts} ${n_rank}"
     	#printf "\n${cmd}\n"
     	${cmd} | parse_iozone "write" >> "${out_fnm}"
     	sleep 10
 
 	printf "/rd)"
-	cmd="${iozone_path} ${iozone_r_opts} ${n_rank}"
+	local cmd="${iozone_path} ${iozone_r_opts} ${n_rank}"
     	#printf "\n${cmd}\n"
     	${cmd} | parse_iozone "read" >> "${out_fnm}"
 	sleep 10
