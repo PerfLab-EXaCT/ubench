@@ -89,7 +89,7 @@ fs_path=$(readlink -f .)
 out_fnm="${scriptCmd}-$(date --iso-8601=minutes).log"
 [[ -n ${opt_out_fnm} ]] && out_fnm="${opt_out_fnm}"
 
-max_ranks=1 #64
+max_ranks=64
 
 max_hours=24
 
@@ -119,6 +119,14 @@ mk_mpi_launcher()
 }
 
 
+kb2_to_mb10_per_ps()
+{
+    n_ps=$1
+    bw=$2
+    echo "(${bw} * 1024) / (10^6 * ${n_ps})" | bc -l
+}
+
+
 #****************************************************************************
 # 
 #****************************************************************************
@@ -131,15 +139,15 @@ parse_ior()
     local num_match=0
     while IFS= read line; do
 	#echo ${line}
-	if ((num_match >= 2)) ; then
-	    continue
-	elif [[ ${line} =~ ${re_tasks} ]] ; then
+	#if ((num_match >= 2)) ; then
+	#    continue
+	if [[ ${line} =~ ${re_tasks} ]] ; then
 	    ranks=${BASH_REMATCH[1]}
 	    ((num_match++))
 	elif [[ ${line} =~ ${re_bw} ]] ; then
 	    type=${BASH_REMATCH[1]}
-	    bw2=${BASH_REMATCH[2]}
-	    bw10=${BASH_REMATCH[3]}
+	    bw2=${BASH_REMATCH[2]}  # MiB/s
+	    bw10=${BASH_REMATCH[3]} # MB/s
 	    ((num_match++))
 	fi
     done
@@ -147,33 +155,46 @@ parse_ior()
 }
 
 
-re_x="Children see throughput for"
-re_rewrite="${re_x} +([0-9]+) rewriters[[:blank:]]+= +([0-9.]+) kB/sec"
-re_rndread="${re_x} +([0-9]+) random readers[[:blank:]]+= +([0-9.]+) kB/sec"
-re_rndwrite="${re_x} +([0-9]+) random writers[[:blank:]]+= +([0-9.]+) kB/sec"
+re_ioz_x="Children see throughput for"
+re_ioz_y="[[:blank:]]+= +([0-9.]+) kB/sec"
+re_re_wr="${re_ioz_x} +([0-9]+) rewriters${re_ioz_y}"
+re_re_rd="${re_ioz_x} +([0-9]+) re-readers${re_ioz_y}"
+re_rnd_rd="${re_ioz_x} +([0-9]+) random readers${re_ioz_y}"
+re_rnd_wr="${re_ioz_x} +([0-9]+) random writers${re_ioz_y}"
 
 parse_iozone()
 {
+    type=$1
     local num_match=0
     while IFS= read line; do
 	#echo ${line}
-	if ((num_match >= 3)) ; then
-	    continue
-	elif [[ ${line} =~ ${re_rewrite} ]] ; then
+	#if ((num_match >= 3)) ; then
+	#    continue
+	if [[ ${line} =~ ${re_re_wr} ]] ; then
 	    ranks=${BASH_REMATCH[1]}
-	    rewrite_bw=${BASH_REMATCH[2]}
+	    re_wr_bw2=${BASH_REMATCH[2]} # KiB/s all ps
+	    re_wr_bw10=$(kb2_to_mb10_per_ps ${ranks} ${re_wr_bw2}) # MB/s
 	    ((num_match++))
-	elif [[ ${line} =~ ${re_rndread} ]] ; then
+	elif [[ ${line} =~ ${re_re_rd} ]] ; then
 	    ranks=${BASH_REMATCH[1]}
-	    rndread_bw=${BASH_REMATCH[2]}
+	    re_rd_bw2=${BASH_REMATCH[2]} # KiB/s all ps
+	    re_rd_bw10=$(kb2_to_mb10_per_ps ${ranks} ${re_rd_bw2}) # MB/s
 	    ((num_match++))
-	elif [[ ${line} =~ ${re_rndwrite} ]] ; then
+	elif [[ ${line} =~ ${re_rnd_rd} ]] ; then
 	    ranks=${BASH_REMATCH[1]}
-	    rndwrite_bw=${BASH_REMATCH[2]}
+	    rnd_rd_bw2=${BASH_REMATCH[2]} # KiB/s all ps
+	    rnd_rd_bw10=$(kb2_to_mb10_per_ps ${ranks} ${rnd_rd_bw2}) # MB/s
+	    ((num_match++))
+	elif [[ ${line} =~ ${re_rnd_wr} ]] ; then
+	    ranks=${BASH_REMATCH[1]}
+	    rnd_wr_bw2=${BASH_REMATCH[2]} # KiB/s all ps
+	    rnd_wr_bw10=$(kb2_to_mb10_per_ps ${ranks} ${rnd_wr_bw2}) # MB/s
 	    ((num_match++))
 	fi
     done
-    printf " re-w,rnd-w,rnd-r %3d: %8.1f kB/sec; %8.1f kB/sec; %8.1f kB/sec\n" ${ranks} ${rewrite_bw} ${rndwrite_bw} ${rndread_bw}
+    
+    printf "   %5s %3d re-wr,re-rd:   %8.1f MB/s/ps; %8.1f MB/s/ps\n" ${type} ${ranks} ${re_wr_bw10} ${re_rd_bw10}
+    printf "   %5s %3d rnd-wr,rnd-rd: %8.1f MB/s/ps; %8.1f MB/s/ps\n" ${type} ${ranks} ${rnd_wr_bw10} ${rnd_rd_bw10}
 }
 
 
@@ -182,7 +203,8 @@ parse_iozone()
 ior_w_opts="-F -a=POSIX -w -s=1 -b=256m -t=16m -i=1 -vv" # -e
 ior_r_opts="-F -a=POSIX -r -s=1 -b=256m -t=16k -i=1 -vv"
 
-iozone_opts="-i 0 -i 1 -i 2 -i 8 -r 16k -s 16m -t"
+iozone_w_opts="-i 0      -i 2 -s 256m -r 16m -t"
+iozone_r_opts="-i 0 -i 1 -i 2 -s 256m -r 16k -t"
 
 dat_fnm_stem="io.dat"
 dat_fnm_path="${fs_path%/}/${dat_fnm_stem}" # strip trailing /
@@ -243,11 +265,17 @@ do_iozone()
 
     printf -- "- ${date_str}: "
     for (( n_rank = 1; n_rank <= max_ranks; n_rank *= 2 )) ; do
-    	printf " ${n_rank}"
-    	cmd="${iozone_path} ${iozone_opts} ${n_rank}"
+    	printf " ${n_rank} (wr"
+    	cmd="${iozone_path} ${iozone_w_opts} ${n_rank}"
     	#printf "\n${cmd}\n"
-    	${cmd} | parse_iozone >> "${out_fnm}"
+    	${cmd} | parse_iozone "write" >> "${out_fnm}"
     	sleep 10
+
+	printf "/rd)"
+	cmd="${iozone_path} ${iozone_r_opts} ${n_rank}"
+    	#printf "\n${cmd}\n"
+    	${cmd} | parse_iozone "read" >> "${out_fnm}"
+	sleep 10
     done
 
     printf "\n"
@@ -261,7 +289,7 @@ do_ior_loop()
 {
     printf "* ior: ${ior_path}\n" | tee -a "${out_fnm}"
     printf "* ior write: ${ior_w_opts}\n" | tee -a "${out_fnm}"
-    printf "* ior read:  ${ior_r_opts}\n" | tee -a "${out_fnm}"
+    printf "* ior read : ${ior_r_opts}\n" | tee -a "${out_fnm}"
     printf "* hostname: ${my_hostname}\n" | tee -a "${out_fnm}"
     printf "* file system: ${fs_path} (${dat_fnm_path})\n" | tee -a "${out_fnm}"
     
@@ -275,7 +303,8 @@ do_ior_loop()
 do_iozone_loop()
 {
     printf "* iozone: ${iozone_path}\n" | tee -a "${out_fnm}"
-    printf "* iozone opts: ${iozone_opts}\n" | tee -a "${out_fnm}"
+    printf "* iozone write: ${iozone_w_opts}\n" | tee -a "${out_fnm}"
+    printf "* iozone read : ${iozone_r_opts}\n" | tee -a "${out_fnm}"
     printf "* hostname: ${my_hostname}\n" | tee -a "${out_fnm}"
     printf "* file system: ${fs_path}\n" | tee -a "${out_fnm}"
     
