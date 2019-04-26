@@ -96,7 +96,7 @@ my_hostname=${HOSTNAME}
 
 fs_path=$(readlink -f .)
 
-out_fnm="${scriptCmd}-$(date --iso-8601=minutes).log"
+out_fnm="${scriptCmd}-$(date --iso-8601=minutes)-${opt_ubench}.log"
 [[ -n ${opt_out_fnm} ]] && out_fnm="${opt_out_fnm}"
 
 #****************************************************************************
