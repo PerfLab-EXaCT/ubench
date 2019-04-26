@@ -15,8 +15,17 @@ scriptPath=$(readlink -f "${scriptPath0}")
 scriptCmd=${scriptPath##*/} # cf. $(basename ...)
 scriptDir=${scriptPath%/*}  # cf. $(dirname ...)
 
+#****************************************************************************
+
 opt_ubench='iozone'
 opt_out_fnm=''
+
+ior_path="${HOME}/app/ior/ior.git/MYINSTALL/bin/ior"
+iozone_path="${HOME}/app/iozone/iozone/src/current/iozone"
+
+max_ranks=64
+
+max_hours=24
 
 #****************************************************************************
 # Parse arguments
@@ -85,18 +94,10 @@ done
 
 my_hostname=${HOSTNAME}
 
-ior_path="${HOME}/app/ior/ior.git/MYINSTALL/bin/ior"
-
-iozone_path="${HOME}/app/iozone/iozone/src/current/iozone"
-
 fs_path=$(readlink -f .)
 
 out_fnm="${scriptCmd}-$(date --iso-8601=minutes).log"
 [[ -n ${opt_out_fnm} ]] && out_fnm="${opt_out_fnm}"
-
-max_ranks=64
-
-max_hours=24
 
 #****************************************************************************
 # 
