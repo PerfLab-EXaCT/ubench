@@ -34,7 +34,7 @@ EOF
 usage()
 {
     cat <<EOF
-Usage: ${scriptCmd} ...
+Usage: ${scriptCmd} [--ubench ior|iozone] ...
 EOF
     exit 0
 }
@@ -50,6 +50,11 @@ while [[ $# -gt 0 ]] ; do
     case "${arg}" in
 	-h | --help )
 	    usage
+	    ;;
+
+	--ubench )
+	    opt_ubench="$1"
+	    shift # past value
 	    ;;
 
 	-o | --output )
@@ -82,7 +87,7 @@ my_hostname=${HOSTNAME}
 
 ior_path="${HOME}/app/ior/ior.git/MYINSTALL/bin/ior"
 
-iozone_path="${HOME}/app/iozone/iozone3_487/src/current/iozone"
+iozone_path="${HOME}/app/iozone/iozone/src/current/iozone"
 
 fs_path=$(readlink -f .)
 
