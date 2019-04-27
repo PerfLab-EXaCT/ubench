@@ -210,8 +210,8 @@ parse_iozone()
 	fi
     done
     
-    printf "   %5s %3d  re-wr, re-rd: %9.1f MB/s (%7.1f/ps); %9.1f MB/s (%7.1f/ps)\n" ${type} ${ranks} ${re_wr_bw10} ${re_wr_bwpp} ${re_rd_bw10} ${re_rd_bwpp}
-    printf "   %5s %3d rnd-wr,rnd-rd: %9.1f MB/s (%7.1f/ps); %9.1f MB/s (%7.1f/ps)\n" ${type} ${ranks} ${rnd_wr_bw10} ${rnd_wr_bwpp} ${rnd_rd_bw10} ${rnd_rd_bwpp}
+    printf "   %5s %3d  re/wr,rd: %9.1f MB/s (%7.1f/ps) %9.1f MB/s (%7.1f/ps)\n" ${type} ${ranks} ${re_wr_bw10} ${re_wr_bwpp} ${re_rd_bw10} ${re_rd_bwpp}
+    printf "   %5s %3d rnd/wr,rd: %9.1f MB/s (%7.1f/ps) %9.1f MB/s (%7.1f/ps)\n" ${type} ${ranks} ${rnd_wr_bw10} ${rnd_wr_bwpp} ${rnd_rd_bw10} ${rnd_rd_bwpp}
 }
 
 
