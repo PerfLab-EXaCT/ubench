@@ -125,10 +125,17 @@ mk_mpi_launcher()
 }
 
 
-kb2_to_mb10_per_ps()
+kb2_to_mb10()
 {
-    local n_ps=$1
-    local bw=$2
+    local bw=$1
+    echo "(${bw} * 1024) / (10^6)" | bc -l
+}
+
+
+kb2_to_mbpp()
+{
+    local bw=$1
+    local n_ps=$2
     echo "(${bw} * 1024) / (10^6 * ${n_ps})" | bc -l
 }
 
@@ -179,28 +186,32 @@ parse_iozone()
 	if [[ ${line} =~ ${re_re_wr} ]] ; then
 	    local ranks=${BASH_REMATCH[1]}
 	    local re_wr_bw2=${BASH_REMATCH[2]} # KiB/s all ps
-	    local re_wr_bw10=$(kb2_to_mb10_per_ps ${ranks} ${re_wr_bw2}) # MB/s
+	    local re_wr_bw10=$(kb2_to_mb10 ${re_wr_bw2}) # MB/s
+	    local re_wr_bwpp=$(kb2_to_mbpp ${re_wr_bw2} ${ranks})
 	    ((n_match++))
 	elif [[ ${line} =~ ${re_re_rd} ]] ; then
 	    local ranks=${BASH_REMATCH[1]}
 	    local re_rd_bw2=${BASH_REMATCH[2]} # KiB/s all ps
-	    local re_rd_bw10=$(kb2_to_mb10_per_ps ${ranks} ${re_rd_bw2}) # MB/s
+	    local re_rd_bw10=$(kb2_to_mb10 ${re_rd_bw2}) # MB/s
+	    local re_rd_bwpp=$(kb2_to_mbpp ${re_rd_bw2} ${ranks})
 	    ((n_match++))
 	elif [[ ${line} =~ ${re_rnd_rd} ]] ; then
 	    local ranks=${BASH_REMATCH[1]}
 	    local rnd_rd_bw2=${BASH_REMATCH[2]} # KiB/s all ps
-	    local rnd_rd_bw10=$(kb2_to_mb10_per_ps ${ranks} ${rnd_rd_bw2}) # MB/s
+	    local rnd_rd_bw10=$(kb2_to_mb10 ${rnd_rd_bw2}) # MB/s
+	    local rnd_rd_bwpp=$(kb2_to_mbpp ${rnd_rd_bw2} ${ranks})
 	    ((n_match++))
 	elif [[ ${line} =~ ${re_rnd_wr} ]] ; then
 	    local ranks=${BASH_REMATCH[1]}
 	    local rnd_wr_bw2=${BASH_REMATCH[2]} # KiB/s all ps
-	    local rnd_wr_bw10=$(kb2_to_mb10_per_ps ${ranks} ${rnd_wr_bw2}) # MB/s
+	    local rnd_wr_bw10=$(kb2_to_mb10 ${rnd_wr_bw2}) # MB/s
+	    local rnd_wr_bwpp=$(kb2_to_mbpp ${rnd_wr_bw2} ${ranks})
 	    ((n_match++))
 	fi
     done
     
-    printf "   %5s %3d  re-wr, re-rd: %8.1f MB/s/ps; %8.1f MB/s/ps\n" ${type} ${ranks} ${re_wr_bw10} ${re_rd_bw10}
-    printf "   %5s %3d rnd-wr,rnd-rd: %8.1f MB/s/ps; %8.1f MB/s/ps\n" ${type} ${ranks} ${rnd_wr_bw10} ${rnd_rd_bw10}
+    printf "   %5s %3d  re-wr, re-rd: %9.1f MB/s (%7.1f/ps); %9.1f MB/s (%7.1f/ps)\n" ${type} ${ranks} ${re_wr_bw10} ${re_wr_bwpp} ${re_rd_bw10} ${re_rd_bwpp}
+    printf "   %5s %3d rnd-wr,rnd-rd: %9.1f MB/s (%7.1f/ps); %9.1f MB/s (%7.1f/ps)\n" ${type} ${ranks} ${rnd_wr_bw10} ${rnd_wr_bwpp} ${rnd_rd_bw10} ${rnd_rd_bwpp}
 }
 
 
