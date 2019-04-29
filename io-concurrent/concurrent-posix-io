@@ -23,7 +23,7 @@ opt_out_fnm=''
 ior_path="${HOME}/app/ior/ior.git/MYINSTALL/bin/ior"
 iozone_path="${HOME}/app/iozone/iozone/src/current/iozone"
 
-max_ranks=64
+max_ranks=128
 
 max_hours=24
 
@@ -99,6 +99,11 @@ fs_path=$(readlink -f .)
 out_fnm="${scriptCmd}-$(date --iso-8601=minutes)-${opt_ubench}.log"
 [[ -n ${opt_out_fnm} ]] && out_fnm="${opt_out_fnm}"
 
+if [[ ! ${opt_ubench} =~ iozone|ior ]] ; then
+    die "invalid benchmark '${opt_ubench}'"
+fi
+
+
 #****************************************************************************
 # 
 #****************************************************************************
@@ -170,8 +175,8 @@ parse_ior()
 
 re_ioz_x="Children see throughput for"
 re_ioz_y="[[:blank:]]+= +([0-9.]+) kB/sec"
-re_re_wr="${re_ioz_x} +([0-9]+) rewriters${re_ioz_y}"
-re_re_rd="${re_ioz_x} +([0-9]+) re-readers${re_ioz_y}"
+re_wr="${re_ioz_x} +([0-9]+) rewriters${re_ioz_y}"
+re_rd="${re_ioz_x} +([0-9]+) readers${re_ioz_y}"
 re_rnd_rd="${re_ioz_x} +([0-9]+) random readers${re_ioz_y}"
 re_rnd_wr="${re_ioz_x} +([0-9]+) random writers${re_ioz_y}"
 
@@ -183,17 +188,17 @@ parse_iozone()
 	#echo ${line}
 	#if ((n_match >= 3)) ; then
 	#    continue
-	if [[ ${line} =~ ${re_re_wr} ]] ; then
+	if [[ ${line} =~ ${re_wr} ]] ; then
 	    local ranks=${BASH_REMATCH[1]}
-	    local re_wr_bw2=${BASH_REMATCH[2]} # KiB/s all ps
-	    local re_wr_bw10=$(kb2_to_mb10 ${re_wr_bw2}) # MB/s
-	    local re_wr_bwpp=$(kb2_to_mbpp ${re_wr_bw2} ${ranks})
+	    local wr_bw2=${BASH_REMATCH[2]} # KiB/s all ps
+	    local wr_bw10=$(kb2_to_mb10 ${wr_bw2}) # MB/s
+	    local wr_bwpp=$(kb2_to_mbpp ${wr_bw2} ${ranks})
 	    ((n_match++))
-	elif [[ ${line} =~ ${re_re_rd} ]] ; then
+	elif [[ ${line} =~ ${re_rd} ]] ; then
 	    local ranks=${BASH_REMATCH[1]}
-	    local re_rd_bw2=${BASH_REMATCH[2]} # KiB/s all ps
-	    local re_rd_bw10=$(kb2_to_mb10 ${re_rd_bw2}) # MB/s
-	    local re_rd_bwpp=$(kb2_to_mbpp ${re_rd_bw2} ${ranks})
+	    local rd_bw2=${BASH_REMATCH[2]} # KiB/s all ps
+	    local rd_bw10=$(kb2_to_mb10 ${rd_bw2}) # MB/s
+	    local rd_bwpp=$(kb2_to_mbpp ${rd_bw2} ${ranks})
 	    ((n_match++))
 	elif [[ ${line} =~ ${re_rnd_rd} ]] ; then
 	    local ranks=${BASH_REMATCH[1]}
@@ -210,18 +215,20 @@ parse_iozone()
 	fi
     done
     
-    printf "   %5s %3d  re/wr,rd: %9.1f MB/s (%7.1f/ps) %9.1f MB/s (%7.1f/ps)\n" ${type} ${ranks} ${re_wr_bw10} ${re_wr_bwpp} ${re_rd_bw10} ${re_rd_bwpp}
-    printf "   %5s %3d rnd/wr,rd: %9.1f MB/s (%7.1f/ps) %9.1f MB/s (%7.1f/ps)\n" ${type} ${ranks} ${rnd_wr_bw10} ${rnd_wr_bwpp} ${rnd_rd_bw10} ${rnd_rd_bwpp}
+    printf "   %5s %3d rewr,rd: %9.1f MB/s (%7.1f/ps) %9.1f MB/s (%7.1f/ps)\n" ${type} ${ranks} ${wr_bw10} ${wr_bwpp} ${rd_bw10} ${rd_bwpp}
+    printf "   %5s %3d rnd/rw : %9.1f MB/s (%7.1f/ps) %9.1f MB/s (%7.1f/ps)\n" ${type} ${ranks} ${rnd_wr_bw10} ${rnd_wr_bwpp} ${rnd_rd_bw10} ${rnd_rd_bwpp}
 }
 
 
 #****************************************************************************
 
-ior_w_opts="-F -a=POSIX -w -s=1 -b=256m -t=16m -i=1 -vv" # -e
-ior_r_opts="-F -a=POSIX -r -s=1 -b=256m -t=16k -i=1 -vv"
+ior_w_opts="-F -a POSIX -w -s 1 -b 256m -t  1m -i 1 -vv" # -e
+ior_r_opts="-F -a POSIX -r -s 1 -b 256m -t 16k -i 1 -vv"
 
-iozone_w_opts="-i 0      -i 2 -s 256m -r 16m -t"
-iozone_r_opts="-i 0 -i 1 -i 2 -s 256m -r 16k -t"
+iozone_w_opts="-i 0      -i 2 -s 1g -r  1m -+r -t"
+iozone_r_opts="-i 0 -i 1 -i 2 -s 1g -r 16k -+r -t"
+# -+r: use fsync
+# -I: direct I/O; bypass buffer cache
 
 dat_fnm_stem="io.dat"
 dat_fnm_path="${fs_path%/}/${dat_fnm_stem}" # strip trailing /
@@ -251,7 +258,7 @@ do_ior()
     # Read tests (first create pristine data)
     #----------------------------------------
 
-    # N.B.: without fsyncs, ior may exit without writing all data
+    # N.B.: without fsyncs (-Y), ior may exit without writing all data
     mk_mpi_launcher ${max_ranks}
     ${mpi_launcher} ${ior_path} ${ior_w_opts} -Y -k -o ${dat_fnm_path} > /dev/null
 
@@ -337,7 +344,6 @@ do_iozone_loop()
 # at 06:00 -m -f ~/scheduledTask.sh
 
 #****************************************************************************
-
 
 printf "" > "${out_fnm}"
 
