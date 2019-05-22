@@ -24,7 +24,7 @@ ior_path="${HOME}/app/ior/ior.git/MYINSTALL/bin/ior"
 iozone_path="${HOME}/app/iozone/iozone/src/current/iozone"
 
 min_task=1
-max_task=250
+max_task=576
 
 max_hour=1
 
@@ -187,7 +187,7 @@ parse_ior()
 
 re_ioz_x="Children see throughput for"
 re_ioz_y="[[:blank:]]+= +([0-9.]+) kB/sec"
-re_wr="${re_ioz_x} +([0-9]+) rewriters${re_ioz_y}"
+re_wr="${re_ioz_x} +([0-9]+) initial writers${re_ioz_y}"
 re_rd="${re_ioz_x} +([0-9]+) readers${re_ioz_y}"
 re_rnd_rd="${re_ioz_x} +([0-9]+) random readers${re_ioz_y}"
 re_rnd_wr="${re_ioz_x} +([0-9]+) random writers${re_ioz_y}"
@@ -227,9 +227,9 @@ parse_iozone()
 	fi
     done
     
-    printf "   %5s %3d re-w,rd: %9.1f MB/s (%7.1f/ps) %9.1f MB/s (%7.1f/ps)\n" \
+    printf "   %5s %3d wr-1,rd: %9.1f MB/s (%7.2f/ps) %9.1f MB/s (%7.2f/ps)\n" \
 	   ${type} ${ranks} ${wr_bw} ${wr_bwpp} ${rd_bw} ${rd_bwpp}
-    printf "   %5s %3d rnd/w,r: %9.1f MB/s (%7.1f/ps) %9.1f MB/s (%7.1f/ps)\n" \
+    printf "   %5s %3d rnd/w,r: %9.1f MB/s (%7.2f/ps) %9.1f MB/s (%7.2f/ps)\n" \
 	   ${type} ${ranks} ${rnd_wr_bw} ${rnd_wr_bwpp} ${rnd_rd_bw} ${rnd_rd_bwpp}
 }
 
@@ -354,14 +354,17 @@ do_iozone_loop()
 
 do_iozone_slurm()
 {
+    # FIXME: Re-defining!
+    local iozone_r_opts="-i 0 -i 1 -i 2 -s 128m -r 16k -+r -t"
+
     local srun_launcher="srun -N 1 -n 1 --exclusive"
     if [[ ${my_hostname} =~ seapearl ]] ; then
 	srun_launcher+=" -p ivy"
     fi
 
-    # FIXME: Re-defining!
-    local iozone_r_opts="-i 0 -i 1 -i 2 -s 256m -r 16k -+r -t"
-
+    local n_task_p_node=${host2tasksPerNode[${my_hostname}]}
+    local n_node=$( ceil_div ${max_task} ${n_task_p_node} )
+    
     #----------------------------------------
 
     printf "* iozone: ${iozone_path}\n" | tee -a "${out_fnm}"
@@ -369,9 +372,7 @@ do_iozone_slurm()
     printf "* iozone read : ${iozone_r_opts}\n" | tee -a "${out_fnm}"
     printf "* hostname (slurm): ${my_hostname}\n" | tee -a "${out_fnm}"
     printf "* file system (slurm): ${fs_path}\n" | tee -a "${out_fnm}"
-
-    local n_task_p_node=${host2tasksPerNode[${my_hostname}]}
-    local n_node=$( ceil_div ${max_task} ${n_task_p_node} )
+    printf "* max tasks: ${max_task}, nodes: ${n_node}\n" | tee -a "${out_fnm}"
 
     local dir_work="run-iozone-node"
     local log_fnm="iozone.log"
