@@ -23,9 +23,10 @@ opt_out_fnm=''
 ior_path="${HOME}/app/ior/ior.git/MYINSTALL/bin/ior"
 iozone_path="${HOME}/app/iozone/iozone/src/current/iozone"
 
-max_ranks=64
+min_task=1
+max_task=560
 
-max_hours=24
+max_hour=1
 
 #****************************************************************************
 # Parse arguments
@@ -108,21 +109,24 @@ fi
 # 
 #****************************************************************************
 
+declare -A host2tasksPerNode=( [bluesky.pnl.gov]=24 \
+			       [seapearl.pnl.gov]=20 )
 
 # sets "mpi_launcher"
 mk_mpi_launcher()
 {
-    local tasks=$1
-    mpi_launcher="mpiexec -n ${tasks}"
+    local n_task=$1
+
+    local n_task_p_node=${host2tasksPerNode[${my_hostname}]}
+    local n_node=$( ceil_div ${n_task} ${n_task_p_node} )
+    
     case "${my_hostname}" in
 	bluesky* )
-	    # --ntasks-per-node=24
-	    local nodes=$(( (tasks + 24 -1) / 24 )) # ceil_div
-	    mpi_launcher="srun -N ${nodes} -n ${tasks} -t 00:20:00"
+	    # --ntasks-per-node=${n_task_p_node}
+	    mpi_launcher="srun -N ${n_node} -n ${n_task} -t 00:20:00"
 	    ;;
 	seapearl* )
-	    local nodes=$(( (tasks + 20 -1) / 20 )) # ceil_div
-	    mpi_launcher="srun -p ivy -N ${nodes} -t 00:20:00 mpiexec -n ${tasks}"
+	    mpi_launcher="srun -p ivy -N ${n_node} -t 00:20:00 mpiexec -n ${n_task}"
 	    ;;
 	* ) # unknown option
 	    die "unknown launcher for '${my_hostname}'"
@@ -255,11 +259,11 @@ do_ior()
     #----------------------------------------
 
     printf -- "- ${date_str}: write"
-    for (( n_rank = 1; n_rank <= max_ranks; n_rank *= 2 )) ; do
-    	printf " ${n_rank}"
-    	mk_mpi_launcher ${n_rank}
+    for (( n_task = min_task; n_task <= max_task; n_task *= 2 )) ; do
+    	printf " ${n_task}"
+    	mk_mpi_launcher ${n_task}
     	local cmd="${mpi_launcher} ${ior_path} ${ior_w_opts} -o ${dat_fnm_path}"
-    	#printf "\n${cmd}\n"
+    	printf "\n${cmd}\n"
     	${cmd}  | parse_ior >> "${out_fnm}"
     	sleep 10
     done
@@ -269,13 +273,13 @@ do_ior()
     #----------------------------------------
 
     # N.B.: without fsyncs (-Y), ior may exit without writing all data
-    mk_mpi_launcher ${max_ranks}
+    mk_mpi_launcher ${max_task}
     ${mpi_launcher} ${ior_path} ${ior_w_opts} -Y -k -o ${dat_fnm_path} > /dev/null
 
     printf "; read"
-    for (( n_rank = 1; n_rank <= max_ranks; n_rank *= 2 )) ; do
-	printf " ${n_rank}"
-	mk_mpi_launcher ${n_rank}
+    for (( n_task = min_task; n_task <= max_task; n_task *= 2 )) ; do
+	printf " ${n_task}"
+	mk_mpi_launcher ${n_task}
 	local cmd="${mpi_launcher} ${ior_path} ${ior_r_opts} -k -o ${dat_fnm_path}"
 	#printf "\n${cmd}\n"
 	${cmd} | parse_ior >> "${out_fnm}"
@@ -298,7 +302,7 @@ do_iozone()
     #----------------------------------------
 
     printf -- "- ${date_str}: "
-    for (( n_task = 1; n_task <= max_ranks; n_task *= 2 )) ; do
+    for (( n_task = min_task; n_task <= max_task; n_task *= 2 )) ; do
     	printf " ${n_task} (wr"
     	local cmd="${iozone_path} ${iozone_w_opts} ${n_task}"
     	#printf "\n${cmd}\n"
@@ -327,7 +331,7 @@ do_ior_loop()
     printf "* hostname (slurm): ${my_hostname}\n" | tee -a "${out_fnm}"
     printf "* file system (slurm): ${fs_path} (${dat_fnm_path})\n" | tee -a "${out_fnm}"
     
-    for (( hour = 1; hour <= max_hours; hour++ )) ; do
+    for (( hour = 1; hour <= max_hour; hour++ )) ; do
 	do_ior
 	sleep ${hour_sec}
     done
@@ -342,7 +346,7 @@ do_iozone_loop()
     printf "* hostname (local): ${my_hostname}\n" | tee -a "${out_fnm}"
     printf "* file system (local): ${fs_path}\n" | tee -a "${out_fnm}"
     
-    for (( hour = 1; hour <= max_hours; hour++ )) ; do
+    for (( hour = 1; hour <= max_hour; hour++ )) ; do
 	do_iozone
 	sleep ${hour_sec}
     done
@@ -350,13 +354,12 @@ do_iozone_loop()
 
 do_iozone_slurm()
 {
-    local max_tasks=260
-    local n_task_p_node=10
+    local srun_launcher="srun -N 1 --ntasks-per-node 1"
+    if [[ ${my_hostname} =~ seapearl ]] ; then
+	srun_launcher+=" -p ivy"
+    fi
 
-    #local srun_launcher="srun -N 1 --ntasks-per-node 1"
-    local srun_launcher="srun -p ivy -N 1 --ntasks-per-node 1"
-
-    # Re-defining!
+    # FIXME: Re-defining!
     local iozone_r_opts="-i 0 -i 1 -i 2 -s 256m -r 16k -+r -t"
 
     #----------------------------------------
@@ -367,16 +370,16 @@ do_iozone_slurm()
     printf "* hostname (slurm): ${my_hostname}\n" | tee -a "${out_fnm}"
     printf "* file system (slurm): ${fs_path}\n" | tee -a "${out_fnm}"
 
-    local n_nodes=$( ceil_div ${max_tasks} ${n_task_p_node} )
-    echo ${n_nodes}
+    local n_task_p_node=${host2tasksPerNode[${my_hostname}]}
+    local n_node=$( ceil_div ${max_task} ${n_task_p_node} )
 
     local dir_work="run-iozone-node"
     local log_fnm="iozone.log"
 
-    for (( i_node = 1; i_node <= n_nodes; i_node++ )) ; do
+    for (( i_node = 1; i_node <= n_node; i_node++ )) ; do
 	printf -v mydir "${fs_path}/${dir_work}%03d" ${i_node}
 	\mkdir -p "${mydir}"
-	local cmd="${srun_launcher} --chdir=${mydir} -o ${mydir}/${log_fnm} ${iozone_path} ${iozone_r_opts} ${n_task_p_node}"
+	local cmd="${srun_launcher} --chdir=${mydir} --output=${mydir}/${log_fnm} ${iozone_path} ${iozone_r_opts} ${n_task_p_node}"
     	#printf "${cmd}\n"
     	${cmd} &
     done
