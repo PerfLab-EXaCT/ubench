@@ -43,7 +43,7 @@ EOF
 usage()
 {
     cat <<EOF
-Usage: ${scriptCmd} [--ubench ior|iozone] ...
+Usage: ${scriptCmd} [--ubench iozone|iozone-slurm|ior] ...
 EOF
     exit 0
 }
@@ -99,7 +99,7 @@ fs_path=$(readlink -f .)
 out_fnm="${scriptCmd}-$(date --iso-8601=minutes)-${opt_ubench}.log"
 [[ -n ${opt_out_fnm} ]] && out_fnm="${opt_out_fnm}"
 
-if [[ ! ${opt_ubench} =~ iozone|ior ]] ; then
+if [[ ! ${opt_ubench} =~ iozone|iozone-slurm|ior ]] ; then
     die "invalid benchmark '${opt_ubench}'"
 fi
 
@@ -117,11 +117,11 @@ mk_mpi_launcher()
 	bluesky* )
 	    # --ntasks-per-node=24
 	    ((nodes= ${tasks} / 24 + 1))
-	    mpi_launcher="srun -N ${nodes} -n ${tasks} -t 00:10:00"
+	    mpi_launcher="srun -N ${nodes} -n ${tasks} -t 00:20:00"
 	    ;;
 	seapearl* )
 	    ((nodes= ${tasks} / 20 + 1))
-	    mpi_launcher="srun -p ivy -N ${nodes} -t 00:10:00 mpiexec -n ${tasks}"
+	    mpi_launcher="srun -p ivy -N ${nodes} -t 00:20:00 mpiexec -n ${tasks}"
 	    ;;
 	* ) # unknown option
 	    die "unknown launcher for '${my_hostname}'"
@@ -290,15 +290,15 @@ do_iozone()
     #----------------------------------------
 
     printf -- "- ${date_str}: "
-    for (( n_rank = 1; n_rank <= max_ranks; n_rank *= 2 )) ; do
-    	printf " ${n_rank} (wr"
-    	local cmd="${iozone_path} ${iozone_w_opts} ${n_rank}"
+    for (( n_task = 1; n_task <= max_ranks; n_task *= 2 )) ; do
+    	printf " ${n_task} (wr"
+    	local cmd="${iozone_path} ${iozone_w_opts} ${n_task}"
     	#printf "\n${cmd}\n"
     	${cmd} | parse_iozone "write" >> "${out_fnm}"
     	sleep 10
 
 	printf "/rd)"
-	local cmd="${iozone_path} ${iozone_r_opts} ${n_rank}"
+	local cmd="${iozone_path} ${iozone_r_opts} ${n_task}"
     	#printf "\n${cmd}\n"
     	${cmd} | parse_iozone "read" >> "${out_fnm}"
 	sleep 10
@@ -316,8 +316,8 @@ do_ior_loop()
     printf "* ior: ${ior_path}\n" | tee -a "${out_fnm}"
     printf "* ior write: ${ior_w_opts}\n" | tee -a "${out_fnm}"
     printf "* ior read : ${ior_r_opts}\n" | tee -a "${out_fnm}"
-    printf "* hostname: ${my_hostname}\n" | tee -a "${out_fnm}"
-    printf "* file system: ${fs_path} (${dat_fnm_path})\n" | tee -a "${out_fnm}"
+    printf "* hostname (slurm): ${my_hostname}\n" | tee -a "${out_fnm}"
+    printf "* file system (slurm): ${fs_path} (${dat_fnm_path})\n" | tee -a "${out_fnm}"
     
     for (( hour = 1; hour <= max_hours; hour++ )) ; do
 	do_ior
@@ -331,14 +331,46 @@ do_iozone_loop()
     printf "* iozone: ${iozone_path}\n" | tee -a "${out_fnm}"
     printf "* iozone write: ${iozone_w_opts}\n" | tee -a "${out_fnm}"
     printf "* iozone read : ${iozone_r_opts}\n" | tee -a "${out_fnm}"
-    printf "* hostname: ${my_hostname}\n" | tee -a "${out_fnm}"
-    printf "* file system: ${fs_path}\n" | tee -a "${out_fnm}"
+    printf "* hostname (local): ${my_hostname}\n" | tee -a "${out_fnm}"
+    printf "* file system (local): ${fs_path}\n" | tee -a "${out_fnm}"
     
     for (( hour = 1; hour <= max_hours; hour++ )) ; do
 	do_iozone
 	sleep ${hour_sec}
     done
 }
+
+do_iozone_slurm()
+{
+    local iozone_r_opts="-i 0 -i 1 -i 2 -s 256m -r 16k -+r -t"
+
+    printf "* iozone: ${iozone_path}\n" | tee -a "${out_fnm}"
+    printf "* iozone write: ${iozone_w_opts}\n" | tee -a "${out_fnm}"
+    printf "* iozone read : ${iozone_r_opts}\n" | tee -a "${out_fnm}"
+    printf "* hostname (slurm): ${my_hostname}\n" | tee -a "${out_fnm}"
+    printf "* file system (slurm): ${fs_path}\n" | tee -a "${out_fnm}"
+
+    local srun_launcher="srun -N 1 --ntasks-per-node 1"
+    
+    local max_tasks=560
+    for (( n_task = 0; n_task <= max_tasks; n_task += 24 )) ; do
+	local mydir="${fs_path}/dir-iozone-${n_task}"
+	mkdir -p "${mydir}"
+	local cmd="${srun_launcher} --chdir=${mydir} -o ${mydir}/iozone.log  ${iozone_path} ${iozone_r_opts} 24"
+    	printf "${cmd}\n"
+    	${cmd} &
+    done
+}
+
+do_iozone_slurm_finish()
+{
+    for x in "${fs_path}"/dir-iozone-*/iozone.log ; do
+	cat ${x} | parse_iozone "read"
+    done
+}
+
+#do_iozone_slurm_finish
+#exit
 
 # watch --interval=3600 <me>
 
@@ -351,6 +383,8 @@ printf "" > "${out_fnm}"
 
 if [[ ${opt_ubench} = iozone ]] ; then
     do_iozone_loop
+elif [[ ${opt_ubench} = iozone-slurm ]] ; then
+    do_iozone_slurm
 elif [[ ${opt_ubench} = ior ]] ; then
     do_ior_loop
 fi
