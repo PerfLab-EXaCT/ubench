@@ -23,7 +23,7 @@ opt_out_fnm=''
 ior_path="${HOME}/app/ior/ior.git/MYINSTALL/bin/ior"
 iozone_path="${HOME}/app/iozone/iozone/src/current/iozone"
 
-max_ranks=128
+max_ranks=64
 
 max_hours=24
 
@@ -108,6 +108,7 @@ fi
 # 
 #****************************************************************************
 
+
 # sets "mpi_launcher"
 mk_mpi_launcher()
 {
@@ -116,17 +117,24 @@ mk_mpi_launcher()
     case "${my_hostname}" in
 	bluesky* )
 	    # --ntasks-per-node=24
-	    ((nodes= ${tasks} / 24 + 1))
+	    local nodes=$(( (tasks + 24 -1) / 24 )) # ceil_div
 	    mpi_launcher="srun -N ${nodes} -n ${tasks} -t 00:20:00"
 	    ;;
 	seapearl* )
-	    ((nodes= ${tasks} / 20 + 1))
+	    local nodes=$(( (tasks + 20 -1) / 20 )) # ceil_div
 	    mpi_launcher="srun -p ivy -N ${nodes} -t 00:20:00 mpiexec -n ${tasks}"
 	    ;;
 	* ) # unknown option
 	    die "unknown launcher for '${my_hostname}'"
 	    ;;
     esac
+}
+
+
+ceil_div() {
+    local num=$1
+    local div=$2
+    echo $(( (num + div - 1) / div ))
 }
 
 
@@ -342,34 +350,40 @@ do_iozone_loop()
 
 do_iozone_slurm()
 {
-    local max_tasks=560
-    local n_task_p_node=24
+    local max_tasks=260
+    local n_task_p_node=10
 
+    #local srun_launcher="srun -N 1 --ntasks-per-node 1"
+    local srun_launcher="srun -p ivy -N 1 --ntasks-per-node 1"
+
+    # Re-defining!
     local iozone_r_opts="-i 0 -i 1 -i 2 -s 256m -r 16k -+r -t"
 
+    #----------------------------------------
+
     printf "* iozone: ${iozone_path}\n" | tee -a "${out_fnm}"
-    printf "* iozone write: ${iozone_w_opts}\n" | tee -a "${out_fnm}"
+    #printf "* iozone write: ${iozone_w_opts}\n" | tee -a "${out_fnm}"
     printf "* iozone read : ${iozone_r_opts}\n" | tee -a "${out_fnm}"
     printf "* hostname (slurm): ${my_hostname}\n" | tee -a "${out_fnm}"
     printf "* file system (slurm): ${fs_path}\n" | tee -a "${out_fnm}"
 
-    #local srun_launcher="srun -N 1 --ntasks-per-node 1"
-    local srun_launcher="-p ivy srun -N 1 --ntasks-per-node 1"
+    local n_nodes=$( ceil_div ${max_tasks} ${n_task_p_node} )
+    echo ${n_nodes}
 
-    local n_nodes
-    ((n_nodes= ${max_tasks} / ${n_task_p_node} + 1))
-    
-    for (( i_node = 0; i_node <= n_nodes; i_node++ )) ; do
-	local mydir="${fs_path}/dir-iozone-${i_node}"
-	mkdir -p "${mydir}"
-	local cmd="${srun_launcher} --chdir=${mydir} -o ${mydir}/iozone.log ${iozone_path} ${iozone_r_opts} ${n_task_p_node}"
+    local dir_work="run-iozone-node"
+    local log_fnm="iozone.log"
+
+    for (( i_node = 1; i_node <= n_nodes; i_node++ )) ; do
+	printf -v mydir "${fs_path}/${dir_work}%03d" ${i_node}
+	\mkdir -p "${mydir}"
+	local cmd="${srun_launcher} --chdir=${mydir} -o ${mydir}/${log_fnm} ${iozone_path} ${iozone_r_opts} ${n_task_p_node}"
     	#printf "${cmd}\n"
     	${cmd} &
     done
 
     wait
 
-    for x in "${fs_path}"/dir-iozone-*/iozone.log ; do
+    for x in "${fs_path}"/${dir_work}*/${log_fnm} ; do
 	cat ${x} | parse_iozone "read" >> "${out_fnm}"
     done
 }
