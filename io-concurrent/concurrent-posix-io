@@ -24,7 +24,7 @@ ior_path="${HOME}/app/ior/ior.git/MYINSTALL/bin/ior"
 iozone_path="${HOME}/app/iozone/iozone/src/current/iozone"
 
 min_task=1
-max_task=560
+max_task=250
 
 max_hour=1
 
@@ -354,7 +354,7 @@ do_iozone_loop()
 
 do_iozone_slurm()
 {
-    local srun_launcher="srun -N 1 --ntasks-per-node 1"
+    local srun_launcher="srun -N 1 -n 1 --exclusive"
     if [[ ${my_hostname} =~ seapearl ]] ; then
 	srun_launcher+=" -p ivy"
     fi
