@@ -342,6 +342,9 @@ do_iozone_loop()
 
 do_iozone_slurm()
 {
+    local max_tasks=560
+    local n_task_p_node=24
+
     local iozone_r_opts="-i 0 -i 1 -i 2 -s 256m -r 16k -+r -t"
 
     printf "* iozone: ${iozone_path}\n" | tee -a "${out_fnm}"
@@ -350,27 +353,26 @@ do_iozone_slurm()
     printf "* hostname (slurm): ${my_hostname}\n" | tee -a "${out_fnm}"
     printf "* file system (slurm): ${fs_path}\n" | tee -a "${out_fnm}"
 
-    local srun_launcher="srun -N 1 --ntasks-per-node 1"
+    #local srun_launcher="srun -N 1 --ntasks-per-node 1"
+    local srun_launcher="-p ivy srun -N 1 --ntasks-per-node 1"
+
+    local n_nodes
+    ((n_nodes= ${max_tasks} / ${n_task_p_node} + 1))
     
-    local max_tasks=560
-    for (( n_task = 0; n_task <= max_tasks; n_task += 24 )) ; do
-	local mydir="${fs_path}/dir-iozone-${n_task}"
+    for (( i_node = 0; i_node <= n_nodes; i_node++ )) ; do
+	local mydir="${fs_path}/dir-iozone-${i_node}"
 	mkdir -p "${mydir}"
-	local cmd="${srun_launcher} --chdir=${mydir} -o ${mydir}/iozone.log  ${iozone_path} ${iozone_r_opts} 24"
-    	printf "${cmd}\n"
+	local cmd="${srun_launcher} --chdir=${mydir} -o ${mydir}/iozone.log ${iozone_path} ${iozone_r_opts} ${n_task_p_node}"
+    	#printf "${cmd}\n"
     	${cmd} &
     done
-}
 
-do_iozone_slurm_finish()
-{
+    wait
+
     for x in "${fs_path}"/dir-iozone-*/iozone.log ; do
-	cat ${x} | parse_iozone "read"
+	cat ${x} | parse_iozone "read" >> "${out_fnm}"
     done
 }
-
-#do_iozone_slurm_finish
-#exit
 
 # watch --interval=3600 <me>
 
