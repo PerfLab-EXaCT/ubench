@@ -24,7 +24,7 @@ ior_path="${HOME}/app/ior/ior.git/MYINSTALL/bin/ior"
 iozone_path="${HOME}/app/iozone/iozone/src/current/iozone"
 
 min_task=1
-max_task=552
+max_task=240
 
 max_hour=1
 
@@ -119,14 +119,16 @@ mk_mpi_launcher()
 
     local n_task_p_node=${host2tasksPerNode[${my_hostname}]}
     local n_node=$( ceil_div ${n_task} ${n_task_p_node} )
+
+    local all_opt="--exclusive -t 00:20:00"
     
     case "${my_hostname}" in
 	bluesky* )
 	    # --ntasks-per-node=${n_task_p_node}
-	    mpi_launcher="srun -N ${n_node} -n ${n_task} -t 00:20:00"
+	    mpi_launcher="srun -N ${n_node} -n ${n_task} ${all_opt}"
 	    ;;
 	seapearl* )
-	    mpi_launcher="srun -p ivy -N ${n_node} -t 00:20:00 mpiexec -n ${n_task}"
+	    mpi_launcher="srun -N ${n_node} -p ivy ${all_opt} mpiexec -n ${n_task}"
 	    ;;
 	* ) # unknown option
 	    die "unknown launcher for '${my_hostname}'"
@@ -359,7 +361,7 @@ do_iozone_slurm()
 
     local srun_launcher="srun -N 1 -n 1 --exclusive"
     if [[ ${my_hostname} =~ seapearl ]] ; then
-	srun_launcher+=" -p ivy"
+	srun_launcher+=" -p ivy" # needs --exclusive!
     fi
 
     local n_task_p_node=${host2tasksPerNode[${my_hostname}]}
