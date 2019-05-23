@@ -24,7 +24,7 @@ ior_path="${HOME}/app/ior/ior.git/MYINSTALL/bin/ior"
 iozone_path="${HOME}/app/iozone/iozone/src/current/iozone"
 
 min_task=1
-max_task=576
+max_task=552
 
 max_hour=1
 
