@@ -24,7 +24,7 @@ ior_path="${HOME}/app/ior/ior.git/MYINSTALL/bin/ior"
 iozone_path="${HOME}/app/iozone/iozone/src/current/iozone"
 
 min_task=1
-max_task=240
+max_task=552 #240(seapearl), 552(bluesky)
 
 max_hour=1
 
@@ -354,8 +354,10 @@ do_iozone_loop()
     done
 }
 
+
 do_iozone_slurm()
 {
+    # FIXME: Currently assumes *read* test
     # FIXME: Re-defining!
     local iozone_r_opts="-i 0 -i 1 -i 2 -s 128m -r 16k -+r -t"
 
