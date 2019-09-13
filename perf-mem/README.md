@@ -2,44 +2,46 @@
 =============================================================================
 
 =============================================================================
-Perf usage:
+Perf
 =============================================================================
 
-Download perf sources from kernel.org and compile only perf. (The new
-version supports Intel event names.)
+Download kernel sources (Symbolic Intel events in versions 4.8+)
+
+  ```sh
+  cd <linux-4.xx>/tools/perf
+  make help
+  make prefix=<prefix> install
+  # make prefix=${HOME}/pkg/perf-4.16.7/${MYCFG_SYSNAMESHORT} install
+  # make prefix=${HOME}/pkg/perf-4.14.38/${MYCFG_SYSNAMESHORT} install
+  ```
+
+=============================================================================
+Perf usage
+=============================================================================
 
 ```
-perf list
-perf mem record -e list
+perf list # show events
+perf ...
 
-# Perf events (mem_inst_retired.all_loads/mem_uops_retired:all_loads)
-# [Use perf report --header to see event translations]
-perf record -d -e mem_inst_retired.all_loads:upp -c 9973 -o <out>
-perf record -d -e cpu/event=0xd0,umask=0x81/upp -c 9973 -o <out>
+perf report --header # show event translations
 
-# Perf mem events:
-perf record    -e cpu/mem-loads/upp 
-perf record    -e cpu/mem-loads,ldlat=1/upp
-perf record -W -e cpu/mem-loads,ldlat=0/upp -c <cnt> -o <out>
-perf record    -e cpu/event=0x0b,umask=0x10/upp 
-perf record    -e cpu/config=0x1cd,config1=0x1f,config2=0x0/upp
-# -W: sample by weight
-# -d: record addresses
-
-perf annotate -n --no-source --full-paths --stdio -i <in>
 perf report -n -v -U --no-demangle --stdio -i <in>
 perf report --stdio --header -n -i <in>
-
-perf script -F event,ip,sym,symoff,dso -i <input>
 
 perf annotate -n --no-source --full-paths --stdio -i <data>
 # duplicates disassembly for each event
 ```
 
+=============================================================================
+Intel Data Linear Address (DLA) events
+=============================================================================
 
-=============================================================================
-SkyLake Data Linear Address Events (perf, Intel)
-=============================================================================
+```sh
+perf record -d -e mem_inst_retired.all_loads:upp -c 9973 -o <out>
+perf record -d -e cpu/event=0xd0,umask=0x81/upp -c 9973 -o <out>
+
+perf script -F event,ip,sym,symoff,dso -i <input>
+```
 
 Data Linear Address events:
 # mem_inst_retired.all_loads   MEM_UOPS_RETIRED.ALL_LOADS
@@ -70,7 +72,22 @@ Data Linear Address events:
 # mem_inst_retired.split_stores    MEM_UOPS_RETIRED.SPLIT_STORES
 
 
+=============================================================================
+Intel Load Latency events
+=============================================================================
 
+```sh
+perf record       -e cpu/mem-loads/upp
+perf record       -e cpu/mem-loads,ldlat=1/upp
+perf record -W -d -e cpu/mem-loads,ldlat=1,period=<cnt>/upp
+perf record -W -d -e cpu/mem-loads,ldlat=1/upp -c <cnt>
+perf record       -e cpu/event=0x0b,umask=0x10/upp
+perf record       -e cpu/config=0x1cd,config1=0x1f,config2=0x0/upp
+# -W: sample by weight
+# -d: record addresses
+
+perf script -F event,addr,bpf-output,ip,sym,symoff,dso -i <input>
+```
 
 =============================================================================
 Comments:

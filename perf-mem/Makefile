@@ -131,14 +131,15 @@ ldlat2_rpt : $(TEST_PERF_LDLAT2_RPT)
 
 
 perf-ldlat1_dat-% : $(TGT)
-	perf record -W -e cpu/mem-loads,ldlat=1/upp -c $(*F) -o $@ ./$(TGT)
+	perf record -W -d -e cpu/mem-loads,ldlat=1,period=$(*F)/upp -o $@ ./$(TGT)
 
 # -W, --weight: sample by weight
 # -d, --data: record addresses
 
 # perf record -W -d -e cpu/mem-loads,ldlat=4/upp -c $(*F)
+# perf record -W -d -e cpu/mem-loads,ldlat=4,period=$(*F)/upp
 # perf record -W -d -e cpu/event=0xcd,umask=0x1,ldlat=4/upp -c $(*F)
-# perf record -W -d -e cpu/event=0xcd,umask=0x1,ldlat=4,period=1/upp
+# perf record -W -d -e cpu/event=0xcd,umask=0x1,ldlat=4,period=$(*F)/upp
 
 # old: perf record -e cpu/mem-loads,ldlat=1/P -c $(*F)
 
