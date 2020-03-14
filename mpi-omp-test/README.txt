@@ -1,7 +1,7 @@
 -*-Mode: text;-*-
 
 $HeadURL: https://svn.pnl.gov/svn/hpcgroup/projects/modsim-tools/ubench/mpi-costs/README.txt $
-$Id: README.txt 14144 2016-05-10 20:39:39Z tallent $
+$Id$
 
 =============================================================================
 
