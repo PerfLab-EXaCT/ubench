@@ -1,0 +1,10 @@
+Make* ident
+*.mk  ident
+*.md  ident
+*.cpp ident
+*.hpp ident
+*.C   ident
+*.c   ident
+*.h   ident
+*.rb  ident
+*.sh  ident
