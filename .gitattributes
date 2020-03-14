@@ -1,10 +1,9 @@
-Make* ident
-*.mk  ident
-*.md  ident
-*.cpp ident
-*.hpp ident
-*.C   ident
-*.c   ident
-*.h   ident
-*.rb  ident
-*.sh  ident
+*.{md,txt}    ident
+[mM]ake*      ident
+*.mk          ident
+*.sh          ident
+*.rb          ident
+*.py          ident
+*.{cpp,hpp,C} ident
+*.[ch]        ident
+
