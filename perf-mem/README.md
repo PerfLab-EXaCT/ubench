@@ -1,7 +1,6 @@
--*-Mode: markdown;-*- [outline]
-=============================================================================
+-*-Mode: markdown;-*-
+-----------------------------------------------------------------------------
 
-=============================================================================
 Perf
 =============================================================================
 
@@ -15,7 +14,6 @@ Download kernel sources (Symbolic Intel events in versions 4.8+)
   # make prefix=${HOME}/pkg/perf-4.14.38/${MYCFG_SYSNAMESHORT} install
   ```
 
-=============================================================================
 Perf usage
 =============================================================================
 
@@ -32,7 +30,6 @@ perf annotate -n --no-source --full-paths --stdio -i <data>
 # duplicates disassembly for each event
 ```
 
-=============================================================================
 Intel Data Linear Address (DLA) events
 =============================================================================
 
@@ -44,35 +41,36 @@ perf script -F event,ip,sym,symoff,dso -i <input>
 ```
 
 Data Linear Address events:
-# mem_inst_retired.all_loads   MEM_UOPS_RETIRED.ALL_LOADS
-# mem_inst_retired.all_stores  MEM_UOPS_RETIRED.ALL_STORES
+```
+  mem_inst_retired.all_loads   MEM_UOPS_RETIRED.ALL_LOADS
+  mem_inst_retired.all_stores  MEM_UOPS_RETIRED.ALL_STORES
 
-# mem_load_retired.l1_hit   MEM_LOAD_UOPS_RETIRED.L1_HIT
-# mem_load_retired.l2_hit   MEM_LOAD_UOPS_RETIRED.L2_HIT
-# mem_load_retired.l3_hit   MEM_LOAD_UOPS_RETIRED.L3_HIT
-# mem_load_retired.fb_hit   MEM_LOAD_UOPS_RETIRED.HIT_LFB
+  mem_load_retired.l1_hit   MEM_LOAD_UOPS_RETIRED.L1_HIT
+  mem_load_retired.l2_hit   MEM_LOAD_UOPS_RETIRED.L2_HIT
+  mem_load_retired.l3_hit   MEM_LOAD_UOPS_RETIRED.L3_HIT
+  mem_load_retired.fb_hit   MEM_LOAD_UOPS_RETIRED.HIT_LFB
 
-# mem_load_retired.l1_miss  MEM_LOAD_UOPS_RETIRED.L1_MISS
-# mem_load_retired.l2_miss  MEM_LOAD_UOPS_RETIRED.L2_MISS
-# mem_load_retired.l3_miss  MEM_LOAD_UOPS_RETIRED.L3_MISS
+  mem_load_retired.l1_miss  MEM_LOAD_UOPS_RETIRED.L1_MISS
+  mem_load_retired.l2_miss  MEM_LOAD_UOPS_RETIRED.L2_MISS
+  mem_load_retired.l3_miss  MEM_LOAD_UOPS_RETIRED.L3_MISS
 
-# mem_inst_retired.lock_loads      MEM_UOPS_RETIRED.LOCK_LOADS
-# mem_load_l3_hit_retired.xsnp_hit  MEM_LOAD_UOPS_L3_HIT_RETIRED.XSNP_HIT
-# mem_load_l3_hit_retired.xsnp_hitm MEM_LOAD_UOPS_L3_HIT_RETIRED.XSNP_HITM
-# mem_load_l3_hit_retired.xsnp_miss MEM_LOAD_UOPS_L3_HIT_RETIRED.XSNP_MISS
-# mem_load_l3_hit_retired.xsnp_none MEM_LOAD_UOPS_LLC_HIT_RETIRED.XSNP_NONE
+  mem_inst_retired.lock_loads      MEM_UOPS_RETIRED.LOCK_LOADS
+  mem_load_l3_hit_retired.xsnp_hit  MEM_LOAD_UOPS_L3_HIT_RETIRED.XSNP_HIT
+  mem_load_l3_hit_retired.xsnp_hitm MEM_LOAD_UOPS_L3_HIT_RETIRED.XSNP_HITM
+  mem_load_l3_hit_retired.xsnp_miss MEM_LOAD_UOPS_L3_HIT_RETIRED.XSNP_MISS
+  mem_load_l3_hit_retired.xsnp_none MEM_LOAD_UOPS_LLC_HIT_RETIRED.XSNP_NONE
 
-# mem_load_l3_miss_retired.local_dram
-# mem_load_l3_miss_retired.remote_dram
+  mem_load_l3_miss_retired.local_dram
+  mem_load_l3_miss_retired.remote_dram
 
-# mem_inst_retired.stlb_miss_loads: Retired load insns that miss the STLB (addr)
-# mem_inst_retired.stlb_miss_stores
+  mem_inst_retired.stlb_miss_loads: Retired load insns that miss the STLB (addr)
+  mem_inst_retired.stlb_miss_stores
 
-# mem_inst_retired.split_loads     MEM_UOPS_RETIRED.SPLIT_LOADS
-# mem_inst_retired.split_stores    MEM_UOPS_RETIRED.SPLIT_STORES
+  mem_inst_retired.split_loads     MEM_UOPS_RETIRED.SPLIT_LOADS
+  mem_inst_retired.split_stores    MEM_UOPS_RETIRED.SPLIT_STORES
+```
 
 
-=============================================================================
 Intel Load Latency events
 =============================================================================
 
@@ -89,7 +87,7 @@ perf record       -e cpu/config=0x1cd,config1=0x1f,config2=0x0/upp
 perf script -F event,addr,bpf-output,ip,sym,symoff,dso -i <input>
 ```
 
-=============================================================================
+
 Comments:
 =============================================================================
 
@@ -132,7 +130,7 @@ zero when prefetchers off:
 ? `offcore_response.all_pf_rfo.any_response`
 
 
-=============================================================================
+
 Extra
 =============================================================================
 
@@ -154,7 +152,7 @@ Intel manual, Section B.4.3.2, page B-23
 > perf stat -e cpu/event=0x0e,umask=0x01,inv,cmask=0x01/ ./x
 
 
-=============================================================================
+
 New
 =============================================================================
 
@@ -167,8 +165,9 @@ A dTLB/2 lookup fails after 1536 pages = 6.1 MB (assuming inclusive; less than L
 
 
 The page tables in the Intel 64 architecture make very good use of caches, with each cache line holding Page Table Entries (PTEs) for 8 consecutive (virtual address) pages.  So it is quite common for all page table walks to find the data in the caches, rather than going all the way to memory.
-
-# mem_inst_retired.stlb_miss_loads: Retired load insns that miss the STLB (addr)
+```
+mem_inst_retired.stlb_miss_loads: Retired load insns that miss the STLB (addr)
+```
 
 This is similar to using load-lat with a high threshold.
 
@@ -176,14 +175,17 @@ Problem: cannot get every memory load. We *can* get a representative sample of m
 
 
 Intel manual, SkyLake (Table 19-4; page 19-25)
-# dtlb_load_misses.miss_causes_a_walk Load misses in all DTLB levels that cause page walks]
-# dtlb_load_misses.walk_completed_4k: Load misses in all TLB levels causing a page walk that completes (4K)
+```
+  dtlb_load_misses.miss_causes_a_walk Load misses in all DTLB levels that cause page walks]
+  dtlb_load_misses.walk_completed_4k: Load misses in all TLB levels causing a page walk that completes (4K)
 
-# dtlb_load_misses.stlb_hit: Loads that miss the DTLB and hit the STLB
+  dtlb_load_misses.stlb_hit: Loads that miss the DTLB and hit the STLB
+```
 
 Intel manual, Broadwell (Table 19-7; page 19-43)
-# PAGE_WALKER_LOADS.DTLB_L1: DTLB page walker loads that hit in the L1+FB
-# PAGE_WALKER_LOADS.DTLB_L2
-# PAGE_WALKER_LOADS.DTLB_L3
-# PAGE_WALKER_LOADS.DTLB_MEMORY: Number of DTLB page walker loads from memory
-
+```
+PAGE_WALKER_LOADS.DTLB_L1: DTLB page walker loads that hit in the L1+FB
+PAGE_WALKER_LOADS.DTLB_L2
+PAGE_WALKER_LOADS.DTLB_L3
+PAGE_WALKER_LOADS.DTLB_MEMORY: Number of DTLB page walker loads from memory
+```
