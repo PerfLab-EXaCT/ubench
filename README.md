@@ -6,4 +6,4 @@ $Id$
 Various micro-benchmarks
 =============================================================================
 
-Home: https://gitlab.pnnl.gov/perf-lab-hub/ubench
+Home: https://gitlab.pnnl.gov/perf-lab/ubench
