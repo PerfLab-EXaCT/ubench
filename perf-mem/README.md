@@ -84,6 +84,10 @@ perf record       -e cpu/config=0x1cd,config1=0x1f,config2=0x0/upp
 # -W: sample by weight
 # -d: record addresses
 
+# Equivalent
+perf mem record       -e ldlat-loads --ldlat 50
+perf     record -W -d -e cpu/mem-loads,ldlat=50/P
+
 perf script -F event,addr,bpf-output,ip,sym,symoff,dso -i <input>
 ```
 
@@ -152,8 +156,8 @@ Extra
 
 * New option to specify latency:
   - https://patchwork.kernel.org/patch/9176415/
-  > perf mem record -e ldlat-loads --ldlat 50 -v true
-  > record -W -d -e cpu/mem-loads,ldlat=50/P true
+  > perf mem record -e ldlat-loads --ldlat 50     <app>
+  > perf record -W -d -e cpu/mem-loads,ldlat=50/P <app>
 
 > kernel.perf_event_paranoid
 https://www.tecmint.com/perf-performance-monitoring-and-analysis-tool-for-linux/
