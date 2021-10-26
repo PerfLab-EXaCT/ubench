@@ -30,7 +30,7 @@ perf annotate -n --no-source --full-paths --stdio -i <data>
 # duplicates disassembly for each event
 ```
 
-Intel Data Linear Address (DLA) events
+Intel (PEBS) Data Linear Address (DLA) events
 =============================================================================
 
 ```sh
@@ -71,7 +71,7 @@ Data Linear Address events:
 ```
 
 
-Intel Load Latency events
+Intel (PEBS) Load Latency events
 =============================================================================
 
 ```sh
@@ -85,6 +85,22 @@ perf record       -e cpu/config=0x1cd,config1=0x1f,config2=0x0/upp
 # -d: record addresses
 
 perf script -F event,addr,bpf-output,ip,sym,symoff,dso -i <input>
+```
+
+
+NEW: last branch record
+
+
+AMD IBS/LWP
+=============================================================================
+
+Reports physical/virtual memory addresses for memory insn
+  IBS Data Cache Linear Address Register (IbsDcLinAd)
+  IBS Data Cache Physical Address Register (IbsDcPhysAd)
+  Last Branch Record: one slot
+
+```
+  perf record -R -a -e ibs_fetch//pp
 ```
 
 
