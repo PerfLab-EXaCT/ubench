@@ -19,7 +19,9 @@ Perf usage
 
 ```
 perf list # show events
-perf ...
+
+perf record 
+  -a: all cpus
 
 perf report --header # show event translations
 
@@ -29,6 +31,7 @@ perf report --stdio --header -n -i <in>
 perf annotate -n --no-source --full-paths --stdio -i <data>
 # duplicates disassembly for each event
 ```
+
 
 Intel (PEBS) Data Linear Address (DLA) events
 =============================================================================
@@ -75,10 +78,14 @@ Intel (PEBS) Load Latency events
 =============================================================================
 
 ```sh
+See: /sys/bus/event_source/devices/cpu/events/mem-{loads,stores}
+
+perf mem uses /sys/devices/cpu/events/mem-{loads,stores}
+
 perf record       -e cpu/mem-loads/upp
 perf record       -e cpu/mem-loads,ldlat=1/upp
-perf record -W -d -e cpu/mem-loads,ldlat=1,period=<cnt>/upp
-perf record -W -d -e cpu/mem-loads,ldlat=1/upp -c <cnt>
+perf record -d -W -e cpu/mem-loads,ldlat=1,period=<cnt>/upp
+perf record -d -W -e cpu/mem-loads,ldlat=1/upp -c <cnt>
 perf record       -e cpu/event=0x0b,umask=0x10/upp
 perf record       -e cpu/config=0x1cd,config1=0x1f,config2=0x0/upp
 # -W: sample by weight
@@ -86,7 +93,7 @@ perf record       -e cpu/config=0x1cd,config1=0x1f,config2=0x0/upp
 
 # Equivalent
 perf mem record       -e ldlat-loads --ldlat 50
-perf     record -W -d -e cpu/mem-loads,ldlat=50/P
+perf     record -d -W -e cpu/mem-loads,ldlat=50/P
 
 perf script -F event,addr,bpf-output,ip,sym,symoff,dso -i <input>
 ```
@@ -103,8 +110,45 @@ Reports physical/virtual memory addresses for memory insn
   IBS Data Cache Physical Address Register (IbsDcPhysAd)
   Last Branch Record: one slot
 
+AMD Toolkit:
+  https://github.com/jlgreathouse/AMD_IBS_Toolkit/
+  https://github.com/jlgreathouse/AMD_IBS_Toolkit/blob/master/README.txt
+  
+  ```sh
+  Collect IBS data and process with python3 driver:
+    <amd-tk>/tools/ibs_run_and_annotate/ibs_run_and_annotate -o -f -- <app>
+    <palm>/amd-ibs-select <in.csv> -o <out.csv>
+  
+  Directly collect IBS data and convert to CSV:
+    <amd-tk>/tools/ibs_monitor/ibs_monitor -o app.op -f app.fetch <app>
+    <amd-tk>/tools/ibs_decoder/ibs_decoder -i app.op -o op.csv -f app.fetch -g fetch.csv
+    <palm>/amd-ibs-select <in.csv> -o <out.csv>
+  ```
+
+Linux perf:
 ```
-  perf record -R -a -e ibs_fetch//pp
+  See: /sys/bus/event_source/devices/{ibs_fetch,ibs_op}
+  
+  'perf mem' fails; needs /sys/devices/cpu/events/mem-{loads,stores}
+
+  perf record [-R] -e ibs_op//p    -a <app>
+  perf record [-R] -e ibs_fetch//p -a <app>
+
+    period: -c <cnt>,  period=<cnt>
+    ???  rand_en=1
+    ???  cnt_ctl=1
+    
+    system-wide: -a
+    per process: -p $(pidof <app>) --> does not seem to work
+
+
+  ---
+  perf record [-R] -e ibs_op//p -p $(pidof <app>)
+  
+  perf record -vv -R -e ibs_op//p -a -C 0 taskset -c 0 true
+  perf record     -R -e ibs_op//p -a sleep 1
+
+  perf report -D --stdio --header
 ```
 
 
