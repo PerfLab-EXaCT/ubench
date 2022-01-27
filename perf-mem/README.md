@@ -110,18 +110,36 @@ Reports physical/virtual memory addresses for memory insn
   IBS Data Cache Physical Address Register (IbsDcPhysAd)
   Last Branch Record: one slot
 
+Linux kernel "Dazed and confused"
+  https://www.spinics.net/lists/kernel/msg3870271.html
+
+
 AMD Toolkit:
   https://github.com/jlgreathouse/AMD_IBS_Toolkit/
   https://github.com/jlgreathouse/AMD_IBS_Toolkit/blob/master/README.txt
   
-  ```sh
-  Collect IBS data and process with python3 driver:
-    <amd-tk>/tools/ibs_run_and_annotate/ibs_run_and_annotate -o -f -- <app>
-    <palm>/amd-ibs-select <in.csv> -o <out.csv>
+  * Does not support PIE executables, which are standard on Ubuntu. Compile with `-no-pie`.
   
+  <joseph.l.greathouse@gmail.com>
+  
+  ```sh
+  sudo <amd-tk>/driver/install_ibs_driver.sh
+  
+  Collect IBS data and source annotation:
+    # Generic:
+    <amd-tk>/tools/ibs_run_and_annotate/ibs_run_and_annotate -o -f -- <app>
+    
+    # Example: run and collect
+    <amd-tk>/tools/ibs_run_and_annotate/ibs_run_and_annotate -o 10400 -- <app>
+    
+    # Example: source annotate only
+    <amd-tk>/tools/ibs_run_and_annotate/ibs_run_and_annotate --lookup -o 10400 -- <app>
+
   Directly collect IBS data and convert to CSV:
     <amd-tk>/tools/ibs_monitor/ibs_monitor -o app.op -f app.fetch <app>
     <amd-tk>/tools/ibs_decoder/ibs_decoder -i app.op -o op.csv -f app.fetch -g fetch.csv
+    
+  # Final winnowing
     <palm>/amd-ibs-select <in.csv> -o <out.csv>
   ```
 

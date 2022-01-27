@@ -1,5 +1,5 @@
--*-Mode: markdown;-*- [outline]
-=============================================================================
+-*-Mode: markdown;-*-
+-----------------------------------------------------------------------------
 
 $HeadURL$
 Id: README.txt 14144 2016-05-10 20:39:39Z tallent $
@@ -8,14 +8,16 @@ Id: README.txt 14144 2016-05-10 20:39:39Z tallent $
 
 Nathan Tallent
 
-=============================================================================
+
 Test binding of MPI ranks to cores.  Focus on SLURM + [OpenMPI | MVAPICH2].
 =============================================================================
 
-> make-batch-job --app="./mpi-affinity" --mpi-per-node 12  12
-> make-batch-job --app="./mpi-affinity" --mpi-per-node 24  12
+```
+make-batch-job --app="./mpi-affinity" --mpi-per-node 12  12
+make-batch-job --app="./mpi-affinity" --mpi-per-node 24  12
 
-> srun -N 1 -n 12 --exclusive ./mpi-affinity
+srun -N 1 -n 12 --exclusive ./mpi-affinity
+```
 
 
 To use the SLURM script, 'run.sbatch', do the following:
@@ -25,10 +27,10 @@ To use the SLURM script, 'run.sbatch', do the following:
    source results/<machine>.<mpi>.sourceme.sh
 
 1. Build 'mpi-affinity':
-   make
+   `make`
 
 2. Check and submit the SLURM script:
-   sbatch [-A PAL] [-p ivy] --ntasks-per-node=40 run.sbatch
+   `sbatch [-A PAL] [-p ivy] --ntasks-per-node=40 run.sbatch`
 
 
 =============================================================================
