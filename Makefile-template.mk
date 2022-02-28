@@ -14,33 +14,48 @@
 #****************************************************************************
 
 #****************************************************************************
-# Input: Set the following variables
+# Interface and user settings
 #****************************************************************************
 
-# MK_PROGRAMS_CXX = <exe>, MK_PROGRAMS_C = <exe>
-#   CXXLINK, CLINK
-#   CXX, CC
-#   CXXFLAGS, CFLAGS
-#   <exe>_SRCS
-#   <exe>_CXXFLAGS, <exe>_CFLAGS
-#   <exe>_LDFLAGS
-#   <exe>_LIBS
-#   <exe>_LDADD
+#----------------------------------------------------------------------------
+# Build/compilation rules
+#----------------------------------------------------------------------------
 
-# MK_LIBRARIES_CXX = <lib>, MK_LIBRARIES_C = <lib>
-#   AR, ARFLAGS
-#   CXX, CC
-#   CXXFLAGS, CFLAGS
-#   <lib>_SRCS
-#   <lib>_CXXFLAGS, <lib>_CFLAGS
+#-----------------------------------------------------------
+# MK_PROGRAMS_CXX = List of <exe>
+# MK_PROGRAMS_C =   List of <exe>
+#-----------------------------------------------------------
+# CXXLINK, CLINK
+# CXX, CC
+# CXXFLAGS, CFLAGS
+# <exe>_SRCS
+# <exe>_CXXFLAGS, <exe>_CFLAGS
+# <exe>_LDFLAGS
+# <exe>_LIBS
+# <exe>_LDADD
 
-# MK_SUBDIRS: subdirs for recursive makes
+#-----------------------------------------------------------
+# MK_LIBRARIES_CXX = List of <lib>
+# MK_LIBRARIES_C   = List of <lib>
+#-----------------------------------------------------------
+# AR, ARFLAGS
+# CXX, CC
+# CXXFLAGS, CFLAGS
+# <lib>_SRCS
+# <lib>_CXXFLAGS, <lib>_CFLAGS
 
-# MK_TARGETS_POST: post-order dependencies w.r.t. MK_SUBDIRS 
-
-# MK_TARGETS_PRE: pre-order dependencies w.r.t MK_SUBDIRS
 
 #----------------------------------------------------------------------------
+# Recursive makes
+#----------------------------------------------------------------------------
+
+#-----------------------------------------------------------
+# MK_SUBDIRS: subdirs for recursive makes
+#-----------------------------------------------------------
+
+#-----------------------------------------------------------
+# MK_TARGETS_POST: post-order dependencies w.r.t. MK_SUBDIRS
+#-----------------------------------------------------------
 
 MK_TARGETS_POST = \
 	all \
@@ -51,8 +66,18 @@ MK_TARGETS_POST = \
 	\
 	check
 
+#-----------------------------------------------------------
+# MK_TARGETS_PRE: pre-order dependencies w.r.t MK_SUBDIRS
+#-----------------------------------------------------------
+
 MK_TARGETS_PRE = \
 	info
+
+#----------------------------------------------------------------------------
+# Interface for common utilities
+#----------------------------------------------------------------------------
+
+SHELL = /bin/bash
 
 
 #****************************************************************************
@@ -66,6 +91,10 @@ MK_TARGETS_PRE = \
 #_realTargetL_post = $(addsuffix $(_realTargetSfx), $(MK_TARGETS_POST))
 
 # t <-- t.local-post <-- t.real <-- t.local-pre <-- subdirs
+
+#----------------------------------------------------------------------------
+
+_msg_target_dbg = "debug: '$@' ('$(*D)', '$(*F)')\n"
 
 #----------------------------------------------------------------------------
 
@@ -105,7 +134,7 @@ $(_localTargetL_post) : %$(_localTargetSfx) : \
 
 $(_subdirTargetL_post) : %$(_subdirTargetSfx_post) :
 ifdef DEBUG
-	@echo "debug post '$@': tgt: '$(*D)' dir: '$(*F)'"
+	@printf $(_msg_target_dbg)
 endif
 	@tgt=$(*D) && dir=$(*F) \
 	  && $(MAKE) -C $${dir} $${tgt}
@@ -126,7 +155,7 @@ $(MK_TARGETS_PRE) : % : \
 .SECONDEXPANSION:
 $(_subdirTargetL_pre) : %$(_subdirTargetSfx_pre) : $$(*D)$$(_localTargetSfx)
 ifdef DEBUG
-	@echo "debug pre '$@': tgt: '$(*D)' dir: '$(*F)'"
+	@printf $(_msg_target_dbg)
 endif
 	@tgt=$(*D) && dir=$(*F) \
 	  && $(MAKE) -C $${dir} $${tgt}
@@ -140,7 +169,7 @@ $(_localTargetL_pre1) : %$(_localTargetSfx1) : %$(_localTargetSfx)
 
 
 #****************************************************************************
-# Compilation rules
+# Build/Compilation rules
 #****************************************************************************
 
 _sfx_cpp = .cpp
@@ -155,7 +184,11 @@ ARFLAGS ?= rcs
 #----------------------------------------------------------------------------
 
 define _program_template_cxx
-  # Note: qualify .o patterns: %.o -> %-$(1).o
+  # Args: (1): program target
+  #  
+  # Note: qualify .o patterns so multiple targets can build the same
+  # source file with different options:
+  #   %.o -> %-$(1).o
 
   $(1)_objs = \
     $$(patsubst %$(_sfx_cpp),%-$(1).o,$$(patsubst %$(_sfx_c),%-$(1).o,$$($(1)_SRCS)))
@@ -185,7 +218,11 @@ endef
 #----------------------------------------------------------------------------
 
 define _program_template_c
-  # Note: qualify .o patterns: %.o -> %-$(1).o
+  # Args: (1): program target
+  #  
+  # Note: qualify .o patterns so multiple targets can build the same
+  # source file with different options:
+  #   %.o -> %-$(1).o
 
   $(1)_objs = $$(patsubst %$(_sfx_c),%-$(1).o,$$($(1)_SRCS))
 
@@ -205,7 +242,11 @@ endef
 #----------------------------------------------------------------------------
 
 define _library_template_c_cxx
-  # Note: qualify .o patterns: %.o -> %-$(1).o
+  # Args: (1): library target
+  #
+  # Note: qualify .o patterns so multiple targets can build the same
+  # source file with different options:
+  #   %.o -> %-$(1).o
 
   $(1)_objs = \
     $$(patsubst %$(_sfx_cpp),%-$(1).o,$$(patsubst %$(_sfx_c),%-$(1).o,$$($(1)_SRCS)))
