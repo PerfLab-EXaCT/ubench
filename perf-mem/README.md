@@ -80,6 +80,8 @@ Intel (PEBS) Load Latency events
 ```sh
 See: /sys/bus/event_source/devices/cpu/events/mem-{loads,stores}
 
+perf mem record -e list
+
 perf mem uses /sys/devices/cpu/events/mem-{loads,stores}
 
 perf record       -e cpu/mem-loads/upp
@@ -123,7 +125,9 @@ AMD Toolkit:
   <joseph.l.greathouse@gmail.com>
   
   ```sh
+  cd <amd-tk> && make
   sudo <amd-tk>/driver/install_ibs_driver.sh
+    # creates: /dev/cpu/<core_id>/ibs/{op,fetch}
   
   Collect IBS data and source annotation:
     # Generic:
@@ -140,14 +144,15 @@ AMD Toolkit:
     <amd-tk>/tools/ibs_decoder/ibs_decoder -i app.op -o op.csv -f app.fetch -g fetch.csv
     
   # Final winnowing
-    <palm>/amd-ibs-select <in.csv> -o <out.csv>
+    <memgaze>/mem-trace/amd-ibs-select <in.csv> -o <out.csv>
   ```
 
 Linux perf:
 ```
   See: /sys/bus/event_source/devices/{ibs_fetch,ibs_op}
   
-  'perf mem' fails; needs /sys/devices/cpu/events/mem-{loads,stores}
+  perf mem record -e list
+  #  fails; needs /sys/devices/cpu/events/mem-{loads,stores}
 
   perf record [-R] -e ibs_op//p    -a <app>
   perf record [-R] -e ibs_fetch//p -a <app>
@@ -169,6 +174,9 @@ Linux perf:
   perf report -D --stdio --header
 ```
 
+Driver implementation:
+- `handle_ibs_event()`: process sample
+- `collect_op_data/collect_fetch_data()`: collect ibs fields
 
 Comments:
 =============================================================================
