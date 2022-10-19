@@ -7,6 +7,7 @@ Analyze improvements of avoiding cache pollution using microbenchmark
 *  Uses PREFETCH_NTA instruction by specifying  _builtin_prefetch compiler directive 
 
 *  Algorithm:
+```
   for N iterations 
     // INVARIANT: for each inner loop, number of accesses is the "same"
     // small footprint + reuse 
@@ -22,6 +23,7 @@ Analyze improvements of avoiding cache pollution using microbenchmark
       // VARY b: {0, 32, 64} bytes
       prefetch-hint A + b
       access element address A
+```
 
 
 
