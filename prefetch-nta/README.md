@@ -19,21 +19,21 @@ Analyze improvements of avoiding cache pollution using microbenchmark
    * x86 example with Intel:
      https://github.com/Exa-Graph/grappolo/blob/develop/Utility/utilityClusteringFunctions.cpp
 
-  ```
-  ./Utility/utilityClusteringFunctions.cpp:74:#pragma noprefetch vDegree
-  ./Utility/utilityClusteringFunctions.cpp:75:#pragma noprefetch vtxPtr
-  ./Utility/utilityClusteringFunctions.cpp:76:#pragma prefetch vtxInd:3  # nta
-  ./Utility/utilityClusteringFunctions.cpp:77:#pragma prefetch cInfo:3   # nta
-  ./Utility/utilityClusteringFunctions.cpp:193:#pragma prefetch vtxInd:3 # nta
-  ```
+    ```
+    ./Utility/utilityClusteringFunctions.cpp:74:#pragma noprefetch vDegree
+    ./Utility/utilityClusteringFunctions.cpp:75:#pragma noprefetch vtxPtr
+    ./Utility/utilityClusteringFunctions.cpp:76:#pragma prefetch vtxInd:3  # nta
+    ./Utility/utilityClusteringFunctions.cpp:77:#pragma prefetch cInfo:3   # nta
+    ./Utility/utilityClusteringFunctions.cpp:193:#pragma prefetch vtxInd:3 # nta
+    ```
 
    * x86 example with GCC:
-  ```
-  prefetcht0      [rdi]    #   __builtin_prefetch(p,0,3);
-  prefetcht1      [rdi]    #   __builtin_prefetch(p,0,2);
-  prefetcht2      [rdi]    #   __builtin_prefetch(p,0,1);
-  prefetchnta     [rdi]    #   __builtin_prefetch(p,0,0); - this one
-  ```
+    ```
+    prefetcht0      [rdi]    #   __builtin_prefetch(p,0,3);
+    prefetcht1      [rdi]    #   __builtin_prefetch(p,0,2);
+    prefetcht2      [rdi]    #   __builtin_prefetch(p,0,1);
+    prefetchnta     [rdi]    #   __builtin_prefetch(p,0,0); - this one
+    ```
 
 * Algorithm (NT):
    ```
