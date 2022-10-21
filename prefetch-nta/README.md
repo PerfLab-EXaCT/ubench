@@ -71,7 +71,7 @@ Analyze improvements of avoiding cache pollution using microbenchmark
     // VARY D: {strided, linked list of small arrays}
     foreach element of data structure D with footprint (fp_ratio * S)
       // VARY prefetch-hint: {implicit hw, explicit, nta}
-      // VARY b: {16, 32, 64} bytes
+      // VARY b: {0, 32, 64} bytes
       prefetch-hint A + b
       access element address A
 ```
