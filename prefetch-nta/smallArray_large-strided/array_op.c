@@ -1,19 +1,20 @@
 /* Analyze improvements of avoiding cache pollution
  * Gather runtime for random accesses to a small array (fits in cache)
  *  with interleaved accesses to a large array (doesnt fit in cache)
- *  Avoid cache pollution from large array using PREFETCH_NTA
+ *  Avoid cache pollution from large array using PREFETCHNTA
  *
  *  Algorithm:
+ *  fp_ratio = large_fp / small_fp
  *  for N iterations (loop in main)
- *    // INVARIANT: for each inner loop, number of accesses is the "same"
+ *    // INVARIANT: for each random access loop, number of accesses is the "same"
  *    // small footprint + reuse (sum_arr_small)
- *    // Vary X : {4, 8, 64,256,1024}
- *      for X iterations
+ *    // Vary X : {4,32, 512, 1024}
+ *      for (X * fp_ratio) iterations
  *           random accesses of footprint S
  *
  *    // large footprint + no reuse (sum_arr_large)
- *    // INVARIANT X : 4
- *    foreach element of data structure D with footprint X * S
+ *    // INVARIANT fp_ratio : 4
+ *    foreach element of data structure D with footprint (fp_ratio * S)
  *      // VARY prefetch-hint: {implicit hw, explicit, nta}
  *      // VARY b: {0, 32, 64} bytes
  *      prefetch-hint A + b
@@ -49,7 +50,7 @@ TYPE __attribute__ ((noinline)) sum_arr_small(TYPE *ar1, uint64_t *ar2, uint64_t
 {
 	TYPE check_sum=0;
 	uint64_t j=0;
-	for (uint64_t k=0; k<sizeRatio*256; k++) {
+	for (uint64_t k=0; k<sizeRatio; k++) {
 		for(uint64_t i=0; i<arCnt; i++) {
 			//j = (random() % arCnt); // overrides any improvement observed from PREFETCH_NTA
 			j = *(ar2+i);
@@ -99,8 +100,10 @@ TYPE __attribute__ ((noinline)) sum_arr_large(TYPE *ar1, uint64_t arCnt)
 int main(void) {
 	struct timespec start, finish;            
 	char *str_log=(char *) malloc(500*sizeof(char)); 
-  // L3 - Unified 32768K - 1/2 is 2*1024*1024 doubles
-  uint64_t arSizeSmall = 2*1024*1024;
+  // L3 - Unified Junction 32768K - 1/2 is 2*1024*1024 doubles
+  //uint64_t arSizeSmall = 2*1024*1024;
+  // L3 - Unified Bluesky 19712K - 1/2 is 1232*1024 doubles
+  uint64_t arSizeSmall = 1232*1024;
   int loopCnt = 600;
  
   // L1 - Data 32K - half is 2048 (8 bytes)

@@ -3,7 +3,7 @@ Analyze improvements of avoiding cache pollution using microbenchmark
 
 *  Gather runtime for repeated random accesses to a small array S (fits in cache) , 
 	with interleaved accesses to a large data structure D (doesnt fit in cache) , 
-	avoid cache pollution from large data structure D using PREFETCH_NTA
+	avoid cache pollution from large data structure D using PREFETCHNTA
 
 *  Uses PREFETCH_NTA instruction
    https://stackoverflow.com/questions/48994494/how-to-properly-use-prefetch-instructions/48995540?noredirect=1#comment84996972_48994494
@@ -58,19 +58,20 @@ Analyze improvements of avoiding cache pollution using microbenchmark
 
 *  Algorithm (YS):
 ```
+  fp_ratio = large_fp / small_fp
+
   for N iterations 
-    // INVARIANT: for each inner loop, number of accesses is the "same"
+    // INVARIANT: for random accesses of S, number of accesses is the "same"
     // small footprint + reuse 
-    // Vary X : {4,8,16,32}
-    for X iterations
+    // Vary X : {4,32, 512, 1024}
+    for (X * fp_ratio) iterations
            random accesses of footprint S
 
     // large footprint + no reuse 
     // VARY D: {strided, linked list of small arrays}
-    // INVARIANT X
-    foreach element of data structure D with footprint X * S
+    foreach element of data structure D with footprint (fp_ratio * S)
       // VARY prefetch-hint: {implicit hw, explicit, nta}
-      // VARY b: {0, 32, 64} bytes
+      // VARY b: {16, 32, 64} bytes
       prefetch-hint A + b
       access element address A
 ```

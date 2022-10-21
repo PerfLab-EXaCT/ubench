@@ -4,15 +4,17 @@
  *  Avoid cache pollution from large array using PREFETCH_NTA
  *
  *  Algorithm:
+ *  fp_ratio = large_fp / small_fp
  *  for N iterations (loop in main)
- *    // INVARIANT: for each inner loop, number of accesses is the "same"
+ *    // INVARIANT: for random accesses of S, number of accesses is the "same"
  *    // small footprint + reuse (sum_arr_small)
- *    // Vary X : {4,8,32,1024}
- *      for X iterations
+ *    // Vary X : {4,32, 512, 1024}
+ *    for (X * fp_ratio) iterations
  *           random accesses of footprint S
  *
+ *    // Vary fp_ratio : {1, 1/2}
  *    // large footprint + no reuse (sum_list)
- *    foreach element of linked list D with footprint X * S * 8 (each element is 64 bytes - cache line width)
+ *    foreach element of linked list D with footprint fp_ratio * S * 8 (each element is 64 bytes - cache line width)
  *      // VARY prefetch-hint: {implicit hw, explicit, nta}
  *      // b: {64} bytes
  *      prefetch-hint A + b
@@ -54,7 +56,7 @@ TYPE __attribute__ ((noinline)) sum_arr_small(TYPE *ar1, uint64_t *ar2, uint64_t
 {
 	TYPE check_sum=0;
 	uint64_t j=0;
-	for (uint64_t k=0; k<sizeRatio*4; k++) {
+	for (uint64_t k=0; k<sizeRatio*512; k++) {
 		for(uint64_t i=0; i<arCnt; i++) {
 			j = *(ar2+i);
 			check_sum += (*(ar1+j));
@@ -129,9 +131,12 @@ int main(void) {
 	struct timespec start, finish;            
 	char *str_log=(char *) malloc(500*sizeof(char)); 
 
-	// L3 - Unified 32768K - 1/2 is 2*1024*1024 doubles
-  uint64_t arSizeSmall = 2*1024*1024;
-	uint64_t arSizeLarge = arSizeSmall/2;
+	// L3 Junction - Unified 32768K - 1/2 is 2*1024*1024 doubles
+  //uint64_t arSizeSmall = 2*1024*1024;
+  // L3 - Unified Bluesky 19712K - 1/2 is 1232*1024 doubles
+  uint64_t arSizeSmall = 1232*1024;
+
+	uint64_t arSizeLarge = arSizeSmall;
 	int listSize =arSizeLarge;
 
 	struct LLNode* first = malloc(sizeof (struct LLNode));
