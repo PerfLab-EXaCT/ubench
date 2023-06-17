@@ -58,23 +58,23 @@ while [[ $# -gt 0 ]] ; do
     shift # past argument
     
     case "${arg}" in
-	-h | --help )
-	    usage
-	    ;;
+    -h | --help )
+        usage
+        ;;
 
-	--ubench )
-	    opt_ubench="$1"
-	    shift # past value
-	    ;;
+    --ubench )
+        opt_ubench="$1"
+        shift # past value
+        ;;
 
-	-o | --output )
-	    opt_out_fnm="$1"
-	    shift # past value
-	    ;;
-      	
-	* ) # unknown option
-	    die "unknown option '$1'"
-	    ;;
+    -o | --output )
+        opt_out_fnm="$1"
+        shift # past value
+        ;;
+          
+    * ) # unknown option
+        die "unknown option '$1'"
+        ;;
     esac
 done
 
@@ -110,7 +110,7 @@ fi
 #****************************************************************************
 
 declare -A host2tasksPerNode=( [bluesky.pnl.gov]=24 \
-			       [seapearl.pnl.gov]=20 )
+                   [seapearl.pnl.gov]=20 )
 
 # sets "mpi_launcher"
 mk_mpi_launcher()
@@ -123,16 +123,16 @@ mk_mpi_launcher()
     local all_opt="--exclusive -t 00:20:00"
     
     case "${my_hostname}" in
-	bluesky* )
-	    # --ntasks-per-node=${n_task_p_node}
-	    mpi_launcher="srun -N ${n_node} -n ${n_task} ${all_opt}"
-	    ;;
-	seapearl* )
-	    mpi_launcher="srun -N ${n_node} -p ivy ${all_opt} mpiexec -n ${n_task}"
-	    ;;
-	* ) # unknown option
-	    die "unknown launcher for '${my_hostname}'"
-	    ;;
+    bluesky* )
+        # --ntasks-per-node=${n_task_p_node}
+        mpi_launcher="srun -N ${n_node} -n ${n_task} ${all_opt}"
+        ;;
+    seapearl* )
+        mpi_launcher="srun -N ${n_node} -p ivy ${all_opt} mpiexec -n ${n_task}"
+        ;;
+    * ) # unknown option
+        die "unknown launcher for '${my_hostname}'"
+        ;;
     esac
 }
 
@@ -170,18 +170,18 @@ parse_ior()
 {
     local n_match=0
     while IFS= read line; do
-	#echo ${line}
-	#if ((n_match >= 2)) ; then
-	#    continue
-	if [[ ${line} =~ ${re_tasks} ]] ; then
-	    local ranks=${BASH_REMATCH[1]}
-	    ((n_match++))
-	elif [[ ${line} =~ ${re_bw} ]] ; then
-	    local type=${BASH_REMATCH[1]}
-	    local bw2=${BASH_REMATCH[2]} # MiB/s
-	    local bw=${BASH_REMATCH[3]}  # MB/s
-	    ((n_match++))
-	fi
+    #echo ${line}
+    #if ((n_match >= 2)) ; then
+    #    continue
+    if [[ ${line} =~ ${re_tasks} ]] ; then
+        local ranks=${BASH_REMATCH[1]}
+        ((n_match++))
+    elif [[ ${line} =~ ${re_bw} ]] ; then
+        local type=${BASH_REMATCH[1]}
+        local bw2=${BASH_REMATCH[2]} # MiB/s
+        local bw=${BASH_REMATCH[3]}  # MB/s
+        ((n_match++))
+    fi
     done
     printf "  %5s %3d: %8.1f MB/s; %8.1f MiB/s\n" ${type} ${ranks} ${bw} ${bw2}
 }
@@ -199,40 +199,40 @@ parse_iozone()
     local type=$1
     local n_match=0
     while IFS= read line; do
-	#echo ${line}
-	#if ((n_match >= 3)) ; then
-	#    continue
-	if [[ ${line} =~ ${re_wr} ]] ; then
-	    local ranks=${BASH_REMATCH[1]}
-	    local wr_bw2=${BASH_REMATCH[2]} # KiB/s all ps
-	    local wr_bw=$(kb2_to_mb10 ${wr_bw2}) # MB/s
-	    local wr_bwpp=$(kb2_to_mbpp ${wr_bw2} ${ranks})
-	    ((n_match++))
-	elif [[ ${line} =~ ${re_rd} ]] ; then
-	    local ranks=${BASH_REMATCH[1]}
-	    local rd_bw2=${BASH_REMATCH[2]} # KiB/s all ps
-	    local rd_bw=$(kb2_to_mb10 ${rd_bw2}) # MB/s
-	    local rd_bwpp=$(kb2_to_mbpp ${rd_bw2} ${ranks})
-	    ((n_match++))
-	elif [[ ${line} =~ ${re_rnd_rd} ]] ; then
-	    local ranks=${BASH_REMATCH[1]}
-	    local rnd_rd_bw2=${BASH_REMATCH[2]} # KiB/s all ps
-	    local rnd_rd_bw=$(kb2_to_mb10 ${rnd_rd_bw2}) # MB/s
-	    local rnd_rd_bwpp=$(kb2_to_mbpp ${rnd_rd_bw2} ${ranks})
-	    ((n_match++))
-	elif [[ ${line} =~ ${re_rnd_wr} ]] ; then
-	    local ranks=${BASH_REMATCH[1]}
-	    local rnd_wr_bw2=${BASH_REMATCH[2]} # KiB/s all ps
-	    local rnd_wr_bw=$(kb2_to_mb10 ${rnd_wr_bw2}) # MB/s
-	    local rnd_wr_bwpp=$(kb2_to_mbpp ${rnd_wr_bw2} ${ranks})
-	    ((n_match++))
-	fi
+    #echo ${line}
+    #if ((n_match >= 3)) ; then
+    #    continue
+    if [[ ${line} =~ ${re_wr} ]] ; then
+        local ranks=${BASH_REMATCH[1]}
+        local wr_bw2=${BASH_REMATCH[2]} # KiB/s all ps
+        local wr_bw=$(kb2_to_mb10 ${wr_bw2}) # MB/s
+        local wr_bwpp=$(kb2_to_mbpp ${wr_bw2} ${ranks})
+        ((n_match++))
+    elif [[ ${line} =~ ${re_rd} ]] ; then
+        local ranks=${BASH_REMATCH[1]}
+        local rd_bw2=${BASH_REMATCH[2]} # KiB/s all ps
+        local rd_bw=$(kb2_to_mb10 ${rd_bw2}) # MB/s
+        local rd_bwpp=$(kb2_to_mbpp ${rd_bw2} ${ranks})
+        ((n_match++))
+    elif [[ ${line} =~ ${re_rnd_rd} ]] ; then
+        local ranks=${BASH_REMATCH[1]}
+        local rnd_rd_bw2=${BASH_REMATCH[2]} # KiB/s all ps
+        local rnd_rd_bw=$(kb2_to_mb10 ${rnd_rd_bw2}) # MB/s
+        local rnd_rd_bwpp=$(kb2_to_mbpp ${rnd_rd_bw2} ${ranks})
+        ((n_match++))
+    elif [[ ${line} =~ ${re_rnd_wr} ]] ; then
+        local ranks=${BASH_REMATCH[1]}
+        local rnd_wr_bw2=${BASH_REMATCH[2]} # KiB/s all ps
+        local rnd_wr_bw=$(kb2_to_mb10 ${rnd_wr_bw2}) # MB/s
+        local rnd_wr_bwpp=$(kb2_to_mbpp ${rnd_wr_bw2} ${ranks})
+        ((n_match++))
+    fi
     done
     
     printf "   %5s %3d wr-1,rd: %9.1f MB/s (%7.2f/ps) %9.1f MB/s (%7.2f/ps)\n" \
-	   ${type} ${ranks} ${wr_bw} ${wr_bwpp} ${rd_bw} ${rd_bwpp}
+       ${type} ${ranks} ${wr_bw} ${wr_bwpp} ${rd_bw} ${rd_bwpp}
     printf "   %5s %3d rnd/w,r: %9.1f MB/s (%7.2f/ps) %9.1f MB/s (%7.2f/ps)\n" \
-	   ${type} ${ranks} ${rnd_wr_bw} ${rnd_wr_bwpp} ${rnd_rd_bw} ${rnd_rd_bwpp}
+       ${type} ${ranks} ${rnd_wr_bw} ${rnd_wr_bwpp} ${rnd_rd_bw} ${rnd_rd_bwpp}
 }
 
 
@@ -262,12 +262,12 @@ do_ior()
 
     printf -- "- ${date_str}: write"
     for (( n_task = min_task; n_task <= max_task; n_task *= 2 )) ; do
-    	printf " ${n_task}"
-    	mk_mpi_launcher ${n_task}
-    	local cmd="${mpi_launcher} ${ior_path} ${ior_w_opts} -o ${dat_fnm_path}"
-    	printf "\n${cmd}\n"
-    	${cmd}  | parse_ior >> "${out_fnm}"
-    	sleep 10
+        printf " ${n_task}"
+        mk_mpi_launcher ${n_task}
+        local cmd="${mpi_launcher} ${ior_path} ${ior_w_opts} -o ${dat_fnm_path}"
+        printf "\n${cmd}\n"
+        ${cmd}  | parse_ior >> "${out_fnm}"
+        sleep 10
     done
 
     #----------------------------------------
@@ -280,12 +280,12 @@ do_ior()
 
     printf "; read"
     for (( n_task = min_task; n_task <= max_task; n_task *= 2 )) ; do
-	printf " ${n_task}"
-	mk_mpi_launcher ${n_task}
-	local cmd="${mpi_launcher} ${ior_path} ${ior_r_opts} -k -o ${dat_fnm_path}"
-	#printf "\n${cmd}\n"
-	${cmd} | parse_ior >> "${out_fnm}"
-	sleep 10
+    printf " ${n_task}"
+    mk_mpi_launcher ${n_task}
+    local cmd="${mpi_launcher} ${ior_path} ${ior_r_opts} -k -o ${dat_fnm_path}"
+    #printf "\n${cmd}\n"
+    ${cmd} | parse_ior >> "${out_fnm}"
+    sleep 10
     done
     printf "\n"
 
@@ -305,17 +305,17 @@ do_iozone()
 
     printf -- "- ${date_str}: "
     for (( n_task = min_task; n_task <= max_task; n_task *= 2 )) ; do
-    	printf " ${n_task} (wr"
-    	local cmd="${iozone_path} ${iozone_w_opts} ${n_task}"
-    	#printf "\n${cmd}\n"
-    	${cmd} | parse_iozone "write" >> "${out_fnm}"
-    	sleep 10
+        printf " ${n_task} (wr"
+        local cmd="${iozone_path} ${iozone_w_opts} ${n_task}"
+        #printf "\n${cmd}\n"
+        ${cmd} | parse_iozone "write" >> "${out_fnm}"
+        sleep 10
 
-	printf "/rd)"
-	local cmd="${iozone_path} ${iozone_r_opts} ${n_task}"
-    	#printf "\n${cmd}\n"
-    	${cmd} | parse_iozone "read" >> "${out_fnm}"
-	sleep 10
+    printf "/rd)"
+    local cmd="${iozone_path} ${iozone_r_opts} ${n_task}"
+        #printf "\n${cmd}\n"
+        ${cmd} | parse_iozone "read" >> "${out_fnm}"
+    sleep 10
     done
 
     printf "\n"
@@ -334,8 +334,8 @@ do_ior_loop()
     printf "* file system (slurm): ${fs_path} (${dat_fnm_path})\n" | tee -a "${out_fnm}"
     
     for (( hour = 1; hour <= max_hour; hour++ )) ; do
-	do_ior
-	sleep ${hour_sec}
+    do_ior
+    sleep ${hour_sec}
     done
 }
 
@@ -349,8 +349,8 @@ do_iozone_loop()
     printf "* file system (local): ${fs_path}\n" | tee -a "${out_fnm}"
     
     for (( hour = 1; hour <= max_hour; hour++ )) ; do
-	do_iozone
-	sleep ${hour_sec}
+    do_iozone
+    sleep ${hour_sec}
     done
 }
 
@@ -363,7 +363,7 @@ do_iozone_slurm()
 
     local srun_launcher="srun -N 1 -n 1 --exclusive"
     if [[ ${my_hostname} =~ seapearl ]] ; then
-	srun_launcher+=" -p ivy" # needs --exclusive!
+    srun_launcher+=" -p ivy" # needs --exclusive!
     fi
 
     local n_task_p_node=${host2tasksPerNode[${my_hostname}]}
@@ -382,17 +382,17 @@ do_iozone_slurm()
     local log_fnm="iozone.log"
 
     for (( i_node = 1; i_node <= n_node; i_node++ )) ; do
-	printf -v mydir "${fs_path}/${dir_work}%03d" ${i_node}
-	\mkdir -p "${mydir}"
-	local cmd="${srun_launcher} --chdir=${mydir} --output=${mydir}/${log_fnm} ${iozone_path} ${iozone_r_opts} ${n_task_p_node}"
-    	#printf "${cmd}\n"
-    	${cmd} &
+    printf -v mydir "${fs_path}/${dir_work}%03d" ${i_node}
+    \mkdir -p "${mydir}"
+    local cmd="${srun_launcher} --chdir=${mydir} --output=${mydir}/${log_fnm} ${iozone_path} ${iozone_r_opts} ${n_task_p_node}"
+        #printf "${cmd}\n"
+        ${cmd} &
     done
 
     wait
 
     for x in "${fs_path}"/${dir_work}*/${log_fnm} ; do
-	cat ${x} | parse_iozone "read" >> "${out_fnm}"
+    cat ${x} | parse_iozone "read" >> "${out_fnm}"
     done
 }
 
