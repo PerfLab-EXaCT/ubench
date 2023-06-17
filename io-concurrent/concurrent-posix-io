@@ -378,7 +378,7 @@ do_iozone_loop()
     printf "* hostname (local): ${my_hostname}\n" | tee -a "${out_fnm}"
     printf "* file system (local): ${fs_path}\n" | tee -a "${out_fnm}"
 
-    usage_iozone() | tee -a "${out_fnm}"
+    usage_iozone | tee -a "${out_fnm}"
     
     for (( hour = 1; hour <= max_hour; hour++ )) ; do
     do_iozone
