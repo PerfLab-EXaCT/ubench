@@ -63,7 +63,7 @@ IOZone notes (cf. 'iozone_w_opts' and 'ior_r_opts')
 - Each test includes two lines of output. An individual test includes
   both read and write tests, e.g., a must always includes a write to
   populate file.
-- Parser selects a subset of the IOZone output:
+- The final outpu parser selects a subset of the IOZone output:
   - wr-1,rd: write new file (incl all metadata costs); then read (sequential)
   - rnd/w,r: random write; then random read
 EOF
