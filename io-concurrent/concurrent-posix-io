@@ -310,12 +310,12 @@ do_iozone()
         #printf "\n${cmd}\n"
         ${cmd} | parse_iozone "write" >> "${out_fnm}"
         sleep 10
-
-    printf "/rd)"
-    local cmd="${iozone_path} ${iozone_r_opts} ${n_task}"
+        
+        printf "/rd)"
+        local cmd="${iozone_path} ${iozone_r_opts} ${n_task}"
         #printf "\n${cmd}\n"
         ${cmd} | parse_iozone "read" >> "${out_fnm}"
-    sleep 10
+        sleep 10
     done
 
     printf "\n"
