@@ -45,9 +45,10 @@ usage()
 {
     cat <<EOF
 Usage: ${scriptCmd} [--ubench iozone|iozone-slurm|ior] ...
+
 EOF
 
-    usage_iozone()
+    usage_iozone
     
     exit 0
 }
