@@ -49,6 +49,23 @@ EOF
     exit 0
 }
 
+usage_iozone()
+{
+    cat <<EOF
+IOZone notes (cf. 'iozone_w_opts' and 'ior_r_opts')
+- Each round test is a pair of tests, a "write" test and then a "read"
+  test.
+- Each test includes two lines of output. Note that an individual test
+  includes both read and write tests, e.g., a must always includes a
+  write to populate file.
+- Parser selects a subset of the IOZone output:
+  - wr-1,rd: write new file (incl all metadata costs); then read (sequential)
+  - rnd/w,r: random write; then random read
+EOF
+}
+
+
+
 #-----------------------------------------------------------
 # optional arguments
 #-----------------------------------------------------------
@@ -228,9 +245,12 @@ parse_iozone()
         ((n_match++))
     fi
     done
-    
+
+    # wr-1/rd: initial write; then sequential read
     printf "   %5s %3d wr-1,rd: %9.1f MB/s (%7.2f/ps) %9.1f MB/s (%7.2f/ps)\n" \
        ${type} ${ranks} ${wr_bw} ${wr_bwpp} ${rd_bw} ${rd_bwpp}
+
+    # rnd/w,r: random write; then random read
     printf "   %5s %3d rnd/w,r: %9.1f MB/s (%7.2f/ps) %9.1f MB/s (%7.2f/ps)\n" \
        ${type} ${ranks} ${rnd_wr_bw} ${rnd_wr_bwpp} ${rnd_rd_bw} ${rnd_rd_bwpp}
 }
@@ -241,9 +261,13 @@ parse_iozone()
 ior_w_opts="-F -a POSIX -w -s 1 -b 256m -t  1m -i 1 -vv" # -e
 ior_r_opts="-F -a POSIX -r -s 1 -b 256m -t 16k -i 1 -vv"
 
+
 iozone_w_opts="-i 0      -i 2 -s 1g -r  1m -+r -t"
 iozone_r_opts="-i 0 -i 1 -i 2 -s 1g -r 16k -+r -t"
+# -i: test selection (must always includ -i 0 to populate file)
+# -s: file size, -r: record size
 # -+r: use fsync
+# -t: throughput
 # -I: direct I/O; bypass buffer cache
 
 dat_fnm_stem="io.dat"
@@ -305,12 +329,14 @@ do_iozone()
 
     printf -- "- ${date_str}: "
     for (( n_task = min_task; n_task <= max_task; n_task *= 2 )) ; do
+        # Write test
         printf " ${n_task} (wr"
         local cmd="${iozone_path} ${iozone_w_opts} ${n_task}"
         #printf "\n${cmd}\n"
         ${cmd} | parse_iozone "write" >> "${out_fnm}"
         sleep 10
-        
+
+        # Read test
         printf "/rd)"
         local cmd="${iozone_path} ${iozone_r_opts} ${n_task}"
         #printf "\n${cmd}\n"
@@ -347,6 +373,8 @@ do_iozone_loop()
     printf "* iozone read : ${iozone_r_opts}\n" | tee -a "${out_fnm}"
     printf "* hostname (local): ${my_hostname}\n" | tee -a "${out_fnm}"
     printf "* file system (local): ${fs_path}\n" | tee -a "${out_fnm}"
+
+    usage_iozone() | tee -a "${out_fnm}"
     
     for (( hour = 1; hour <= max_hour; hour++ )) ; do
     do_iozone
