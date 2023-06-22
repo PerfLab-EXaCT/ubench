@@ -1,0 +1,208 @@
+* iozone: /people/tallent/app/iozone/iozone3_487/src/current/iozone
+* iozone write: -i 0      -i 2 -s 256m -r 16m -t
+* iozone read : -i 0 -i 1 -i 2 -s 256m -r 16k -t
+* hostname: bluesky.pnl.gov
+* file system: /pic/scratch/tallent/xxx-io
+- 2019-04-24T20:51-0700
+   write   1  re-wr, re-rd:    132.8 MB/s/ps;      0.0 MB/s/ps
+   write   1 rnd-wr,rnd-rd:    131.8 MB/s/ps;   3981.0 MB/s/ps
+    read   1  re-wr, re-rd:    130.3 MB/s/ps;   4522.2 MB/s/ps
+    read   1 rnd-wr,rnd-rd:    128.2 MB/s/ps;   4025.4 MB/s/ps
+   write   2  re-wr, re-rd:     63.5 MB/s/ps;      0.0 MB/s/ps
+   write   2 rnd-wr,rnd-rd:     63.9 MB/s/ps;   4318.5 MB/s/ps
+    read   2  re-wr, re-rd:     66.0 MB/s/ps;   4472.8 MB/s/ps
+    read   2 rnd-wr,rnd-rd:     65.2 MB/s/ps;   4071.0 MB/s/ps
+   write   4  re-wr, re-rd:     31.9 MB/s/ps;      0.0 MB/s/ps
+   write   4 rnd-wr,rnd-rd:     32.0 MB/s/ps;   3648.3 MB/s/ps
+    read   4  re-wr, re-rd:     33.0 MB/s/ps;   3848.2 MB/s/ps
+    read   4 rnd-wr,rnd-rd:     32.7 MB/s/ps;   4364.5 MB/s/ps
+   write   8  re-wr, re-rd:     16.5 MB/s/ps;      0.0 MB/s/ps
+   write   8 rnd-wr,rnd-rd:     16.4 MB/s/ps;   2862.9 MB/s/ps
+    read   8  re-wr, re-rd:     17.1 MB/s/ps;   4300.5 MB/s/ps
+    read   8 rnd-wr,rnd-rd:     17.0 MB/s/ps;   3835.9 MB/s/ps
+   write  16  re-wr, re-rd:      8.2 MB/s/ps;      0.0 MB/s/ps
+   write  16 rnd-wr,rnd-rd:      8.2 MB/s/ps;   2298.7 MB/s/ps
+    read  16  re-wr, re-rd:      9.2 MB/s/ps;   3931.4 MB/s/ps
+    read  16 rnd-wr,rnd-rd:      9.2 MB/s/ps;   2932.2 MB/s/ps
+   write  32  re-wr, re-rd:      4.1 MB/s/ps;      0.0 MB/s/ps
+   write  32 rnd-wr,rnd-rd:      4.2 MB/s/ps;   1418.1 MB/s/ps
+    read  32  re-wr, re-rd:      4.7 MB/s/ps;   2945.6 MB/s/ps
+    read  32 rnd-wr,rnd-rd:      4.7 MB/s/ps;   2473.2 MB/s/ps
+   write  64  re-wr, re-rd:      1.9 MB/s/ps;      0.0 MB/s/ps
+   write  64 rnd-wr,rnd-rd:      1.8 MB/s/ps;    774.1 MB/s/ps
+    read  64  re-wr, re-rd:      2.6 MB/s/ps;   1191.0 MB/s/ps
+    read  64 rnd-wr,rnd-rd:      2.5 MB/s/ps;   1657.2 MB/s/ps
+- 2019-04-24T22:27-0700
+   write   1  re-wr, re-rd:    129.4 MB/s/ps;      0.0 MB/s/ps
+   write   1 rnd-wr,rnd-rd:    129.0 MB/s/ps;   4348.1 MB/s/ps
+    read   1  re-wr, re-rd:    129.4 MB/s/ps;   6097.8 MB/s/ps
+    read   1 rnd-wr,rnd-rd:    130.9 MB/s/ps;   4413.3 MB/s/ps
+   write   2  re-wr, re-rd:     64.8 MB/s/ps;      0.0 MB/s/ps
+   write   2 rnd-wr,rnd-rd:     63.2 MB/s/ps;   4200.8 MB/s/ps
+    read   2  re-wr, re-rd:     65.4 MB/s/ps;   4619.4 MB/s/ps
+    read   2 rnd-wr,rnd-rd:     65.7 MB/s/ps;   4247.7 MB/s/ps
+   write   4  re-wr, re-rd:     31.9 MB/s/ps;      0.0 MB/s/ps
+   write   4 rnd-wr,rnd-rd:     31.9 MB/s/ps;   3870.0 MB/s/ps
+    read   4  re-wr, re-rd:     32.6 MB/s/ps;   4265.7 MB/s/ps
+    read   4 rnd-wr,rnd-rd:     33.0 MB/s/ps;   4199.4 MB/s/ps
+   write   8  re-wr, re-rd:     16.5 MB/s/ps;      0.0 MB/s/ps
+   write   8 rnd-wr,rnd-rd:     15.7 MB/s/ps;   2795.9 MB/s/ps
+    read   8  re-wr, re-rd:     16.9 MB/s/ps;   4173.6 MB/s/ps
+    read   8 rnd-wr,rnd-rd:     16.7 MB/s/ps;   3569.2 MB/s/ps
+   write  16  re-wr, re-rd:      8.0 MB/s/ps;      0.0 MB/s/ps
+   write  16 rnd-wr,rnd-rd:      8.0 MB/s/ps;   2380.7 MB/s/ps
+    read  16  re-wr, re-rd:      8.9 MB/s/ps;   4079.3 MB/s/ps
+    read  16 rnd-wr,rnd-rd:      9.0 MB/s/ps;   3317.9 MB/s/ps
+   write  32  re-wr, re-rd:      3.9 MB/s/ps;      0.0 MB/s/ps
+   write  32 rnd-wr,rnd-rd:      3.9 MB/s/ps;   1560.6 MB/s/ps
+    read  32  re-wr, re-rd:      4.8 MB/s/ps;   3613.6 MB/s/ps
+    read  32 rnd-wr,rnd-rd:      4.8 MB/s/ps;   2805.2 MB/s/ps
+   write  64  re-wr, re-rd:      1.9 MB/s/ps;      0.0 MB/s/ps
+   write  64 rnd-wr,rnd-rd:      1.9 MB/s/ps;    744.6 MB/s/ps
+    read  64  re-wr, re-rd:      2.3 MB/s/ps;   1605.4 MB/s/ps
+    read  64 rnd-wr,rnd-rd:      2.2 MB/s/ps;   1565.9 MB/s/ps
+- 2019-04-25T00:02-0700
+   write   1  re-wr, re-rd:    129.7 MB/s/ps;      0.0 MB/s/ps
+   write   1 rnd-wr,rnd-rd:    128.0 MB/s/ps;   4536.9 MB/s/ps
+    read   1  re-wr, re-rd:    131.9 MB/s/ps;   4497.8 MB/s/ps
+    read   1 rnd-wr,rnd-rd:    128.1 MB/s/ps;   3955.5 MB/s/ps
+   write   2  re-wr, re-rd:     64.3 MB/s/ps;      0.0 MB/s/ps
+   write   2 rnd-wr,rnd-rd:     63.8 MB/s/ps;   4574.9 MB/s/ps
+    read   2  re-wr, re-rd:     65.7 MB/s/ps;   4689.0 MB/s/ps
+    read   2 rnd-wr,rnd-rd:     65.3 MB/s/ps;   4631.0 MB/s/ps
+   write   4  re-wr, re-rd:     31.7 MB/s/ps;      0.0 MB/s/ps
+   write   4 rnd-wr,rnd-rd:     31.7 MB/s/ps;   3801.1 MB/s/ps
+    read   4  re-wr, re-rd:     32.7 MB/s/ps;   4240.8 MB/s/ps
+    read   4 rnd-wr,rnd-rd:     33.0 MB/s/ps;   4173.5 MB/s/ps
+   write   8  re-wr, re-rd:     16.0 MB/s/ps;      0.0 MB/s/ps
+   write   8 rnd-wr,rnd-rd:     16.0 MB/s/ps;   3259.3 MB/s/ps
+    read   8  re-wr, re-rd:     16.8 MB/s/ps;   4212.1 MB/s/ps
+    read   8 rnd-wr,rnd-rd:     16.7 MB/s/ps;   3834.2 MB/s/ps
+   write  16  re-wr, re-rd:      7.7 MB/s/ps;      0.0 MB/s/ps
+   write  16 rnd-wr,rnd-rd:      7.6 MB/s/ps;   2363.7 MB/s/ps
+    read  16  re-wr, re-rd:      9.1 MB/s/ps;   3856.9 MB/s/ps
+    read  16 rnd-wr,rnd-rd:      9.1 MB/s/ps;   3536.1 MB/s/ps
+   write  32  re-wr, re-rd:      4.2 MB/s/ps;      0.0 MB/s/ps
+   write  32 rnd-wr,rnd-rd:      4.1 MB/s/ps;   1569.8 MB/s/ps
+    read  32  re-wr, re-rd:      4.4 MB/s/ps;   2902.4 MB/s/ps
+    read  32 rnd-wr,rnd-rd:      4.3 MB/s/ps;   2785.4 MB/s/ps
+   write  64  re-wr, re-rd:      1.8 MB/s/ps;      0.0 MB/s/ps
+   write  64 rnd-wr,rnd-rd:      1.8 MB/s/ps;    789.6 MB/s/ps
+    read  64  re-wr, re-rd:      2.2 MB/s/ps;   1577.9 MB/s/ps
+    read  64 rnd-wr,rnd-rd:      2.2 MB/s/ps;   1377.1 MB/s/ps
+- 2019-04-25T01:36-0700
+   write   1  re-wr, re-rd:    129.4 MB/s/ps;      0.0 MB/s/ps
+   write   1 rnd-wr,rnd-rd:    133.3 MB/s/ps;   4567.5 MB/s/ps
+    read   1  re-wr, re-rd:    127.2 MB/s/ps;   4407.0 MB/s/ps
+    read   1 rnd-wr,rnd-rd:    127.5 MB/s/ps;   3961.8 MB/s/ps
+   write   2  re-wr, re-rd:     63.3 MB/s/ps;      0.0 MB/s/ps
+   write   2 rnd-wr,rnd-rd:     64.7 MB/s/ps;   4465.6 MB/s/ps
+    read   2  re-wr, re-rd:     66.3 MB/s/ps;   4861.8 MB/s/ps
+    read   2 rnd-wr,rnd-rd:     65.1 MB/s/ps;   4664.4 MB/s/ps
+   write   4  re-wr, re-rd:     31.9 MB/s/ps;      0.0 MB/s/ps
+   write   4 rnd-wr,rnd-rd:     31.8 MB/s/ps;   3601.3 MB/s/ps
+    read   4  re-wr, re-rd:     32.8 MB/s/ps;   4337.2 MB/s/ps
+    read   4 rnd-wr,rnd-rd:     32.9 MB/s/ps;   3889.2 MB/s/ps
+   write   8  re-wr, re-rd:     16.0 MB/s/ps;      0.0 MB/s/ps
+   write   8 rnd-wr,rnd-rd:     15.9 MB/s/ps;   2673.1 MB/s/ps
+    read   8  re-wr, re-rd:     17.3 MB/s/ps;   3747.7 MB/s/ps
+    read   8 rnd-wr,rnd-rd:     17.2 MB/s/ps;   3985.8 MB/s/ps
+   write  16  re-wr, re-rd:      8.3 MB/s/ps;      0.0 MB/s/ps
+   write  16 rnd-wr,rnd-rd:      8.4 MB/s/ps;   2108.5 MB/s/ps
+    read  16  re-wr, re-rd:      8.8 MB/s/ps;   3921.1 MB/s/ps
+    read  16 rnd-wr,rnd-rd:      8.8 MB/s/ps;   3023.8 MB/s/ps
+   write  32  re-wr, re-rd:      3.8 MB/s/ps;      0.0 MB/s/ps
+   write  32 rnd-wr,rnd-rd:      3.8 MB/s/ps;   1563.0 MB/s/ps
+    read  32  re-wr, re-rd:      4.3 MB/s/ps;   2742.4 MB/s/ps
+    read  32 rnd-wr,rnd-rd:      4.3 MB/s/ps;   2763.7 MB/s/ps
+   write  64  re-wr, re-rd:      1.8 MB/s/ps;      0.0 MB/s/ps
+   write  64 rnd-wr,rnd-rd:      1.8 MB/s/ps;    773.9 MB/s/ps
+    read  64  re-wr, re-rd:      2.6 MB/s/ps;   1484.1 MB/s/ps
+    read  64 rnd-wr,rnd-rd:      2.6 MB/s/ps;   1389.7 MB/s/ps
+- 2019-04-25T03:13-0700
+   write   1  re-wr, re-rd:    129.4 MB/s/ps;      0.0 MB/s/ps
+   write   1 rnd-wr,rnd-rd:    133.1 MB/s/ps;   4525.3 MB/s/ps
+    read   1  re-wr, re-rd:    131.8 MB/s/ps;   4719.0 MB/s/ps
+    read   1 rnd-wr,rnd-rd:    129.1 MB/s/ps;   3993.0 MB/s/ps
+   write   2  re-wr, re-rd:     63.1 MB/s/ps;      0.0 MB/s/ps
+   write   2 rnd-wr,rnd-rd:     64.5 MB/s/ps;   4760.9 MB/s/ps
+    read   2  re-wr, re-rd:     66.0 MB/s/ps;   4595.9 MB/s/ps
+    read   2 rnd-wr,rnd-rd:     65.3 MB/s/ps;   4558.2 MB/s/ps
+   write   4  re-wr, re-rd:     32.6 MB/s/ps;      0.0 MB/s/ps
+   write   4 rnd-wr,rnd-rd:     32.5 MB/s/ps;   3388.1 MB/s/ps
+    read   4  re-wr, re-rd:     35.8 MB/s/ps;   5315.2 MB/s/ps
+    read   4 rnd-wr,rnd-rd:     34.9 MB/s/ps;   4768.5 MB/s/ps
+   write   8  re-wr, re-rd:     15.7 MB/s/ps;      0.0 MB/s/ps
+   write   8 rnd-wr,rnd-rd:     15.6 MB/s/ps;   2934.2 MB/s/ps
+    read   8  re-wr, re-rd:     17.5 MB/s/ps;   3715.6 MB/s/ps
+    read   8 rnd-wr,rnd-rd:     17.6 MB/s/ps;   3795.6 MB/s/ps
+   write  16  re-wr, re-rd:      8.2 MB/s/ps;      0.0 MB/s/ps
+   write  16 rnd-wr,rnd-rd:      8.2 MB/s/ps;   2467.6 MB/s/ps
+    read  16  re-wr, re-rd:      9.5 MB/s/ps;   3340.1 MB/s/ps
+    read  16 rnd-wr,rnd-rd:      9.5 MB/s/ps;   3133.2 MB/s/ps
+   write  32  re-wr, re-rd:      4.0 MB/s/ps;      0.0 MB/s/ps
+   write  32 rnd-wr,rnd-rd:      4.0 MB/s/ps;   1508.7 MB/s/ps
+    read  32  re-wr, re-rd:      4.3 MB/s/ps;   2725.2 MB/s/ps
+    read  32 rnd-wr,rnd-rd:      4.5 MB/s/ps;   2643.5 MB/s/ps
+   write  64  re-wr, re-rd:      2.0 MB/s/ps;      0.0 MB/s/ps
+   write  64 rnd-wr,rnd-rd:      1.8 MB/s/ps;    771.3 MB/s/ps
+    read  64  re-wr, re-rd:      2.3 MB/s/ps;   1517.2 MB/s/ps
+    read  64 rnd-wr,rnd-rd:      2.2 MB/s/ps;   1526.1 MB/s/ps
+- 2019-04-25T04:49-0700
+   write   1  re-wr, re-rd:    132.0 MB/s/ps;      0.0 MB/s/ps
+   write   1 rnd-wr,rnd-rd:    131.6 MB/s/ps;   4274.7 MB/s/ps
+    read   1  re-wr, re-rd:    133.0 MB/s/ps;   4456.8 MB/s/ps
+    read   1 rnd-wr,rnd-rd:    127.3 MB/s/ps;   4000.9 MB/s/ps
+   write   2  re-wr, re-rd:     64.7 MB/s/ps;      0.0 MB/s/ps
+   write   2 rnd-wr,rnd-rd:     64.8 MB/s/ps;   4475.5 MB/s/ps
+    read   2  re-wr, re-rd:     66.1 MB/s/ps;   4561.7 MB/s/ps
+    read   2 rnd-wr,rnd-rd:     66.0 MB/s/ps;   4117.7 MB/s/ps
+   write   4  re-wr, re-rd:     31.1 MB/s/ps;      0.0 MB/s/ps
+   write   4 rnd-wr,rnd-rd:     31.1 MB/s/ps;   3416.1 MB/s/ps
+    read   4  re-wr, re-rd:     34.2 MB/s/ps;   4650.5 MB/s/ps
+    read   4 rnd-wr,rnd-rd:     34.0 MB/s/ps;   4048.9 MB/s/ps
+   write   8  re-wr, re-rd:     16.8 MB/s/ps;      0.0 MB/s/ps
+   write   8 rnd-wr,rnd-rd:     16.8 MB/s/ps;   2871.7 MB/s/ps
+    read   8  re-wr, re-rd:     17.1 MB/s/ps;   4624.2 MB/s/ps
+    read   8 rnd-wr,rnd-rd:     17.1 MB/s/ps;   3976.7 MB/s/ps
+   write  16  re-wr, re-rd:      7.9 MB/s/ps;      0.0 MB/s/ps
+   write  16 rnd-wr,rnd-rd:      7.9 MB/s/ps;   2309.5 MB/s/ps
+    read  16  re-wr, re-rd:      9.0 MB/s/ps;   3770.1 MB/s/ps
+    read  16 rnd-wr,rnd-rd:      9.0 MB/s/ps;   3502.3 MB/s/ps
+   write  32  re-wr, re-rd:      3.9 MB/s/ps;      0.0 MB/s/ps
+   write  32 rnd-wr,rnd-rd:      3.9 MB/s/ps;   1540.9 MB/s/ps
+    read  32  re-wr, re-rd:      4.4 MB/s/ps;   3201.5 MB/s/ps
+    read  32 rnd-wr,rnd-rd:      4.5 MB/s/ps;   2963.3 MB/s/ps
+   write  64  re-wr, re-rd:      2.0 MB/s/ps;      0.0 MB/s/ps
+   write  64 rnd-wr,rnd-rd:      1.9 MB/s/ps;    810.6 MB/s/ps
+    read  64  re-wr, re-rd:      2.7 MB/s/ps;   1392.2 MB/s/ps
+    read  64 rnd-wr,rnd-rd:      2.7 MB/s/ps;   1468.2 MB/s/ps
+- 2019-04-25T06:23-0700
+   write   1  re-wr, re-rd:    132.2 MB/s/ps;      0.0 MB/s/ps
+   write   1 rnd-wr,rnd-rd:    133.1 MB/s/ps;   4567.6 MB/s/ps
+    read   1  re-wr, re-rd:    131.2 MB/s/ps;   4221.9 MB/s/ps
+    read   1 rnd-wr,rnd-rd:    129.3 MB/s/ps;   4082.0 MB/s/ps
+   write   2  re-wr, re-rd:     65.0 MB/s/ps;      0.0 MB/s/ps
+   write   2 rnd-wr,rnd-rd:     64.2 MB/s/ps;   4817.0 MB/s/ps
+    read   2  re-wr, re-rd:     65.7 MB/s/ps;   4610.1 MB/s/ps
+    read   2 rnd-wr,rnd-rd:     65.5 MB/s/ps;   4123.8 MB/s/ps
+   write   4  re-wr, re-rd:     31.7 MB/s/ps;      0.0 MB/s/ps
+   write   4 rnd-wr,rnd-rd:     31.7 MB/s/ps;   3943.8 MB/s/ps
+    read   4  re-wr, re-rd:     33.3 MB/s/ps;   4801.0 MB/s/ps
+    read   4 rnd-wr,rnd-rd:     32.9 MB/s/ps;   3985.4 MB/s/ps
+   write   8  re-wr, re-rd:     17.0 MB/s/ps;      0.0 MB/s/ps
+   write   8 rnd-wr,rnd-rd:     16.9 MB/s/ps;   2626.4 MB/s/ps
+    read   8  re-wr, re-rd:     17.0 MB/s/ps;   3858.4 MB/s/ps
+    read   8 rnd-wr,rnd-rd:     17.0 MB/s/ps;   3830.0 MB/s/ps
+   write  16  re-wr, re-rd:      8.0 MB/s/ps;      0.0 MB/s/ps
+   write  16 rnd-wr,rnd-rd:      7.9 MB/s/ps;   2655.9 MB/s/ps
+    read  16  re-wr, re-rd:      8.9 MB/s/ps;   3762.4 MB/s/ps
+    read  16 rnd-wr,rnd-rd:      8.9 MB/s/ps;   3348.1 MB/s/ps
+   write  32  re-wr, re-rd:      3.9 MB/s/ps;      0.0 MB/s/ps
+   write  32 rnd-wr,rnd-rd:      3.9 MB/s/ps;   1552.0 MB/s/ps
+    read  32  re-wr, re-rd:      4.8 MB/s/ps;   3068.8 MB/s/ps
+    read  32 rnd-wr,rnd-rd:      4.7 MB/s/ps;   2709.3 MB/s/ps
+   write  64  re-wr, re-rd:      2.0 MB/s/ps;      0.0 MB/s/ps
+   write  64 rnd-wr,rnd-rd:      1.9 MB/s/ps;    752.4 MB/s/ps
+    read  64  re-wr, re-rd:      2.2 MB/s/ps;   1350.2 MB/s/ps
+    read  64 rnd-wr,rnd-rd:      2.2 MB/s/ps;   1467.2 MB/s/ps

@@ -1,0 +1,17 @@
+ior: /people/tallent/app/ior/ior.git/MYINSTALL/bin/ior (-s=1 -b=256m -t=16k)
+file system: /people/tallent/1modsim-tools-svn/ubench/ior/xxx
+Sat Apr 13 20:48:10 PDT 2019
+  Write 1: 62.96 MB/sec; 60.05 MiB/sec
+  Write 2: 69.66 MB/sec; 66.44 MiB/sec
+  Write 4: 68.48 MB/sec; 65.30 MiB/sec
+  Write 8: 104.87 MB/sec; 100.01 MiB/sec
+  Write 16: 113.37 MB/sec; 108.12 MiB/sec
+  Write 32: 116.26 MB/sec; 110.87 MiB/sec
+  Write 64: 116.34 MB/sec; 110.95 MiB/sec
+  Read 1: 92.96 MB/sec; 88.65 MiB/sec
+  Read 2: 192.03 MB/sec; 183.13 MiB/sec
+  Read 4: 228.50 MB/sec; 217.91 MiB/sec
+  Read 8: 229.63 MB/sec; 218.99 MiB/sec
+  Read 16: 229.68 MB/sec; 219.04 MiB/sec
+  Read 32: 230.87 MB/sec; 220.18 MiB/sec
+  Read 64: 154.19 MB/sec; 147.04 MiB/sec

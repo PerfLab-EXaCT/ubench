@@ -1,0 +1,28 @@
+* iozone: /people/tallent/app/iozone/iozone/src/current/iozone
+* iozone write: -i 0      -i 2 -s 1g -r  1m -+r -t
+* iozone read : -i 0 -i 1 -i 2 -s 1g -r 16k -+r -t
+* hostname: bluesky.pnl.gov
+* file system: /people/tallent/xxx-io
+- 2019-05-20T12:41-0700
+   write   1 re-w,rd:      11.3 MB/s (   11.3/ps)       0.0 MB/s (    0.0/ps)
+   write   1 rnd/w,r:       9.6 MB/s (    9.6/ps)    5784.8 MB/s ( 5784.8/ps)
+    read   1 re-w,rd:       1.4 MB/s (    1.4/ps)     107.2 MB/s (  107.2/ps)
+    read   1 rnd/w,r:       8.3 MB/s (    8.3/ps)    4513.0 MB/s ( 4513.0/ps)
+   write   2 re-w,rd:      13.9 MB/s (    6.9/ps)       0.0 MB/s (    0.0/ps)
+   write   2 rnd/w,r:      13.4 MB/s (    6.7/ps)   11873.9 MB/s ( 5937.0/ps)
+    read   2 re-w,rd:      26.0 MB/s (   13.0/ps)    6499.0 MB/s ( 3249.5/ps)
+    read   2 rnd/w,r:       3.6 MB/s (    1.8/ps)    4637.0 MB/s ( 2318.5/ps)
+   write   4 re-w,rd:      29.3 MB/s (    7.3/ps)       0.0 MB/s (    0.0/ps)
+   write   4 rnd/w,r:      22.1 MB/s (    5.5/ps)   22466.5 MB/s ( 5616.6/ps)
+    read   4 re-w,rd:       8.6 MB/s (    2.1/ps)     114.3 MB/s (   28.6/ps)
+    read   4 rnd/w,r:       1.4 MB/s (    0.4/ps)   13270.8 MB/s ( 3317.7/ps)
+   write   8 re-w,rd:      49.5 MB/s (    6.2/ps)       0.0 MB/s (    0.0/ps)
+   write   8 rnd/w,r:      48.7 MB/s (    6.1/ps)   40650.1 MB/s ( 5081.3/ps)
+    read   8 re-w,rd:      85.1 MB/s (   10.6/ps)    5235.7 MB/s (  654.5/ps)
+    read   8 rnd/w,r:       6.9 MB/s (    0.9/ps)    4894.2 MB/s (  611.8/ps)
+   write  16 re-w,rd:      78.1 MB/s (    4.9/ps)       0.0 MB/s (    0.0/ps)
+   write  16 rnd/w,r:      83.9 MB/s (    5.2/ps)   61603.3 MB/s ( 3850.2/ps)
+    read  16 re-w,rd:      62.8 MB/s (    3.9/ps)   14196.1 MB/s (  887.3/ps)
+    read  16 rnd/w,r:      13.9 MB/s (    0.9/ps)   13131.5 MB/s (  820.7/ps)
+   write  32 re-w,rd:      87.0 MB/s (    2.7/ps)       0.0 MB/s (    0.0/ps)
+   write  32 rnd/w,r:      80.9 MB/s (    2.5/ps)   64308.8 MB/s ( 2009.7/ps)
