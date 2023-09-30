@@ -9,3 +9,5 @@
 *.hpp     ident
 *.C       ident
 *.[ch]    ident
+#
+run-ib* ident

@@ -1,0 +1,40 @@
+#!/bin/bash
+
+#****************************************************************************
+# $Id$
+#
+# Nathan Tallent
+#****************************************************************************
+
+#****************************************************************************
+
+scriptPath="${BASH_SOURCE[0]}" # works when script is sourced (unlike $0)
+scriptCmd=${scriptPath##*/} # cf. $(basename ...)
+
+if [[ -z $1 || $1 =~ ^--?h(elp)? ]] ; then
+    cat <<EOF
+  usage: ${scriptCmd} <server> <test> <test options>
+
+Launch a Mellanox InfiniBand/RDMA perftest microbenchmark. Each launch
+is arranged has a server/client pair.
+
+Launch from *client*.
+EOF
+    exit
+fi
+
+#****************************************************************************
+
+server=$1
+shift
+
+ssh ${server} "$@" &
+sleep 3 # give server time to start
+
+"$@" ${server}
+status=$?
+wait
+
+# command && { <$? -eq 0> } || { $? -ne 0 }
+
+exit ${status}

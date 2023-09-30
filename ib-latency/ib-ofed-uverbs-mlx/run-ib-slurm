@@ -1,0 +1,77 @@
+#!/bin/bash
+
+#****************************************************************************
+# $Id$
+#
+# Nathan Tallent
+#****************************************************************************
+
+#****************************************************************************
+
+scriptPath0="${BASH_SOURCE[0]}" # works when script is sourced (unlike $0)
+#scriptPath=$(readlink "${scriptPath0}") # 'readlink -f' on Linux
+scriptCmd=${scriptPath0##*/} # cf. $(basename ...)
+scriptDir=${scriptPath0%/*}  # cf. $(dirname ...)
+
+cmd="${scriptDir}/run-ib-bench-all"
+
+if [[ $1 =~ ^--?h(elp)? ]] ; then
+    cat <<EOF
+  usage: ${scriptCmd}
+
+Runs all Mellanox InfiniBand/RDMA microbenchmarks tests on all nodes
+within a SLURM allocation.
+
+Should be launched (1) within a SLURM allocation (after salloc) and
+(2) from the *server*.
+
+Uses: '${cmd}'
+EOF
+    exit
+fi
+
+#****************************************************************************
+
+# https://misc.flogisoft.com/bash/tip_colors_and_formatting
+ClrBeg0=$'\e[1m\e[4m\e[35m' # '$' syntax quotes escapes
+ClrBeg1=$'\e[1m\e[4m\e[31m' # '$' syntax quotes escapes
+ClrEnd=$'\e[0m'
+
+#****************************************************************************
+
+opt_nodes="2"
+
+#****************************************************************************
+
+# salloc -N ${opt_nodes} -t 0:60:00 --exclusive
+
+# wait for allocation
+
+#-----------------------------------------------------------
+# 
+#-----------------------------------------------------------
+
+server_nm="$(hostname -s)"
+server_ip=$(hostname -i) # head node
+
+# Slurm's node list is compact. Must be expanded
+# Other SLURM_NODELIST options:
+#   https://github.com/jtfrey/snodelist
+
+# echo ${SLURM_NODELIST} # ${SLURM_JOB_NODELIST}
+
+# Output of 'scontrol...' is one-per-line
+slurm_nodelist=( $(scontrol show hostnames) )
+# echo ${slurm_nodelist[*]}
+
+#-----------------------------------------------------------
+# Launch sequentially, i.e,. in round-robin fashion
+#-----------------------------------------------------------
+
+printf "${ClrBeg0}Launching ${cmd}${ClrEnd}\n"
+printf "${ClrBeg0}Server: ${server_nm} (${server_ip})${ClrEnd}\n"
+printf "${ClrBeg0}Clients: ${slurm_nodelist[*]}${ClrEnd}\n"
+
+for node_nm in "${slurm_nodelist[@]}" ; do
+	  srun -n 1 -N 1 --nodelist ${node_nm} ${cmd} ${server_ip}
+done

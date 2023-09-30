@@ -1,0 +1,168 @@
+#!/usr/bin/env python
+# -*-Mode: python;-*-
+
+#****************************************************************************
+# $HeadURL$
+# $Id$
+#
+# Nathan Tallent
+#****************************************************************************
+
+import os
+import sys
+import argparse
+
+#import re
+from dataclasses import dataclass
+#import collections
+
+import json
+import pandas
+#import numpy
+#import math
+
+my_help = """
+xxx
+"""
+
+
+#****************************************************************************
+#
+#****************************************************************************
+
+def main():
+    #-------------------------------------------------------
+    # 
+    #-------------------------------------------------------
+
+    from argparse import RawTextHelpFormatter
+    
+    parser = argparse.ArgumentParser(description=my_help,
+                                     formatter_class=RawTextHelpFormatter)
+    parser.add_argument(dest='in_path', #metavar='in-path',
+                        help="json file")
+    # nargs='+', type=argparse.FileType('r'),
+    
+    parser.add_argument('-o', '--output', dest='out_path', metavar='out_path',
+                        help="Output CSV file")
+    args = parser.parse_args()
+
+    #-------------------------------------------------------
+    # 
+    #-------------------------------------------------------
+    
+    processPerfData(args.in_path, args.out_path)
+
+
+#****************************************************************************
+#
+#****************************************************************************
+
+#----------------------------------------------------------------------------
+# Initial columns
+#----------------------------------------------------------------------------
+
+# col0_date       = 'Trade Date'
+
+# col0H_dtype = {
+#     col0_date: str,
+#     col0_sharePrice: float,
+# }
+
+# # Initial 'keep' list
+# col0L_keep = [
+#     col0_date,
+# ]
+
+
+#----------------------------------------------------------------------------
+# Final columns
+#----------------------------------------------------------------------------
+
+# Date, Account, Description, Commodity/Currency,
+# Action, Price, Deposit, Withdrawal
+
+col_date     = 'Date'
+
+
+def processPerfData(in_path, out_path):
+    #-------------------------------------------------------
+    # 
+    #-------------------------------------------------------
+
+    # https://www.delftstack.com/howto/python-pandas/json-to-pandas-dataframe/
+    in_fs = open(in_path)
+
+    in_dict = json.load(in_fs)
+
+    print(in_dict)
+
+    df = pandas.DataFrame.from_dict(in_dict, orient='index')
+
+    
+    # df['time'].astype('datetime64[ns]')
+
+    #print(df)
+
+    n_trans_init = df.shape[0]
+    
+    #-------------------------------------------------------
+    # 
+    #-------------------------------------------------------
+
+    #MSG.msg_b("Transactions: {}, post-prune: {}, post-simplify: {}".format(n_trans_init, n_trans_postPrune, n_trans_postSmpl))
+
+    #MSG.warn(out_path)
+
+    os = out_path if (out_path) else sys.stdout
+    df.to_csv(os, index=False) # sep=' '
+
+
+
+#****************************************************************************
+# 
+#****************************************************************************
+
+class MSG:
+    # https://www.geeksforgeeks.org/print-colors-python-terminal/
+    clr_nil  = ''
+    clr_bold  = '\033[01m'
+    clr_red   = '\033[31m'
+    clr_purpl = '\033[35m'
+    clr_reset = '\033[0m'
+
+    @staticmethod
+    def msg(str):
+        MSG.do(MSG.clr_nil, '', str)
+
+    @staticmethod
+    def msg_b(str):
+        MSG.do(MSG.clr_bold, '', str)
+        
+    @staticmethod
+    def warn(str):
+        MSG.do(MSG.clr_bold + MSG.clr_purpl, 'Warning', str)
+
+    @staticmethod
+    def err(str, code=1):
+        MSG.do(MSG.clr_bold + MSG.clr_red, 'Error', str)
+        exit(code)
+
+    @staticmethod
+    def do(color, info, str):
+        if (info):
+            try:
+                name = sys._getframe(2).f_code.co_name
+            except (IndexError, TypeError, AttributeError): # something went wrong
+                name = "<unknown>"
+
+            print("{}{} [{}]: {}{}".format(color, info, name, str, MSG.clr_reset))
+        else:
+            print("{}{}{}".format(color, str, MSG.clr_reset))
+
+
+
+#****************************************************************************
+
+if (__name__ == "__main__"):
+    sys.exit(main())

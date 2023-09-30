@@ -1,0 +1,139 @@
+#!/bin/bash
+
+#****************************************************************************
+# $Id$
+#
+# Nathan Tallent
+#****************************************************************************
+
+#****************************************************************************
+
+scriptPath0="${BASH_SOURCE[0]}" # works when script is sourced (unlike $0)
+#scriptPath=$(readlink "${scriptPath0}") # 'readlink -f' on Linux
+scriptCmd=${scriptPath0##*/} # cf. $(basename ...)
+scriptDir=${scriptPath0%/*}  # cf. $(dirname ...)
+
+cmd="${scriptDir}/run-ib-bench"
+
+if [[ -z $1 || $1 =~ ^--?h(elp)? ]] ; then
+    cat <<EOF
+  usage: ${scriptCmd} <server>
+
+Run all Mellanox InfiniBand/RDMA microbenchmarks tests in round-robin
+fashion.  Microbenchmarks are from the Performance Tests (perftest)
+package for OFED.
+  https://community.mellanox.com/s/article/perftest-package
+
+Launch from *client*. To obtain server ip use "hostname -i".
+
+Uses: '${cmd}'
+EOF
+    exit
+fi
+
+#****************************************************************************
+
+# https://misc.flogisoft.com/bash/tip_colors_and_formatting
+ClrBeg0=$'\e[1m\e[4m\e[35m' # '$' syntax quotes escapes
+ClrBeg1=$'\e[1m\e[4m\e[31m' # '$' syntax quotes escapes
+ClrEnd=$'\e[0m'
+
+#****************************************************************************
+
+server_ip=$1 # tested above
+# [[ -z "${server_ip}" ]] && server_ip="130.20.68.50" # junction
+# : ${server_ip:=${"130.20.68.50"} # junction
+
+client_nm="$(hostname -s)"
+client_id="${client_nm} $(hostname -i)"
+
+#-----------------------------------------------------------
+
+out_id=${SLURM_JOB_ID:-$$}
+out_dirNm="${scriptCmd}-${client_nm}-${out_id}"
+
+while [[ -d "${out_dirNm}" ]] ; do
+    out_dirNm+="-$$"
+done
+
+\mkdir ${out_dirNm}
+#echo ${out_dirNm}
+
+#-----------------------------------------------------------
+
+opt_com="-d mlx5_0 -i 1 -F"
+
+opt_bw="--all" # --all XOR --duration=10 ; --bidirectional --report-both
+opt_bw_at="--duration=10" # No '--all'
+opt_lat="" # --report-histogram
+
+opt_at1="--atomic_type=CMP_AND_SWAP"
+opt_at2="--atomic_type=FETCH_AND_ADD"
+
+SEP=000
+SEP_re="^000$"
+
+ubenchL=(
+    ib_send_bw ${opt_com} ${opt_bw} ${SEP}
+    ib_write_bw ${opt_com} ${opt_bw} ${SEP}
+    ib_read_bw ${opt_com} ${opt_bw} ${SEP}
+
+    ib_atomic_bw ${opt_com} ${opt_at1} ${opt_bw_at} ${SEP}
+    ib_atomic_bw ${opt_com} ${opt_at2} ${opt_bw_at} ${SEP}
+
+    ib_send_lat ${opt_com} ${opt_lat} ${SEP}
+    ib_write_lat ${opt_com} ${opt_lat} ${SEP}
+    ib_read_lat ${opt_com} ${opt_lat} ${SEP}
+
+    ib_atomic_lat ${opt_com} ${opt_at1} ${opt_lat} ${SEP}
+    ib_atomic_lat ${opt_com} ${opt_at2} ${opt_lat} ${SEP}
+)
+
+#****************************************************************************
+
+set -- "${ubenchL[@]}"
+while [[ $# -gt 0 ]]; do
+    argL=( )
+    ubench=$1
+    while [[ ! $1 =~ ${SEP_re} ]] ; do
+        arg="$1" && shift
+        argL+=("${arg}")
+        #printf -- "${arg} (${argL[*]})\n"
+    done
+
+    shift # move past separator
+
+    # "${x[*]}" --> single word; "${x[@]}" -> multiple words
+    arg_str="${argL[*]}"
+
+    # form argument for output file
+    out_fnNm="${arg_str// /}"    # replace all matches
+    out_fnNm="${out_fnNm//=/}"   # replace all matches
+    out_fnNm="${out_fnNm//--/-}" # replace all matches    
+    
+    out_pathNm="${out_dirNm}/${out_fnNm}.json"
+    out_arg="--out_json --out_json_file=${out_pathNm}"
+
+    # final command
+    printf "${ClrBeg0}${ubench} (${client_id})${ClrEnd}: ${arg_str} -> ${out_pathNm}\n"
+
+    ${cmd} ${server_ip} "${argL[@]}" ${out_arg}
+done
+
+
+#-----------------------------------------------------------
+# When ubenchL contains only benchmark names:
+#-----------------------------------------------------------
+
+# for ubench in "${ubenchL[@]}" ; do
+#
+#     opt_bench=${opt_bw}
+#     if [[ ${ubench} =~ _lat ]] ; then
+#         opt_bench=${opt_lat}
+#     fi
+#        
+#     printf "${ClrBeg0}${ubench}${ClrEnd}\n"
+#
+#     ${cmd} ${server_ip} ${ubench} ${opt_com} ${opt_bench}
+#
+# done
