@@ -1,9 +1,7 @@
--*-Mode: markdown;-*-
+<!-- -*-Mode: markdown;-*- -->
+<!-- $Id$ -->
 
-$Id$
-
------------------------------------------------------------------------------
 Various micro-benchmarks
 =============================================================================
 
-Home: https://gitlab.pnnl.gov/perf-lab/ubench
+**Home**: https://github.com/PerfLab-EXaCT/ubench
