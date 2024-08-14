@@ -1,5 +1,5 @@
 -*-Mode: markdown;-*- [outline]
-=============================================================================
+
 
 Vince Weaver's code provides third-party control of prefetchers:
   https://github.com/deater/uarch-configure/tree/master/intel-prefetch
@@ -12,7 +12,7 @@ For first-party control of prefetchers, need to use sched_getaffinity()
   cf. https://stackoverflow.com/questions/4586405/how-to-get-the-number-of-cpus-in-linux-using-c?answertab=active#tab-top
 
 
-=============================================================================
+
 Intel model numbers:
 =============================================================================
 
@@ -20,7 +20,7 @@ https://en.wikichip.org/wiki/intel/cpuid
 
 https://software.intel.com/en-us/articles/intel-architecture-and-processor-identification-with-cpuid-model-and-family-numbers
 
-=============================================================================
+
 Controlling Intel prefetchers:
 =============================================================================
 
