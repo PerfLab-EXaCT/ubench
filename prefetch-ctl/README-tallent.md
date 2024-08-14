@@ -1,4 +1,4 @@
--*-Mode: markdown;-*- [outline]
+<!-- -*-Mode: markdown;-*- -->
 
 
 Vince Weaver's code provides third-party control of prefetchers:
